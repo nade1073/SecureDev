@@ -1,0 +1,11 @@
+﻿@model Vladi2.Models.homeVM
+
+<h1>Hello @Model.data</h1>
+<div class="jumbotron">
+    @*search input form - demonstrating xss*@
+    @using (Html.BeginForm("xss", "home", FormMethod.Get))
+    {
+        <input type="text" name="xss"/>
+        <button type="submit">submit </button>
+    }
+</div>
