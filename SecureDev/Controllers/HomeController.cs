@@ -82,17 +82,24 @@ namespace Vladi2.Controllers
             encriptedPassword = EncryptionManager.Encrypt(user.Password, c_passwordKey);
 
             var connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
-
+            var query = "SELECT * FROM tblusers Where Username = @Username or Email = @Email";
             using (var m_dbConnection = new SQLiteConnection(connectionString))
             {
                 m_dbConnection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM tblusers Where Username = '" + user.Username + "' and Email = '" + user.Email + "'", m_dbConnection))
-                using (SQLiteDataReader reader = command.ExecuteReader())
+                using (SQLiteCommand command = new SQLiteCommand(query, m_dbConnection))
                 {
-                    if(reader.Read() == true)
+                    command.Parameters.Add("@Username", System.Data.DbType.String);
+                    command.Parameters.Add("@Email", System.Data.DbType.String);
+                    command.Parameters["@Username"].Value = user.Username;
+                    command.Parameters["@Email"].Value = user.Email;
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
-                        return View();
+                        if (reader.Read() == true)
+                        {
+                            ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
+                            return View();
+                        }
                     }
                 }
 
