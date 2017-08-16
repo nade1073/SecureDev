@@ -15,8 +15,7 @@ namespace Vladi2.Controllers
         // this is not must
         public BaseController()
         {
-            
-            //adada
+          
         }
         
     }

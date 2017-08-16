@@ -145,7 +145,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\EncryptionManager.cs" />
     <Compile Include="Models\homeVM.cs" />
+    <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +186,7 @@
     <Content Include="Views\Home\XSS.cshtml" />
     <Content Include="Views\Home\UserHome.cshtml" />
     <Content Include="Sqlite\db.sqlite" />
+    <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
