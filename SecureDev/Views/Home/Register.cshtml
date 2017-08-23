@@ -13,8 +13,8 @@
         @using (Html.BeginForm("Register", "home", FormMethod.Post))
         {
 
-            @Html.EditorFor(model => model.Username, new { htmlAttributes = new {  placeholder = "Username", id = "username"} });
-            @Html.ValidationMessageFor(model => model.Username);
+            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new {  placeholder = "UserName", id = "username"} });
+            @Html.ValidationMessageFor(model => model.UserName);
             <br/>
             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type = "password", placeholder = "password", id = "password" } });
             @Html.ValidationMessageFor(model => model.Password);

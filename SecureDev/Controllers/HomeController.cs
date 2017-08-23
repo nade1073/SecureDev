@@ -21,42 +21,40 @@ namespace Vladi2.Controllers
             var vm = new homeVM() { data = validationError };
             return View(vm);
         }
+
+    
         //GET: home/login 
+        [HttpPost]
         public ActionResult Login(string username, string password)
         {
             //the path is absolute and should be changed.
             string encriptedPassword;
-            var connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
+            UserAccount userDetailes = new UserAccount();
+            userDetailes.UserName = username;
+            userDetailes.Password = password;
+            var connectionString = string.Format("DataSource={0}", @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite");
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
-            string loginQuery = "SELECT * FROM tblusers Where Username = @Username";
-
-
-
-            using (var m_dbConnection = new SQLiteConnection(connectionString))
+            string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
+            Func<SQLiteCommand, SQLiteDataReader, RedirectToRouteResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
             {
-                m_dbConnection.Open();
-                string loginQuery = "SELECT * FROM tblusers Where Username = @Username";
-                using (SQLiteCommand command = new SQLiteCommand(loginQuery, m_dbConnection))
+                while (reader.Read())
                 {
-                    command.Parameters.Add(@"Username", System.Data.DbType.String);
-                    command.Parameters["@Username"].Value = username;
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                    var encriptionPassword = reader.GetString(2).Trim();
+                    var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
+                    var userName = reader.GetString(1).Trim();
+                    if (decriptionis == password)
                     {
-                        while (reader.Read())
-                        {
-                            //if we got here - the select succeded , the user exist in db - redirect to userHome page
-                            var encriptionPassword = reader.GetString(2).Trim();
-                            var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
-                            var userName = reader.GetString(1).Trim();
-                            if (decriptionis == password)
-                                return RedirectToAction("UserHome", "Home", new { userName });
-                        }
+                        return RedirectToAction("UserHome", "Home", new { userName });
                     }
+                        
                 }
-            }
-            //the login failed - redirect to login page with the login error
-            return RedirectToAction("Index", "Home", new { validationError = "The username or password are invalid" });
+                return RedirectToAction("Index", "Home", new { validationError = "The username or password are invalid" });
+
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked, "@UserName");
         }
         //gets the string from the input and returns a xss view with the string as model
         //this is for xss demonstration.
@@ -80,7 +78,7 @@ namespace Vladi2.Controllers
         public ActionResult Register(UserAccount user, string ConfirmPassword)
         {
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
+            string connectionString = string.Format("DataSource={0}", @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite");
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -98,23 +96,18 @@ namespace Vladi2.Controllers
                 if (reader.Read() == true)
                 {
                     ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
-                    return View();
                 }
                 return View();
             };
-            databaseConnection.ContactToDataBase(query, user, MethodToBeInvoked, "@UserName", "@Email");
+            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Email");
 
-
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                return View();
+            };
 
             string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
-            databaseConnection.ContactToDataBase(insetrToDataBaseQuery, user, null, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
-
-            return View();
-
+            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
     }
 }
-
-
-
-

@@ -10,14 +10,18 @@ namespace Vladi2.Models
 {
     public class DataBaseUtils
     {
-        public event ActionResultDelegate MethodToBeInvoked;
+        //public event ActionResultDelegate MethodToBeInvoked;
         public string ConnectionDirectoryInMyComputer { get; private set; }
+
+        private TypeMapFromTypeToDbType m_typeConverter;
         public DataBaseUtils(string i_ConnectionDirectoryInMyComputer)
         {
             ConnectionDirectoryInMyComputer = i_ConnectionDirectoryInMyComputer;
+            m_typeConverter = new TypeMapFromTypeToDbType();
         }
-        public void ContactToDataBase
-            (string i_QueryActionOnDataBase, UserAccount i_User, Func<SQLiteCommand, SQLiteDataReader, RedirectToRouteResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
+
+        public ActionResult ContactToDataBaseAndExecute
+            (string i_QueryActionOnDataBase, UserAccount i_User, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {
             using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
             {
@@ -26,7 +30,7 @@ namespace Vladi2.Models
                 {
                     foreach (string parameter in i_ParametersOfTheQuery)
                     {
-                        command.Parameters.Add(parameter, TypeMapFromTypeToDbType.typeMap[parameter.GetType()]);
+                        command.Parameters.Add(parameter, m_typeConverter.typeMap[parameter.GetType()]);
                     }
                     foreach (string parameter in i_ParametersOfTheQuery)
                     {
@@ -35,37 +39,7 @@ namespace Vladi2.Models
 
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        if (MethodToBeInvoked != null)
-                        {
-                            MethodToBeInvoked(command, reader);
-                        }
-                    }
-                }
-            }
-        }
-        public void ContactToDataBase
-            (string i_QueryActionOnDataBase, UserAccount i_User, Func<SQLiteCommand, SQLiteDataReader, ViewResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
-        {
-            using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
-            {
-                m_dbConnection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(i_QueryActionOnDataBase, m_dbConnection))
-                {
-                    foreach (string parameter in i_ParametersOfTheQuery)
-                    {
-                        command.Parameters.Add(parameter, TypeMapFromTypeToDbType.typeMap[parameter.GetType()]);
-                    }
-                    foreach (string parameter in i_ParametersOfTheQuery)
-                    {
-                        command.Parameters[parameter].Value = matchingParams(parameter, i_User);
-                    }
-
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        if (MethodToBeInvoked != null)
-                        {
-                            MethodToBeInvoked(command, reader);
-                        }
+                           return MethodToBeInvoked(command, reader);
                     }
                 }
             }

@@ -8,9 +8,11 @@ namespace Vladi2.Models
 {
     public class TypeMapFromTypeToDbType
     {
-        public static Dictionary<Type,DbType> typeMap { get; private set; }
-         static TypeMapFromTypeToDbType()
+        public Dictionary<Type,DbType> typeMap { get; private set; }
+         public TypeMapFromTypeToDbType()
         {
+            typeMap = new Dictionary<Type, DbType>();
+            typeMap[typeof(string)] = DbType.String;
             typeMap[typeof(byte)] = DbType.Byte;
             typeMap[typeof(sbyte)] = DbType.SByte;
             typeMap[typeof(short)] = DbType.Int16;
@@ -23,7 +25,6 @@ namespace Vladi2.Models
             typeMap[typeof(double)] = DbType.Double;
             typeMap[typeof(decimal)] = DbType.Decimal;
             typeMap[typeof(bool)] = DbType.Boolean;
-            typeMap[typeof(string)] = DbType.String;
             typeMap[typeof(char)] = DbType.StringFixedLength;
             typeMap[typeof(Guid)] = DbType.Guid;
             typeMap[typeof(DateTime)] = DbType.DateTime;
