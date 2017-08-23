@@ -1,21 +1,101 @@
-﻿@model Vladi2.Models.homeVM
+﻿@model Vladi2.Models.UserAccount
 
-@*login form*@
+<div class="background">
+    <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+            <div class="login-form">
+               @using (Html.BeginForm("login", "home", FormMethod.Post))
+               {
+                    <div class="sign-in-htm">
+                        <div class="group">
+                            <label for="userSignin" class="label">Username</label>
+                            <input name="username" id="userSignin" type="text" class="input">
+                        </div>
 
-    <div class="wrapper">
-        <form class="form-signin" action="home/login" method="post">
-            @*action - goes to home controller - login action*@
-            <h2 class="form-signin-heading">Please login</h2>
-            <input type="text" class="form-control" name="username" placeholder="User name" required="" autofocus="" />
-            <input type="password" class="form-control" name="password" placeholder="Password" required="" />
-            @*not valid login validation - will show only after invalid login attempt*@
-            <p style="color:red">@Model.data</p>
-            <label class="checkbox">
-                <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
-            </label>
-            <button style="width:60px;" class="btn btn-md btn-primary btn-block" type="submit">Login</button>
-        </form>
+                        <div class="group">
+                            <label for="passwordSignin" class="label">Password</label>
+                            <input name="password" type="password" class="input" data-type="password">
+                        </div>
+                       @* <p style="color:red">@Model.data</p>*@
+                        <div class="group">
+                            <input id="check" type="checkbox" class="check" checked>
+                            <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                        </div>
+                        <div class="group">
+                            <input id="signInButton" type="submit" class="button" value="Sign In">
+                        </div>
+
+                        <div class="hr"></div>
+                        <div class="foot-lnk">
+                            <a href="#forgot">Forgot Password?</a>
+                        </div>
+                    </div>
+               }
+       
+                @using (Html.BeginForm("Register", "home", FormMethod.Post))
+                {
+                    <div class="sign-up-htm">
+                        <div class="group">
+                      
+                           
+                            <label for="user" class="label">Username</label>
+        
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { id = "username", @class = "input", type = "text", name = "userRegister" } });
+                            @Html.ValidationMessageFor(model => model.UserName);
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">Password</label>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { id = "password", type = "password", @class = "input", name = "userRegister" } })
+                         @Html.ValidationMessageFor(model => model.Password)
+                       
+                        </div>
+                        
+                        <div class="group">
+                            <label for="pass" class="label">Repeat Password</label>
+                            <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="input" data-type="password">
+                        </div>
+
+                        <div class="group">
+
+                            <label for="pass" class="label">Email Address</label>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { id = "Email", @class = "input", type = "text", name = "userRegister" } })
+                            @Html.ValidationMessageFor(model => model.Email)
+                     
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">Phone Number</label>
+                            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { id = "PhoneNumber", @class = "input", type = "text", name = "userRegister" } })
+                            @Html.ValidationMessageFor(model => model.PhoneNumber)
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">First Name</label>
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { id = "FirstName", @class = "input", type = "text", name = "userRegister" } })
+                    
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">Last Name</label>
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { id = "LastName", @class = "input", type = "text", name = "userRegister" } })
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="Sign Up">
+                        </div>
+                       
+                        <div class="hr"></div>
+                        <div class="foot-lnk">
+                            <label for="tab-1">Already Member?</label>
+                        </div>
+                    </div>
+                }
+
+</div>
+        </div>
     </div>
+
+</div>
+
+
 
 
 
