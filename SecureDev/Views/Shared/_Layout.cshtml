@@ -14,7 +14,33 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
+
+
+
+
+
 <body>
+    <header id="mynav">
+        <ul>
+            @if (Session["UserName"] == null)
+            {
+                <li><a onclick="location.href='@Url.Action("Login","account")'" o class="active">Home</a></li>
+            }
+            @if (Session["UserName"] != null)
+            {
+                <li><a class="active" onclick="location.href='@Url.Action("SearchConsultants","account")'">Home Page</a></li>
+                <li><a class="active" onclick="location.href='@Url.Action("SmartProfile","account")'">SmartForm</a></li>
+                <li><a class="active" onclick="location.href='@Url.Action("ChangePassword","account")'">Change Password</a></li>
+
+
+                <li class="rightfloat"><a id="signOutButton">Sign Out</a></li>
+            }
+        </ul>
+    </header>
+
+
+
+
 
 <div class="container body-content">
     @*all the views are rendered inside this div*@
