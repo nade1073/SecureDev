@@ -11,6 +11,22 @@ namespace Vladi2.Models
         [Required(ErrorMessage = "UserName required")]
         public string UserName { get; set; }
 
+        public UserAccount()
+        {
+
+        }
+
+        public UserAccount (string userRegister,string PasswordRegister,string email,string phoneNumber,string firstName,string lastName)
+        {
+            UserName = userRegister;
+            Password = PasswordRegister;
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            PhoneNumber = phoneNumber;
+
+        }
+
         [Required(ErrorMessage = "Password required")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}",ErrorMessage= "Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:")]
         public string Password { get; set; }
