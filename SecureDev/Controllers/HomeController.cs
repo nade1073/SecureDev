@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Vladi2.Models;
@@ -27,12 +28,16 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
+            if(!ValidationLoginUserProperty(username, password))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             //the path is absolute and should be changed.
             string encriptedPassword;
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
+            var connectionString = string.Format("DataSource={0}", @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite");
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -69,32 +74,33 @@ namespace Vladi2.Controllers
             var vm = new homeVM { data = userName };
             return View(vm);
         }
-        public ActionResult Register()
-        {
-            return View();
-        }
 
         [HttpPost]
         public ActionResult Register(UserAccount user, string ConfirmPassword)
         {
 
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
+                string connectionString = string.Format("DataSource={0}", @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite");
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
                 ViewBag.errorConfirm = "The passwords is not same";
-                return View();
+                return RedirectToAction("Index", "Home");
+            }
+
+            if(!ValidationRegUserProperty(user))
+            {
+                return RedirectToAction("Index", "Home");
             }
 
             encriptedPassword = EncryptionManager.Encrypt(user.Password, c_passwordKey);
             user.Password = encriptedPassword;
 
             var query = "SELECT * FROM tblusers Where Username = @UserName or Email = @Email";
-            Func<SQLiteCommand, SQLiteDataReader, ViewResult> MethodToBeInvokedAfterTheValidation;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
             {
-                return View();
+                return RedirectToAction("Index", "Home");
             };
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
@@ -102,7 +108,7 @@ namespace Vladi2.Controllers
                 if (reader.Read() == true)
                 {
                     ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
-                    return View();
+                    return RedirectToAction("Index", "Home");
                 }
 
                 string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
@@ -112,6 +118,77 @@ namespace Vladi2.Controllers
 
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
+        }
+        private bool ValidationRegUserProperty(UserAccount i_User)
+        {
+            if(i_User.FirstName==null || i_User.LastName ==null || i_User.Email == null || i_User.Password == null || i_User.PhoneNumber == null || i_User.UserName == null)
+            {
+                return false;
+            }
+            string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
+            var matchPassword = Regex.Match(i_User.Password, passwordRegex, RegexOptions.IgnoreCase);
+            if (!matchPassword.Success)
+            {
+                return false;
+            }
+
+            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+            var matchEmail = Regex.Match(i_User.Email, emailRegex, RegexOptions.IgnoreCase);
+            if (!matchEmail.Success)
+            {
+                return false;
+            }
+
+            if(!IsDigitsOnly(i_User.PhoneNumber))
+            {
+                return false;
+            }
+
+            if(!(IsCharacterOnly(i_User.FirstName)&&IsCharacterOnly(i_User.LastName)))
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        private bool ValidationLoginUserProperty(string i_UserName, string i_Password)
+        {
+            if (i_Password == null || i_UserName == null)
+            {
+                return false; 
+            }
+            string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
+            var matchPassword = Regex.Match(i_Password, passwordRegex, RegexOptions.IgnoreCase);
+            if (!matchPassword.Success)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
+        bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+
+            return true;
+        }
+
+        bool IsCharacterOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!((c > 'a' && c < 'z')|| (c > 'A' && c < 'Z')))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

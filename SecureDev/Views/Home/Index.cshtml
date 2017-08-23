@@ -1,22 +1,108 @@
 ﻿@model Vladi2.Models.UserAccount
 
+@*<script type="text/javascript">
+
+  
+
+    function registerFormValidate()
+    {
+        
+        var userName = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var ConfirmPassword = document.getElementById("ConfirmPassword").value;
+        var Email = document.getElementById("Email").value;
+        var firstname = document.getElementById("FirstName").value;
+        var lastname = document.getElementById("LastName").value;
+        var phonenumber = document.getElementById("PhoneNumber").value;
+       
+        if (userName == "" || password == "" || ConfirmPassword == "" || Email == "" || firstname == "" || lastname == "" || phonenumber == "")
+        {
+            alert("Please fill all the fields!!");
+            return false;
+        }
+        if (password != ConfirmPassword)
+        {
+            alert("The passwords are not equal");
+            return false;
+        }
+        var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
+        if (!regexPass.test(password))
+        {
+            alert("Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:");
+            return false;
+        }
+        var regexMail=/^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
+        if (!regexMail.test(Email))
+        {
+            alert("Email is incorrect");
+            return false;
+        }
+        var firsttext = val.match(/\d+/g);
+        if (matches != null) {
+            alert('number');
+        }
+        if (isNaN(phonenumber))
+        {
+            alert("Phonenumber is contain letters");
+            return false;
+        }
+        if (isNan(firstname))
+        {
+            
+            alert("Names conatain numbers");
+            return false;
+        }
+        if (isNan(lastname)===false) {
+
+            alert("Names conatain numbers");
+            return false;
+        }
+        if (!(/^[a-zA-Z]+$/.test(firstname))) {
+            alert("the string has a number");
+            return false;
+        }
+        if (!(/^[a-zA-Z]+$/.test(lastname))) {
+            alert("the string has a number");
+            return false;
+        }
+
+
+           return true;
+    }
+
+    function loginFormValidation()
+    {
+        var userName = document.getElementById("userLogin").value;
+        var password = document.getElementById("passwordLogin").value;
+        if(userName == "" || password =="")
+        {
+            alert("Please fill all the fields!!");
+            return false;
+        }
+
+    }
+</script>*@
+
+
+
+
 <div class="background">
     <div class="login-wrap">
         <div class="login-html">
             <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
             <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
             <div class="login-form">
-               @using (Html.BeginForm("login", "home", FormMethod.Post))
+               @using (Html.BeginForm("login", "home", FormMethod.Post, new { onsubmit = "return loginFormValidation()" }))
                {
                     <div class="sign-in-htm">
                         <div class="group">
                             <label for="userSignin" class="label">Username</label>
-                            <input name="username" id="userSignin" type="text" class="input">
+                            <input name="username" id="userLogin" type="text" class="input">
                         </div>
 
                         <div class="group">
                             <label for="passwordSignin" class="label">Password</label>
-                            <input name="password" type="password" class="input" data-type="password">
+                            <input id="passwordLogin"name="password" type="password" class="input" data-type="password">
                         </div>
                        @* <p style="color:red">@Model.data</p>*@
                         <div class="group">
@@ -34,7 +120,7 @@
                     </div>
                }
        
-                @using (Html.BeginForm("Register", "home", FormMethod.Post))
+                @using (Html.BeginForm("Register", "home", FormMethod.Post, new { onsubmit = "return registerFormValidate()" }))
                 {
                     <div class="sign-up-htm">
                         <div class="group">
