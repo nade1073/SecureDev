@@ -90,24 +90,27 @@ namespace Vladi2.Controllers
             user.Password = encriptedPassword;
 
             var query = "SELECT * FROM tblusers Where Username = @UserName or Email = @Email";
-            Func<SQLiteCommand, SQLiteDataReader, ViewResult> MethodToBeInvoked;
+            Func<SQLiteCommand, SQLiteDataReader, ViewResult> MethodToBeInvokedAfterTheValidation;
+            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+            {
+                return View();
+            };
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
                 if (reader.Read() == true)
                 {
                     ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
+                    return View();
                 }
-                return View();
-            };
-            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Email");
 
-            MethodToBeInvoked = (commad, reader) =>
-            {
-                return View();
+                string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
+                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvokedAfterTheValidation, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
             };
+            return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Email");
 
-            string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
-            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
+            //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
+            //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
     }
 }
