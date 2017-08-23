@@ -27,24 +27,31 @@ namespace Vladi2.Controllers
             //the path is absolute and should be changed.
             string encriptedPassword;
             var connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
+            string loginQuery = "SELECT * FROM tblusers Where Username = @Username";
 
-                encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
 
-              
+
             using (var m_dbConnection = new SQLiteConnection(connectionString))
             {
                 m_dbConnection.Open();
-                using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM tblusers Where Username = '" + username + "'", m_dbConnection))
-                using (SQLiteDataReader reader = command.ExecuteReader())
+                string loginQuery = "SELECT * FROM tblusers Where Username = @Username";
+                using (SQLiteCommand command = new SQLiteCommand(loginQuery, m_dbConnection))
                 {
-                    while (reader.Read())
+                    command.Parameters.Add(@"Username", System.Data.DbType.String);
+                    command.Parameters["@Username"].Value = username;
+                    using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        //if we got here - the select succeded , the user exist in db - redirect to userHome page
-                        var encriptionPassword = reader.GetString(2).Trim();
-                        var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
-                        var userName = reader.GetString(1).Trim();
-                        if (decriptionis == password)
-                            return RedirectToAction("UserHome", "Home", new { userName });
+                        while (reader.Read())
+                        {
+                            //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                            var encriptionPassword = reader.GetString(2).Trim();
+                            var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
+                            var userName = reader.GetString(1).Trim();
+                            if (decriptionis == password)
+                                return RedirectToAction("UserHome", "Home", new { userName });
+                        }
                     }
                 }
             }
@@ -73,6 +80,8 @@ namespace Vladi2.Controllers
         public ActionResult Register(UserAccount user, string ConfirmPassword)
         {
             string encriptedPassword;
+            string connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
                 ViewBag.errorConfirm = "The passwords is not same";
@@ -80,85 +89,29 @@ namespace Vladi2.Controllers
             }
 
             encriptedPassword = EncryptionManager.Encrypt(user.Password, c_passwordKey);
+            user.Password = encriptedPassword;
 
-            var connectionString = string.Format("DataSource={0}", @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite");
-            var query = "SELECT * FROM tblusers Where Username = @Username or Email = @Email";
-            using (var m_dbConnection = new SQLiteConnection(connectionString))
+            var query = "SELECT * FROM tblusers Where Username = @UserName or Email = @Email";
+            Func<SQLiteCommand, SQLiteDataReader, ViewResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
             {
-                m_dbConnection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(query, m_dbConnection))
+                if (reader.Read() == true)
                 {
-                    command.Parameters.Add("@Username", System.Data.DbType.String);
-                    command.Parameters.Add("@Email", System.Data.DbType.String);
-                    command.Parameters["@Username"].Value = user.Username;
-                    command.Parameters["@Email"].Value = user.Email;
-
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read() == true)
-                        {
-                            ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
-                            return View();
-                        }
-                    }
+                    ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
+                    return View();
                 }
+                return View();
+            };
+            databaseConnection.ContactToDataBase(query, user, MethodToBeInvoked, "@UserName", "@Email");
 
-                using (SQLiteCommand command = new SQLiteCommand(
-                    "Insert INTO tblusers (FirstName,UserName,Password,LastName,PhoneNumber,Email) VALUES ('"+user.FirstName+"','"+user.Username+"','"+ encriptedPassword + "','"+user.LastName+"','"+user.PhoneNumber+"','"+user.Email+"')", m_dbConnection))
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                
-                }
 
-            }
+
+            string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
+            databaseConnection.ContactToDataBase(insetrToDataBaseQuery, user, null, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
+
             return View();
-    
-        }
-        private string EncryptString_Aes(string plainText, byte[] Key, byte[] IV)
-        {
-            // Check arguments. 
-            if (plainText == null || plainText.Length <= 0)
-                throw new ArgumentNullException("plainText");
-            if (Key == null || Key.Length <= 0)
-                throw new ArgumentNullException("Key");
-            if (IV == null || IV.Length <= 0)
-                throw new ArgumentNullException("Key");
-            byte[] encrypted;
-            // Create an AesCryptoServiceProvider object 
-            // with the specified key and IV. 
-            using (AesCryptoServiceProvider aesAlg = new AesCryptoServiceProvider())
-            {
-                aesAlg.Key = Key;
-                aesAlg.IV = IV;
-
-                // Create a decrytor to perform the stream transform.
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                // Create the streams used for encryption. 
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-
-                            //Write all data to the stream.
-                            swEncrypt.Write(plainText);
-                        }
-                        encrypted = msEncrypt.ToArray();
-                    }
-                }
-            }
-
-
-            // Return the encrypted bytes from the memory stream. 
-            //return encrypted;
-            return System.Text.Encoding.UTF8.GetString(encrypted);
 
         }
-
-
-
     }
 }
 
