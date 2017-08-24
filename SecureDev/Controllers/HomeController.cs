@@ -16,6 +16,8 @@ namespace Vladi2.Controllers
     public class HomeController : BaseController
     {
         const string c_passwordKey = "Nadav&Netanel";
+        const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
+        const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         //entry point for main page as determined in the route config
         public ActionResult Index(string validationError = null)
         {
@@ -37,7 +39,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite");
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -52,7 +54,8 @@ namespace Vladi2.Controllers
                     var userName = reader.GetString(1).Trim();
                     if (decriptionis == password)
                     {
-                        return RedirectToAction("UserHome", "Home", new { userName });
+                        Session["UserName"] = username;
+                        return RedirectToAction("UserHome", "Home");
                     }
                         
                 }
@@ -69,10 +72,9 @@ namespace Vladi2.Controllers
             return View(vm);
         }
         //returns the user home page
-        public ActionResult UserHome(string userName)
+        public ActionResult UserHome()
         {
-            var vm = new homeVM { data = userName };
-            return View(vm);
+            return View();
         }
 
         [HttpPost]
@@ -80,7 +82,7 @@ namespace Vladi2.Controllers
         {
 
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite");
+                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
