@@ -78,16 +78,22 @@ namespace Vladi2.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(UserAccount user, string ConfirmPassword ,HttpPostedFileBase file)
+        public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
         {
+            if (IsImage(file))
+            { 
             byte[] fileInBytes = new byte[file.ContentLength];
             using (BinaryReader theReader = new BinaryReader(file.InputStream))
             {
                 fileInBytes = theReader.ReadBytes(file.ContentLength);
             }
             string fileAsString = Convert.ToBase64String(fileInBytes);
-     
-
+            user.PictureUser = fileAsString;
+             }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             string encriptedPassword;
                 string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
@@ -120,8 +126,8 @@ namespace Vladi2.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
-                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvokedAfterTheValidation, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
+                string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email, PictureUser) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email,@PictureUser)";
+                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvokedAfterTheValidation, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email", "@PictureUser");
             };
             return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Email");
 
@@ -153,10 +159,10 @@ namespace Vladi2.Controllers
                 return false;
             }
 
-            if(!(IsCharacterOnly(i_User.FirstName)&&IsCharacterOnly(i_User.LastName)))
-            {
-                return false;
-            }
+            //if(!(IsCharacterOnly(i_User.FirstName)&&IsCharacterOnly(i_User.LastName)))
+            //{
+            //    return false;
+            //}
             return true;
 
         }
@@ -198,6 +204,18 @@ namespace Vladi2.Controllers
             }
 
             return true;
+        }
+        private bool IsImage(HttpPostedFileBase file)
+        {
+            if (file.ContentType.Contains("image"))
+            {
+                return true;
+            }
+
+            string[] formats = new string[] { ".jpg", ".png", ".gif", ".jpeg" }; // add more if u like...
+
+            // linq from Henrik Stenbæk
+            return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
