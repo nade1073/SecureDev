@@ -81,7 +81,37 @@
         }
 
     }
+
+
+
+    $('#pictureButton').click(function () {
+
+        $('#files').click();
+
+    });
+
+    //Create an image
+    $("#files").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = imageIsLoaded;
+            reader.readAsDataURL(this.files[0]);
+            picArray.push(this.files[0]);
+
+        }
+    });
+    function imageIsLoaded(e) {
+
+        $(".form-style-test").append("<div class=imageDragger id=imageDragger" + imageCount + "><div class=closer></div><img class=thumbnail id=myImage" + imageCount + " src=#  </> </div>");
+        $(".imageDragger").draggable({ containment: ".range" });
+        $('#myImage' + imageCount).attr('src', e.target.result);
+        $("#myImage" + imageCount).resizable({ containment: ".range", autoHide: true });
+        imageCount++;
+    };
+
 </script>
+
+
 
 
 
@@ -164,6 +194,13 @@
                             <label for="pass" class="label">Last Name</label>
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { id = "LastName", @class = "input", type = "text", name = "userRegister" } })
                         </div>
+
+                        <div class="group">
+                            <label for="pass" class="label">Picture</label>
+                             <input type="file" name="UserPic" id="UserPic" accept="image/jpg, image/jpeg">
+
+                            </div>
+
                         <div class="group">
                             <input type="submit" class="button" value="Sign Up">
                         </div>
