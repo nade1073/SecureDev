@@ -157,6 +157,14 @@
     <Content Include="Content\beautiful-car-background.jpeg" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\CarsPictures\audi.jpg" />
+    <Content Include="Content\CarsPictures\driving-1995-lamborghini-cala-concept-4.jpg" />
+    <Content Include="Content\CarsPictures\dsc_8582.jpg" />
+    <Content Include="Content\CarsPictures\ferrariportofino02.jpg" />
+    <Content Include="Content\CarsPictures\mercedes_amg-gt4-2.jpg" />
+    <Content Include="Content\CarsPictures\overlay.png" />
+    <Content Include="Content\CarsPictures\watermark-template.jpg" />
+    <Content Include="Content\CarsPictures\Wolfsagen.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

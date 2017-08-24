@@ -1,11 +1,176 @@
-﻿@model Vladi2.Models.homeVM
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<h1>Hello @Model.data</h1>
-<div class="jumbotron">
-    @*search input form - demonstrating xss*@
-    @using (Html.BeginForm("xss", "home", FormMethod.Get))
-    {
-        <input type="text" name="xss"/>
-        <button type="submit">submit </button>
-    }
-</div>
+<head>
+    <title>Buzz</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="css/images/favicon.ico" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="js/fancybox/jquery.fancybox-1.3.1.css" type="text/css" media="all" />
+    <!--[if IE 6]><script src="js/png-fix.js" type="text/javascript" charset="utf-8"></script><![endif]-->
+    <script src="js/jquery-1.4.2.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/fancybox/jquery.fancybox-1.3.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/fancybox/jquery.mousewheel-3.0.2.pack.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery.easing.1.3.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/js-func.js" type="text/javascript" charset="utf-8"></script>
+</head>
+@if (Session["UserName"] != null)
+{
+    <h3 style="text-align:center;">Wellcome  @Session["UserName"]</h3>
+}
+
+    <div id="wrapper">
+        <div id="header">
+
+        </div>
+        <div id="main">
+            <div class="shell">
+                <div id="content" class="left">
+                    <div class="box box-featured">
+                        <div class="box-image"> <a href="#"><img  src="~/Content/CarsPictures/Wolfsagen.jpg" style="width:80%;"></a> </div>
+                        <div class="box-body">
+                            <p class="posted">Featured article</p>
+                            <h2>New Volkswagen T-Roc SUV: specs, pictures and sale date</h2>
+                            <p class="text">The all-new Volkswagen T-Roc SUV has been revealed, and is set to hit showrooms later in 2017 </p>
+                            <a href="#" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <div class="box">
+                        <div class="box-image"> <a href="#"><img src="~/Content/CarsPictures/audi.jpg" style="width:100%;" /></a> <a href="" class="overlay notext">&nbsp;</a> </div>
+                        <div class="box-body">
+                            <p class="posted">Posted on 18 March 2008</p>
+                            <h2>Audi reveals new naming structure to loop in e-tron range</h2>
+                            <p class="text">Audi's new numerical naming system will be used on conventional, hybrid and all-electric models</p>
+                            <a href="#" class="comments">21</a> <a href="" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <a href="#" class="close notext">&nbsp;</a>
+                    </div>
+                    <div class="box">
+                        <div class="box-image"> <a href="#"><img src="~/Content/CarsPictures//ferrariportofino02.jpg" style="width:100%" /></a> <a href="css/images/box-image2.jpg" class="overlay notext">&nbsp;</a> </div>
+                        <div class="box-body">
+                            <p class="posted">Posted on 18 March 2008</p>
+                            <h2>New 592bhp Ferrari Portofino unleashed to replace California</h2>
+                            <p class="text">Ferrari's new entry-level Portofino model packs BMW M5 levels of power, four seats and a folding metal roof</p>
+                            <a href="#" class="comments">21</a> <a href="#" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <a href="#" class="close notext">&nbsp;</a>
+                    </div>
+                    <div class="box box-small">
+                        <div class="box-image"> <a href="#"><img src="~/Content/CarsPictures/mercedes_amg-gt4-2.jpg" style="width:100%;" alt="" /></a> <a href="css/images/box-image3.jpg" class="overlay notext">&nbsp;</a> </div>
+                        <div class="box-body">
+                            <p class="posted">Posted on 18 March 2008</p>
+                            <h2>Mercedes-AMG's new Porsche Panamera rival</h2>
+                            <p class="text">New 2018 Mercedes-AMG GT four-door: wraps peel off in fresh spy shots</p>
+                            <a href="#" class="comments">21</a> <a href="#" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <a href="#" class="close notext">&nbsp;</a>
+                    </div>
+                    <div class="box box-small">
+                        <div class="box-image"> <a href="#"><img src="~/Content/CarsPictures/watermark-template.jpg" style="width:100%;" alt="" /></a> <a href="css/images/box-image4.jpg" class="overlay notext">&nbsp;</a> </div>
+                        <div class="box-body">
+                            <p class="posted">Posted on 18 March 2008</p>
+                            <h2>Mercedes confirms compact EQ concept for Frankfurt Motor Show</h2>
+                            <p class="text">LElectrified compact EQ model will be the headline act in upcoming compact car product offensive at Mercedes</p>
+                            <a href="#" class="comments">21</a> <a href="#" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <a href="#" class="close notext">&nbsp;</a>
+                    </div>
+                    <div class="box box-small">
+                        <div class="box-image"> <a href="#"><img src="~/Content/CarsPictures/dsc_8582.jpg" alt="" style="width:100%;" /></a> <a href="css/images/box-image5.jpg" class="overlay notext">&nbsp;</a> </div>
+                        <div class="box-body">
+                            <p class="posted">Posted on 18 March 2008</p>
+                            <h2>Audi TT RS review</h2>
+                            <p class="text">For fast Audi fans, things don’t get much better than the awesomely potent 395bhp TT RS</p>
+                            <a href="#" class="comments">21</a> <a href="#" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <a href="#" class="close notext">&nbsp;</a>
+                    </div>
+                    <div class="box box-small">
+                        <div class="box-image"> <a href="#"><img src="~/Content/CarsPictures/driving-1995-lamborghini-cala-concept-4.jpg" style="width:100%;" alt="" /></a> <a href="css/images/box-image6.jpg" class="overlay notext">&nbsp;</a> </div>
+                        <div class="box-body">
+                            <p class="posted">Posted on 18 March 2008</p>
+                            <h2>Lamborghini’s V10 history started with the P140 and Calà concepts</h2>
+                            <p class="text">The Lamborghini Huracán Performante is a gift from the Italian god of speed. It uses a cutting-edge weight-saving material named Forged Composites, and it’s equipped with the</p>
+                            <a href="#" class="comments">21</a> <a href="#" class="continue">Continue reading</a>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <a href="#" class="close notext">&nbsp;</a>
+                    </div>
+                    <div class="cl">&nbsp;</div>
+                </div>
+                <div id="sidebar" class="right">
+                    <div class="box box-tabs">
+                        <div class="tabs">
+                            <ul>
+                                <li><a href="#popular" class="active">Popular</a></li>
+                                <li><a href="#comments">Comments</a></li>
+                                <li class="last"><a href="#featured">Featured</a></li>
+                            </ul>
+                        </div>
+                        <div class="cl">&nbsp;</div>
+                        <div class="tabs-content">
+                            <ul class="tabs-list" id="popular">
+                                <li><a href="#">First Ride: 2018 Harley-Davidson Softail lineup</a></li>
+                                <li><a href="#">First Drive: 2018 GMC Terrain</a></li>
+                                <li><a href="#">Motorcycle review: 2017 Yamaha FJ-09</a></li>
+                                <li><a href="#">SUV Review: 2017 Mini Cooper S Countryman All4</a></li>
+
+                            </ul>
+                            <ul class="tabs-list" id="comments" style="display: none;">
+                                <li><a href="#">First Drive: 2018 Toyota Camry</a></li>
+                                <li><a href="#">Reader Review: 2017 Mazda MX-5 RF</a></li>
+                                <li><a href="#">First Drive: 2018 GMC Terrain</a></li>
+                                <li><a href="#">Car Review: 2017 Mercedes-AMG C43 4Matic</a></li>
+
+                            </ul>
+                            <ul class="tabs-list" id="featured" style="display: none;">
+                                <li><a href="#">Motorcycle review: 2017 Yamaha FJ-09</a></li>
+                                <li><a href="#">SUV Review: 2017 Mini Cooper S Countryman All4</a></li>
+                                <li><a href="#">Senectus donec, lacus scelerisque, vestibulum id tristique.</a></li>
+                                <li><a href="#">First Drive: 2018 Toyota Camry</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <h2 class="title">The site Created by:</h2>
+                        <div class="follow-item">
+                            <p><span class="author">Nadav Shalev & Netanel Zavolunov</span></p>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <h2 class="title">Full width widgetized zone</h2>
+                        <div class="widget-item">
+                            <p>
+                                150 cars now that all examples destined for Britain have been sold.
+                                The first 100 cars confirmed for Britain were snapped up within 12 months of order books opening, so 50 more NSXs will be offered here, with first deliveries beginning in mid-2018
+                            </p>
+                        </div>
+                        <div class="widget-item">
+                            <p>Demand has exceeded the brand’s expectations despite there being just two UK dealers that offer the NSX, Crown Honda in Hendon and Chiswick Honda. Honda UK boss Dave Hodgetts believes the car’s iconic predecessor has helped to improve its desirability.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cl">&nbsp;</div>
+            </div>
+        </div>
+        <div id="footer-push" class="notext">&nbsp;</div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
