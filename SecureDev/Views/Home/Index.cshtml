@@ -1,6 +1,6 @@
 ﻿@model Vladi2.Models.UserAccount
 
-@*<script type="text/javascript">
+<script type="text/javascript">
 
   
 
@@ -81,7 +81,7 @@
         }
 
     }
-</script>*@
+</script>
 
 
 
@@ -128,8 +128,8 @@
                            
                             <label for="user" class="label">Username</label>
         
-                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { id = "username", @class = "input", type = "text", name = "userRegister" } });
-                            @Html.ValidationMessageFor(model => model.UserName);
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { id = "username", @class = "input", type = "text", name = "userRegister" } })
+                            @Html.ValidationMessageFor(model => model.UserName)
                         </div>
                         <div class="group">
                             <label for="pass" class="label">Password</label>

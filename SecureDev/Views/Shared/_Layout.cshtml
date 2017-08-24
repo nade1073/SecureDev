@@ -15,6 +15,11 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 
+@*@if (Session["UserName"] == null)
+{
+}*@
+
+
 
 
 
@@ -22,19 +27,13 @@
 <body>
     <header id="mynav">
         <ul>
-            @if (Session["UserName"] == null)
-            {
-                <li><a onclick="location.href='@Url.Action("Login","account")'" o class="active">Home</a></li>
-            }
-            @if (Session["UserName"] != null)
-            {
+           
+                <li><a onclick="location.href='@Url.Action("Login","account")'" o class="active">Home</a></li>          
                 <li><a class="active" onclick="location.href='@Url.Action("SearchConsultants","account")'">Home Page</a></li>
                 <li><a class="active" onclick="location.href='@Url.Action("SmartProfile","account")'">SmartForm</a></li>
                 <li><a class="active" onclick="location.href='@Url.Action("ChangePassword","account")'">Change Password</a></li>
-
-
                 <li class="rightfloat"><a id="signOutButton">Sign Out</a></li>
-            }
+            
         </ul>
     </header>
 
@@ -47,13 +46,55 @@
     @RenderBody()
   @*<hr/>*@  
     @*layout footer*@
-    <footer>
-       
-    </footer>
+
 </div>
+
+
     @*renders and minifies scripts with the mvc bundles*@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <footer id="sticky">
+
+        <!--containers for footer content-->
+        <div class="container2 siteNav">
+            <nav>
+                <span style="border-bottom:2px solid">Site Nav</span>
+                <ul>
+                    <li>
+                        <a>Home</a>
+                    </li>
+                    <li>
+                        <a>Here</a>
+                    </li>
+                    <li>
+                        <a>There</a>
+                    </li>
+                    <li>
+                        <a>Away</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container2 contact">
+            <h4>--- Contact Us! ---</h4>
+            <a>email@mail.com</a>
+            <address>
+                123 Street<br />
+                Anywhere, USA<br />
+                1.800.555.6666
+            </address>
+        </div>
+
+        <div class="container2 cta">
+            <h4>
+                Want more info?<br />
+                Click below!
+            </h4>
+            <button>Learn More!</button>
+        </div>
+
+    </footer>
 </body>
 </html>
