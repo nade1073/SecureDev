@@ -74,6 +74,10 @@ namespace Vladi2.Controllers
         //returns the user home page
         public ActionResult UserHome()
         {
+            if(Session["UserName"]==null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

@@ -23,23 +23,20 @@
 
 
 <body>
+  
     <header id="mynav">
-        <ul>
-           
-                <li><a onclick="location.href='@Url.Action("Login","account")'" o class="active">Home</a></li>          
-                <li><a class="active" onclick="location.href='@Url.Action("SearchConsultants","account")'">Home Page</a></li>
-                <li><a class="active" onclick="location.href='@Url.Action("SmartProfile","account")'">SmartForm</a></li>
-                <li><a class="active" onclick="location.href='@Url.Action("ChangePassword","account")'">Change Password</a></li>
-                <li class="rightfloat"><a id="signOutButton">Sign Out</a></li>
-            
-        </ul>
+    <ul>
+
+        <li><a onclick="location.href='@Url.Action("Login","account")'" o class="active">Home</a></li>
+        <li><a class="active" onclick="location.href='@Url.Action("SearchConsultants","account")'">Home Page</a></li>
+        <li><a class="active" onclick="location.href='@Url.Action("SmartProfile","account")'">SmartForm</a></li>
+        <li><a class="active" onclick="location.href='@Url.Action("ChangePassword","account")'">Change Password</a></li>
+        <li class="rightfloat"><a id="signOutButton">Sign Out</a></li>
+
+    </ul>
     </header>
 
-
-
-
-
-<div class="container ">
+<div class="container5">
     @*all the views are rendered inside this div*@
     @RenderBody()
   @*<hr/>*@  
