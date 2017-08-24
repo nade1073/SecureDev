@@ -78,8 +78,15 @@ namespace Vladi2.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(UserAccount user, string ConfirmPassword)
+        public ActionResult Register(UserAccount user, string ConfirmPassword ,HttpPostedFileBase file)
         {
+            byte[] fileInBytes = new byte[file.ContentLength];
+            using (BinaryReader theReader = new BinaryReader(file.InputStream))
+            {
+                fileInBytes = theReader.ReadBytes(file.ContentLength);
+            }
+            string fileAsString = Convert.ToBase64String(fileInBytes);
+     
 
             string encriptedPassword;
                 string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
