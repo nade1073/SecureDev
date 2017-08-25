@@ -2,13 +2,11 @@
 
 <script type="text/javascript">
 
-  
-
     function registerFormValidate()
     {
         
-        var userName = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
+        var userName = document.getElementById("usernameRegister").value;
+        var password = document.getElementById("passwordRegister").value;
         var ConfirmPassword = document.getElementById("ConfirmPassword").value;
         var Email = document.getElementById("Email").value;
         var firstname = document.getElementById("FirstName").value;
@@ -17,55 +15,48 @@
        
         if (userName == "" || password == "" || ConfirmPassword == "" || Email == "" || firstname == "" || lastname == "" || phonenumber == "")
         {
-            alert("Please fill all the fields!!");
+            alert("Please check the Errors");
             return false;
         }
         if (password != ConfirmPassword)
         {
-            alert("The passwords are not equal");
+            alert("Please check the Errors");
             return false;
         }
         var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
         if (!regexPass.test(password))
         {
-            alert("Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:");
+            alert("Please check the Errors");
             return false;
         }
         var regexMail=/^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
         if (!regexMail.test(Email))
         {
-            alert("Email is incorrect");
+            alert("Please check the Errors");
             return false;
         }
-        var firsttext = val.match(/\d+/g);
-        if (matches != null) {
-            alert('number');
-        }
+ 
         if (isNaN(phonenumber))
         {
-            alert("Phonenumber is contain letters");
+            alert("Please check the Errors");
             return false;
         }
-        if (isNan(firstname))
-        {
-            
-            alert("Names conatain numbers");
-            return false;
-        }
-        if (isNan(lastname)===false) {
-
-            alert("Names conatain numbers");
-            return false;
-        }
+        
         if (!(/^[a-zA-Z]+$/.test(firstname))) {
-            alert("the string has a number");
+            alert("Please check the Errors");
             return false;
         }
         if (!(/^[a-zA-Z]+$/.test(lastname))) {
-            alert("the string has a number");
+            alert("Please check the Errors");
             return false;
         }
-
+        var x = document.getElementById("file");
+        if (document.getElementById("file").files.length == 0)
+        {
+          
+            alert("Please check the Errors");
+            return false;
+        }
 
            return true;
     }
@@ -89,10 +80,125 @@
             $('#file').click();
 
         });
+     
+        
+        $('#passwordRegister').on('input', function (e)
+        {
+            var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
+            var value = $(this).val();
+            if (value.length === 0) {
+                $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!regexPass.test(value)) {
+
+                $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:</p>");
+            }
+            else {
+                $('#passwordError').replaceWith("<p id=passwordError ></p>");
+            }
+        });
+        $('#usernameRegister').on('input', function (e)
+        {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#userNameerror').replaceWith("<p id=userNameerror class=msgError>Error:Field is required. </p>");
+            }
+            else {
+                $('#userNameerror').replaceWith("<p id=userNameerror ></p>");
+            }
+        });
+        $('#ConfirmPassword').on('input', function (e) {
+            var value = $(this).val();
+            ConfirmPassword = document.getElementById("passwordRegister").value;
+            if (value.length === 0 ) {
+
+                $('#confirmPasswordError').replaceWith("<p id=confirmPasswordError class=msgError>Error:Field is required. </p>");
+            }
+            else if (value != ConfirmPassword) {
+
+                $('#confirmPasswordError').replaceWith("<p id=confirmPasswordError class=msgError>Passwords are not match </p>");
+            }
+
+            else {
+                $('#confirmPasswordError').replaceWith("<p id=confirmPasswordError ></p>");
+            }
+        }); 
+        $('#Email').on('input', function (e) {
+            var value = $(this).val();
+            var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
+         
+            if (value.length === 0) {
+
+                $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Field is required. </p>");
+            }
+             else  if (!regexMail.test(value)) {
+                 $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Email is incorrect. </p>");
+           
+            }
+            else {
+                $('#emailError').replaceWith("<p id=emailError ></p>");
+            }
+        });
+        $('#PhoneNumber').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0)
+            {
+
+                $('#PhoneError').replaceWith("<p id=PhoneError class=msgError>Error:Field is required. </p>");
+            } 
+
+            else if (!(value.match(/^\d+$/)))
+            {
+                $('#PhoneError').replaceWith("<p id=PhoneError class=msgError>Error:Only numbers are accepted. </p>");
+
+            }
+            else {
+                $('#PhoneError').replaceWith("<p id=PhoneError ></p>");
+            }
+        });
+        $('#FirstName').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#firstnameError').replaceWith("<p id=firstnameError ></p>");
+            }
+        });
+        $('#LastName').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#lastnameError').replaceWith("<p id=lastnameError ></p>");
+            }
+        });
+
+        $("#file").change(function () {
+            { 
+                $('#imageError').replaceWith("<p id=imageError class=msgError style=color:green;>Image loaded </p>");
+                
+            }
+        });
+
     });
 
 </script>
-
 
 
     <div class="login-wrap">
@@ -130,51 +236,52 @@
                 {
                     <div class="sign-up-htm">
                         <div class="group">
-
-
-                            <label for="user" class="label">Username</label>
-
-                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { id = "username", @class = "input", type = "text", name = "userRegister" } })
-                            @Html.ValidationMessageFor(model => model.UserName)
+                            <label for="user" class="label">Username</label>                          
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { id = "usernameRegister", @class = "input", type = "text", name = "userRegister" } })
+                            <p id="userNameerror"></p>
                         </div>
+                      
                         <div class="group">
                             <label for="pass" class="label">Password</label>
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { id = "password", type = "password", @class = "input", name = "userRegister" } })
-                            @Html.ValidationMessageFor(model => model.Password)
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { id = "passwordRegister", type = "password", @class = "input", name = "userRegister" } })
+                            <p id="passwordError"></p>
 
                         </div>
 
                         <div class="group">
                             <label for="pass" class="label">Repeat Password</label>
                             <input name="ConfirmPassword" id="ConfirmPassword" type="password" class="input" data-type="password">
+                            <p id="confirmPasswordError"></p>
                         </div>
 
                         <div class="group">
 
                             <label for="pass" class="label">Email Address</label>
                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { id = "Email", @class = "input", type = "text", name = "userRegister" } })
-                            @Html.ValidationMessageFor(model => model.Email)
+                            <p id="emailError"></p>
 
                         </div>
                         <div class="group">
                             <label for="pass" class="label">Phone Number</label>
                             @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { id = "PhoneNumber", @class = "input", type = "text", name = "userRegister" } })
-                            @Html.ValidationMessageFor(model => model.PhoneNumber)
+                            <p id="PhoneError"></p>
                         </div>
                         <div class="group">
                             <label for="pass" class="label">First Name</label>
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { id = "FirstName", @class = "input", type = "text", name = "userRegister" } })
-
+                            <p id="firstnameError"></p>
                         </div>
                         <div class="group">
                             <label for="pass" class="label">Last Name</label>
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { id = "LastName", @class = "input", type = "text", name = "userRegister" } })
+                            <p id="lastnameError"></p>
                         </div>
 
                         <div class="group">
                             <label for="pass" class="label">Picture</label>
-                            <input type="button" name="pictureButton" id="pictureButton" value="Click on me to add Picture" />
+                            <input  type="button" name="pictureButton" id="pictureButton" value="Upload Picture" />
                             <input type="file" name="file" id="file" accept="image/jpg,image/jpeg" style="display:none" />
+                            <p id="imageError" class="msgError">Error:Required Image</p>
                         </div>
                         <div class="group">
                             <input type="submit" class="button" value="Sign Up">

@@ -20,30 +20,37 @@
 
 
 
-
+@*<li><a class="active" onclick="location.href='@Url.Action("SearchConsultants","account")'">Home Page</a></li>*@
 
 <body>
   
     <header id="mynav">
     <ul>
+        @if (Session["UserName"] == null)
+        {
+        <li><a disable class="active">Hello Geust</a></li>
 
-        <li><a onclick="location.href='@Url.Action("Login","account")'" o class="active">Home</a></li>
-        <li><a class="active" onclick="location.href='@Url.Action("SearchConsultants","account")'">Home Page</a></li>
-        <li><a class="active" onclick="location.href='@Url.Action("SmartProfile","account")'">SmartForm</a></li>
-        <li><a class="active" onclick="location.href='@Url.Action("ChangePassword","account")'">Change Password</a></li>
-        <li class="rightfloat"><a id="signOutButton">Sign Out</a></li>
+
+
+        }
+        else
+        {
+        <li><a  o class="active">Home</a></li>
+           <li><a  o class="active">My Profile</a></li>
+        <li><a o class="active">Buisness Logic 1</a></li>
+        <li><a o class="active">Buisness Logic 2</a></li>
+            <li class="rightfloat"><a id="signOutButton">Sign Out</a></li>
+        }
 
     </ul>
     </header>
 
 <div class="container5">
-    @*all the views are rendered inside this div*@
+
     @RenderBody()
-  @*<hr/>*@  
-    @*layout footer*@
+
 
 </div>
-
 
     @*renders and minifies scripts with the mvc bundles*@
     @Scripts.Render("~/bundles/jquery")
@@ -51,34 +58,17 @@
     @RenderSection("scripts", required: false)
     <footer id="sticky">
 
-        <!--containers for footer content-->
-        <div class="container2 siteNav">
-            <nav>
-                <span style="border-bottom:2px solid">Site Nav</span>
-                <ul>
-                    <li>
-                        <a>Home</a>
-                    </li>
-                    <li>
-                        <a>Here</a>
-                    </li>
-                    <li>
-                        <a>There</a>
-                    </li>
-                    <li>
-                        <a>Away</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+
+   
 
         <div class="container2 contact">
-            <h4>--- Contact Us! ---</h4>
-            <a>email@mail.com</a>
+            <h4> Contact Us!</h4>
+            <a>Secure_Dev@gmail.com</a>
             <address>
-                123 Street<br />
-                Anywhere, USA<br />
-                1.800.555.6666
+                Holon institute <br />
+                of technology<br />
+               Holon, Israel<br />
+            
             </address>
         </div>
 

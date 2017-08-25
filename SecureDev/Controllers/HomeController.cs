@@ -84,7 +84,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
         {
-            if (IsImage(file))
+            if (file!=null && IsImage(file))
             { 
             byte[] fileInBytes = new byte[file.ContentLength];
             using (BinaryReader theReader = new BinaryReader(file.InputStream))
@@ -94,7 +94,7 @@ namespace Vladi2.Controllers
             string fileAsString = Convert.ToBase64String(fileInBytes);
             user.PictureUser = fileAsString;
              }
-            else
+            else 
             {
                 return RedirectToAction("Index", "Home");
             }

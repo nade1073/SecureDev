@@ -60,7 +60,7 @@ html {
 body {
      width:100%;
      height:100%;
-    border:5px solid red;
+
    position:relative;
         margin:0;
     color:#6a6f8c;
@@ -760,13 +760,13 @@ pre code {
 .container5 {
     overflow:hidden;
    position:relative;
-    border:5px solid blue;
+   
    margin-top:33px;
    margin-bottom:140px;
    
 }
 .containerofUserHome{
-    border:5px solid pink;
+
     position:relative;
    
 }
@@ -6767,6 +6767,7 @@ a{color:inherit;text-decoration:none}
 .login-html .tab,
 .login-form .group .label,
 .login-form .group .button{
+    
     text-transform:uppercase;
 }
 .login-html .tab{
@@ -6788,16 +6789,18 @@ a{color:inherit;text-decoration:none}
     perspective:1000px;
     transform-style:preserve-3d;
 }
+
 .login-form .group{
+
     margin-bottom:15px;
 }
 .login-form .group .label,
-.login-form .group .input,
 .login-form .group .button{
     width:100%;
     color:#fff;
     display:block;
 }
+
 .login-form .group .input,
 .login-form .group .button{
     border:none;
@@ -6805,6 +6808,25 @@ a{color:inherit;text-decoration:none}
     border-radius:25px;
     background:rgba(255,255,255,.1);
 }
+
+.login-form .group .input{
+    width:50%;
+    display:inline;
+    
+}
+.msgError{
+    width:80%;
+    height:50%;
+    color:red;
+    font-size:14px;
+    font-weight: bold;
+text-align:left;
+   
+}
+.group{
+
+}
+
 .login-form .group input[data-type="password"]{
     text-security:circle;
     -webkit-text-security:circle;
@@ -6862,6 +6884,8 @@ a{color:inherit;text-decoration:none}
 .login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
     transform:rotate(0);
 }
+
+
 
 .hr{
     height:2px;
@@ -7029,7 +7053,7 @@ ul a:active, ul a.active {
 
 
 #sticky {
-   border:5px solid green;
+  
  
   background:black;
   color:white;
@@ -7096,8 +7120,7 @@ background:rgba(0, 0, 5, 0.8); /*the a value of .5 makes it transparent*/
 
 #mynav{
      top: 0px; /*Offsets the top navbar 37px from the top of the viewport*/
-     border:5px solid #8c15ae;
-
+  
 }
 
 
@@ -7281,17 +7304,19 @@ h1#logo a {
 	display:inline;
 	background: rgba(0,0,0,.8);
 
-	padding:11px;
+	padding:5px;
 	margin:0 10px 11px 0;
 	position:relative;
 }
 
 .box .box-image {
+   
 	float:left;
-	display:inline;
+    padding-right:10px;
+    margin:0 auto;
 	width:119px;
 	height:85px;
-	margin-right:11px;
+
 	position:relative;
 }
 .box .box-body .posted {
@@ -7478,7 +7503,30 @@ h1#logo a {
 	margin-bottom:20px;
 }
 
-p{
-    width:500px;
-    height:300px;
+
+#pictureButton {
+  background: #3498db;
+  background-image: -webkit-linear-gradient(top, #3498db, #21587a);
+  background-image: -moz-linear-gradient(top, #3498db, #21587a);
+  background-image: -ms-linear-gradient(top, #3498db, #21587a);
+  background-image: -o-linear-gradient(top, #3498db, #21587a);
+  background-image: linear-gradient(to bottom, #3498db, #21587a);
+  -webkit-border-radius: 34px;
+  -moz-border-radius: 34px;
+  border-radius: 20px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 12px 21px 13px 20px;
+  text-decoration: none;
+}
+
+#pictureButton:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
 }
