@@ -83,6 +83,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            
             return View();
         }
 
@@ -144,6 +145,19 @@ namespace Vladi2.Controllers
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
+
+        public ActionResult AccountProfile()
+        {
+            UserAccount temp = new UserAccount("nadav", "@Nade87491", "nade1073@gmail.com", "0546960200", "Nadav", "Shalev");
+            if(Session["UserName"]==null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.User = temp;
+            return View();
+        }
+
+
         private bool ValidationRegUserProperty(UserAccount i_User)
         {
             if(i_User.FirstName==null || i_User.LastName ==null || i_User.Email == null || i_User.Password == null || i_User.PhoneNumber == null || i_User.UserName == null)

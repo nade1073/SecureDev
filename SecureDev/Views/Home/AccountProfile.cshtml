@@ -1,0 +1,77 @@
+﻿
+
+    @{
+        ViewBag.Title = "AccountProfile";
+    }
+
+
+
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </head>
+
+    <div class="card">
+        <div class="imgProfile">
+            <a><i class="fa fa-edit editimage"></i></a>
+            <img src="~/Content/CarsPictures/driving-1995-lamborghini-cala-concept-4.jpg" alt="John">
+
+        </div>
+
+        <div class="group">
+         
+            <input class="inputMaterial" type="text" value="@ViewBag.User.UserName" readonly required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="Accountlabel">Username</label>
+        </div>
+        <div class="group">
+            <a><i class="fa fa-edit editclass"></i></a>
+            <input class="inputMaterial" type="password" value="*****" required>
+
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="Accountlabel">Password</label>
+        </div>
+        <div class="group">
+            <a><i class="fa fa-edit editclass"></i></a>
+            <input class="inputMaterial" type="text" value="@ViewBag.User.PhoneNumber" readonly required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="Accountlabel">Phone Number</label>
+        </div>
+        <div class="group">
+            <a><i class="fa fa-edit editclass"></i></a>
+            <input class="inputMaterial" type="text" value="@ViewBag.User.FirstName" readonly required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="Accountlabel">First Name</label>
+        </div>
+        <div class="group">
+            <a><i class="fa fa-edit editclass"></i></a>
+            <input class="inputMaterial" type="text"value="@ViewBag.User.LastName" readonly required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="Accountlabel">Last Name</label>
+        </div>
+        <div class="group">
+            <a><i class="fa fa-edit editclass"></i></a>
+            <input class="inputMaterial" type="text" value="@ViewBag.User.Email" readonly required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="Accountlabel">Email</label>
+        </div>
+
+
+        <p class="title">CEO & Founder, Example</p>
+        <p>Harvard University</p>
+        <div style="margin: 24px 0;">
+
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-facebook"></i></a>
+        </div>
+
+        <button id="buttonlogintoregister" type="submit">Update</button>
+    </div>
+
