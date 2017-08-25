@@ -19,9 +19,12 @@ namespace Vladi2.Controllers
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         //entry point for main page as determined in the route config
-        public ActionResult Index(string validationError = null)
+        public ActionResult Index()
         {
-   
+            if (TempData["ErrorUserNameAndPassword"] != null)
+            {
+                ViewBag.loginError = TempData["ErrorUserNameAndPassword"];
+            }
             return View();
         }
 
@@ -32,6 +35,7 @@ namespace Vladi2.Controllers
         {
             if(!ValidationLoginUserProperty(username, password))
             {
+                TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
             }
             //the path is absolute and should be changed.
@@ -59,7 +63,8 @@ namespace Vladi2.Controllers
                     }
                         
                 }
-                return RedirectToAction("Index", "Home", new { validationError = "The username or password are invalid" });
+                TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
+                return RedirectToAction("Index", "Home");
 
             };
             return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked, "@UserName");
@@ -126,6 +131,7 @@ namespace Vladi2.Controllers
             {
                 if (reader.Read() == true)
                 {
+
                     ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
                     return RedirectToAction("Index", "Home");
                 }
