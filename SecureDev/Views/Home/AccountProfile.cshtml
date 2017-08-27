@@ -12,183 +12,185 @@
     </head>
 
 <script type="text/javascript">
+  
 
-    function FormValidate() {
+        function FormValidate() {
 
-        var password = document.getElementById("passwordRegister").value;
-        var phonenumber = document.getElementById("PhoneNumber").value;
-        var Email = document.getElementById("Email").value;
-        var firstname = document.getElementById("FirstName").value;
-        var lastname = document.getElementById("LastName").value;
+            var password = document.getElementById("passwordRegister").value;
+            var phonenumber = document.getElementById("PhoneNumber").value;
+            var Email = document.getElementById("Email").value;
+            var firstname = document.getElementById("FirstName").value;
+            var lastname = document.getElementById("LastName").value;
        
 
-        if (password == "" || Email == "" || firstname == "" || lastname == "" || phonenumber == "") {
-            alert("Please check the Errors");
-            return false;
-        }
-
-        var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
-        if (password != "*****")
-            {
-        if (!regexPass.test(password)) {
-            alert("Please check the Errors");
-            return false;
-        }
-        }
-        var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
-        if (!regexMail.test(Email)) {
-            alert("Please check the Errors");
-            return false;
-        }
-
-        if (isNaN(phonenumber)) {
-            alert("Please check the Errors");
-            return false;
-        }
-
-        if (!(/^[a-zA-Z]+$/.test(firstname))) {
-            alert("Please check the Errors");
-            return false;
-        }
-        if (!(/^[a-zA-Z]+$/.test(lastname))) {
-            alert("Please check the Errors");
-            return false;
-        }
-        //var x = document.getElementById("file");
-        //if (document.getElementById("file").files.length == 0) {
-
-        //    alert("Please check the Errors");
-        //    return false;
-        //}
-
-        return true;
-    }
-    $(function () {
-
-
-        $('#EmailChange').click(function () {
-
-            $("#Email").attr("readonly", false);
-
-        });
-        $('#Email').on('input', function (e) {
-            var value = $(this).val();
-            var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
-
-            if (value.length === 0) {
-
-                $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Field is required. </p>");
+            if (password == "" || Email == "" || firstname == "" || lastname == "" || phonenumber == "") {
+                alert("Please check the Errors");
+                return false;
             }
-            else  if (!regexMail.test(value)) {
-                $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Email is incorrect. </p>");
 
-            }
-            else {
-                $('#emailError').replaceWith("<p id=emailError ></p>");
-            }
-        });
-        $('#PasswordChange').click(function () {
-
-            $("#passwordRegister").attr("readonly", false);
-
-        });
-        $('#passwordRegister').on('input', function (e) {
             var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
-            var value = $(this).val();
-            if (value.length === 0) {
-                $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Field is required. </p>");
-            }
-
-            else if (!regexPass.test(value)) {
-
-                $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:</p>");
-            }
-            else {
-                $('#passwordError').replaceWith("<p id=passwordError ></p>");
-            }
-        });
-        $('#PhoneNumberChange').click(function () {
-
-            $("#PhoneNumber").attr("readonly", false);
-
-        });
-        $('#PhoneNumber').on('input', function (e) {
-            var value = $(this).val();
-            if (value.length === 0) {
-
-                $('#PhoneError').replaceWith("<p id=PhoneError class=msgError>Error:Field is required. </p>");
-            }
-
-            else if (!(value.match(/^\d+$/))) {
-                $('#PhoneError').replaceWith("<p id=PhoneError class=msgError>Error:Only numbers are accepted. </p>");
-
-            }
-            else {
-                $('#PhoneError').replaceWith("<p id=PhoneError ></p>");
-            }
-        });
-        $('#FirstNameChange').click(function () {
-
-            $("#FirstName").attr("readonly", false);
-
-        });
-        $('#FirstName').on('input', function (e) {
-            var value = $(this).val();
-            if (value.length === 0) {
-
-                $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Field is required. </p>");
-            }
-
-            else if (!(value.match(/^[a-zA-Z()]*$/))) {
-                $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Only Charcters are accepted. </p>");
-
-            }
-            else {
-                $('#firstnameError').replaceWith("<p id=firstnameError ></p>");
-            }
-        });
-        $('#LastNameChange').click(function () {
-
-            $("#LastName").attr("readonly", false);
-
-        });
-        $('#LastName').on('input', function (e) {
-            var value = $(this).val();
-            if (value.length === 0) {
-
-                $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Field is required. </p>");
-            }
-
-            else if (!(value.match(/^[a-zA-Z()]*$/))) {
-                $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Only Charcters are accepted. </p>");
-
-            }
-            else {
-                $('#lastnameError').replaceWith("<p id=lastnameError ></p>");
-            }
-        });
-        $('#ChangePicture').click(function () {
-
-            $('#file').click();
-
-        });
-
-        $("#file").change(function () 
-        {
-            if (this.files && this.files[0])
+            if (password != "*****")
             {
-                var reader = new FileReader();
-                reader.onload = imageIsLoaded;
-                reader.readAsDataURL(this.files[0]);
-
+                if (!regexPass.test(password)) {
+                    alert("Please check the Errors");
+                    return false;
+                }
             }
-        });
-        function imageIsLoaded(e)
-        {
+            var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
+            if (!regexMail.test(Email)) {
+                alert("Please check the Errors");
+                return false;
+            }
 
-            $('#PictureProfile').attr('src', e.target.result);
-        };
-    });
+            if (isNaN(phonenumber)) {
+                alert("Please check the Errors");
+                return false;
+            }
+
+            if (!(/^[a-zA-Z]+$/.test(firstname))) {
+                alert("Please check the Errors");
+                return false;
+            }
+            if (!(/^[a-zA-Z]+$/.test(lastname))) {
+                alert("Please check the Errors");
+                return false;
+            }
+            //var x = document.getElementById("file");
+            //if (document.getElementById("file").files.length == 0) {
+
+            //    alert("Please check the Errors");
+            //    return false;
+            //}
+
+            return true;
+        }
+        $(function () {
+
+
+            $('#EmailChange').click(function () {
+
+                $("#Email").attr("readonly", false);
+
+            });
+            $('#Email').on('input', function (e) {
+                var value = $(this).val();
+                var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
+
+                if (value.length === 0) {
+
+                    $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Field is required. </p>");
+                }
+                else  if (!regexMail.test(value)) {
+                    $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Email is incorrect. </p>");
+
+                }
+                else {
+                    $('#emailError').replaceWith("<p id=emailError ></p>");
+                }
+            });
+            $('#PasswordChange').click(function () {
+
+                $("#passwordRegister").attr("readonly", false);
+
+            });
+            $('#passwordRegister').on('input', function (e) {
+                var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
+                var value = $(this).val();
+                if (value.length === 0) {
+                    $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Field is required. </p>");
+                }
+
+                else if (!regexPass.test(value)) {
+
+                    $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:</p>");
+                }
+                else {
+                    $('#passwordError').replaceWith("<p id=passwordError ></p>");
+                }
+            });
+            $('#PhoneNumberChange').click(function () {
+
+                $("#PhoneNumber").attr("readonly", false);
+
+            });
+            $('#PhoneNumber').on('input', function (e) {
+                var value = $(this).val();
+                if (value.length === 0) {
+
+                    $('#PhoneError').replaceWith("<p id=PhoneError class=msgError>Error:Field is required. </p>");
+                }
+
+                else if (!(value.match(/^\d+$/))) {
+                    $('#PhoneError').replaceWith("<p id=PhoneError class=msgError>Error:Only numbers are accepted. </p>");
+
+                }
+                else {
+                    $('#PhoneError').replaceWith("<p id=PhoneError ></p>");
+                }
+            });
+            $('#FirstNameChange').click(function () {
+
+                $("#FirstName").attr("readonly", false);
+
+            });
+            $('#FirstName').on('input', function (e) {
+                var value = $(this).val();
+                if (value.length === 0) {
+
+                    $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Field is required. </p>");
+                }
+
+                else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                    $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Only Charcters are accepted. </p>");
+
+                }
+                else {
+                    $('#firstnameError').replaceWith("<p id=firstnameError ></p>");
+                }
+            });
+            $('#LastNameChange').click(function () {
+
+                $("#LastName").attr("readonly", false);
+
+            });
+            $('#LastName').on('input', function (e) {
+                var value = $(this).val();
+                if (value.length === 0) {
+
+                    $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Field is required. </p>");
+                }
+
+                else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                    $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Only Charcters are accepted. </p>");
+
+                }
+                else {
+                    $('#lastnameError').replaceWith("<p id=lastnameError ></p>");
+                }
+            });
+            $('#ChangePicture').click(function () {
+
+                $('#file').click();
+
+            });
+
+            $("#file").change(function () 
+            {
+                if (this.files && this.files[0])
+                {
+                    var reader = new FileReader();
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(this.files[0]);
+
+                }
+            });
+            function imageIsLoaded(e)
+            {
+
+                $('#PictureProfile').attr('src', e.target.result);
+            };
+        });
+       // window.onload = OnCreate;
 
 </script>
 @using (Html.BeginForm("AccountProfile", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
@@ -198,8 +200,7 @@
    
         <div class="imgProfile">
             <a><i id="ChangePicture"class="fa fa-edit editimage"></i></a>
-            <img id="PictureProfile"src="~/Content/CarsPictures/driving-1995-lamborghini-cala-concept-4.jpg" alt="John">
-
+            <img id="PictureProfile" src="data:image;base64,@ViewBag.User.PictureUser" alt="John">
         </div>
 
         <div class="group">
