@@ -28,8 +28,6 @@ namespace Vladi2.Controllers
             return View();
         }
 
-    
-        //GET: home/login 
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
@@ -69,7 +67,7 @@ namespace Vladi2.Controllers
             };
             return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked, "@UserName");
         }
-        //gets the string from the input and returns a xss view with the string as model
+
         //this is for xss demonstration.
         public ActionResult XSS(string xss)
         {
@@ -83,6 +81,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            
             return View();
         }
 
@@ -144,6 +143,67 @@ namespace Vladi2.Controllers
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
+
+        public ActionResult AccountProfile()
+        {
+            UserAccount temp = new UserAccount("nadav", "@Nade87491", "nade1073@gmail.com", "0546960200", "Nadav", "Shalev");
+            if(Session["UserName"]==null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.User = temp;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
+        {
+            UserAccount ChangeUser = new UserAccount();
+            ChangeUser.UserName = (string)Session["UserName"];
+            ChangeUser.FirstName = FirstName;
+            ChangeUser.LastName = LastName;
+            if (passwordRegister != "*****")
+            {
+                ChangeUser.Password = passwordRegister;
+            }
+            else
+            {
+                ChangeUser.Password = passwordRegister;// NEED TO CHANGE TO DEFAULT PASSWORD FROM DATA BASE **********************
+            }
+            ChangeUser.Email = Email;
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if(file!=null)
+            {
+
+                if(IsImage(file))
+                {
+                    byte[] fileInBytes = new byte[file.ContentLength];
+                    using (BinaryReader theReader = new BinaryReader(file.InputStream))
+                    {
+                        fileInBytes = theReader.ReadBytes(file.ContentLength);
+                    }
+                    string fileAsString = Convert.ToBase64String(fileInBytes);
+                    ChangeUser.PictureUser = fileAsString; // NEED TO CHANGE TO THE DEFAULT PICTURE!! FROM DB
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            if (!ValidationRegUserProperty(ChangeUser))
+            {
+                return View();
+            }
+
+
+            //////Query to change the Deatils in DB!!//////////
+
+            return View();
+        }
+
+
         private bool ValidationRegUserProperty(UserAccount i_User)
         {
             if(i_User.FirstName==null || i_User.LastName ==null || i_User.Email == null || i_User.Password == null || i_User.PhoneNumber == null || i_User.UserName == null)
