@@ -146,13 +146,40 @@ namespace Vladi2.Controllers
 
         public ActionResult AccountProfile()
         {
-            UserAccount temp = new UserAccount("nadav", "@Nade87491", "nade1073@gmail.com", "0546960200", "Nadav", "Shalev");
-            if(Session["UserName"]==null)
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            string userNameFromSession = (string)Session["UserName"];
+            string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
+            UserAccount userDetails = new UserAccount();//new UserAccount("nadav", "@Nade87491", "nade1073@gmail.com", "0546960200", "Nadav", "Shalev");
+            userDetails.UserName = userNameFromSession;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
             {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                    var encriptionPassword = reader.GetString(2).Trim();
+                    var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
+                    var userName = reader.GetString(1).Trim();
+                    userDetails.FirstName = reader.GetString(0).Trim();
+                    userDetails.LastName = reader.GetString(3).Trim();
+                    userDetails.PhoneNumber = reader.GetString(4).Trim();
+                    userDetails.Email = reader.GetString(5).Trim();
+                    ViewBag.User = userDetails;
+                    return View();
+
+                }
                 return RedirectToAction("Index", "Home");
-            }
-            ViewBag.User = temp;
-            return View();
+
+            };
+
+            return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
+            //if (Session["UserName"]==null)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
+            //ViewBag.User = userDetails;
+            //return View();
         }
         [HttpPost]
         public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
