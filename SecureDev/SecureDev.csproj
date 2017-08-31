@@ -201,6 +201,7 @@
     <Content Include="Views\Home\AccountProfile.cshtml" />
     <Content Include="Views\Home\HomePageForum.cshtml" />
     <Content Include="Views\Home\SportsForum.cshtml" />
+    <Content Include="Views\Home\CreateTopic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

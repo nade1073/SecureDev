@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "CreateTopic";
+}
+
+
+
+<div class="form-style-6">
+    <h1>Create Topic</h1>
+   @using (Html.BeginForm("HomePageForum", "home", FormMethod.Post))
+   {
+        <input type="text" name="field1" placeholder="Your Subject" />
+        <textarea name="field3" placeholder="Type your Message"></textarea>
+        <input type="submit" value="Send" />
+   }
+</div>
