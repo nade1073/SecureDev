@@ -41,7 +41,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -103,7 +103,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -146,7 +146,7 @@ namespace Vladi2.Controllers
 
         public ActionResult AccountProfile()
         {
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -192,33 +192,42 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
+            updateUserBasicInformatiom(profileQuriy, databaseConnection, UpdateUser, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
+
+            profileQuriy = "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
+
+            bool isGoodPassword = passwordCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
+
+            if(!isGoodPassword)
+            {
+                ViewBag.Error = "Error in password";// Add to view!!!@@#!@#!#!@#!
+                return View();
+            }
+
+            profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
+
+            bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
+
+            if(!isGoodFileFormatToUpload)
+            {
+                return View();
+            }
+
+            return RedirectToAction("AccountProfile", "Home");
+        }
+
+        private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
+        {
+            bool isValidateFileFormat = true;
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
                 return View();
             };
-            databaseConnection.ContactToDataBaseAndExecute(profileQuriy, UpdateUser, MethodToBeInvoked, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
-
-
-            if (passwordRegister != "*****")
-            {
-                if (ValidatePassword(passwordRegister))
-                {
-                    string encriptedPassword = EncryptionManager.Encrypt(passwordRegister, c_passwordKey);
-                    UpdateUser.Password = encriptedPassword;
-                    profileQuriy =  "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
-                    databaseConnection.ContactToDataBaseAndExecute(profileQuriy, UpdateUser, MethodToBeInvoked, "@Password", "@UserName");
-                }
-                else
-                {
-                    ViewBag.Error = "Error in password";// Add to view!!!@@#!@#!#!@#!
-                    return View();
-                }
-            }
             if (file != null)
             {
                 if (IsImage(file))
@@ -229,19 +238,52 @@ namespace Vladi2.Controllers
                         fileInBytes = theReader.ReadBytes(file.ContentLength);
                     }
                     string fileAsString = Convert.ToBase64String(fileInBytes); // Last String base64 for image!
-                    UpdateUser.PictureUser = fileAsString;
-                    profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
-                    databaseConnection.ContactToDataBaseAndExecute(profileQuriy, UpdateUser, MethodToBeInvoked, "@PictureUser", "@UserName");
+                    updateUser.PictureUser = fileAsString;
+                    databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, "@PictureUser", "@UserName");
                 }
                 else
                 {
-                    return View();
+                    isValidateFileFormat = false;
                 }
             }
+            return isValidateFileFormat;
 
-            return RedirectToAction("AccountProfile", "Home");
         }
 
+        private bool passwordCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, string passwordRegister, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
+        {
+            bool isValidatePassword = true;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                return View();
+            };
+            if (passwordRegister != "*****")
+            {
+                if (ValidatePassword(passwordRegister))
+                {
+                    string encriptedPassword = EncryptionManager.Encrypt(passwordRegister, c_passwordKey);
+                    updateUser.Password = encriptedPassword;
+                    databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, i_ParametersOfTheQuery);
+                }
+                else
+                {
+                    isValidatePassword = false;
+                }
+            }
+            return isValidatePassword;
+        }
+
+        private void updateUserBasicInformatiom(string i_ProfileQuriy, DataBaseUtils i_DatabaseConnection, UserAccount i_User, params string[] i_ParametersOfTheQuery)
+        {
+
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                return View();
+            };
+            i_DatabaseConnection.ContactToDataBaseAndExecute(i_ProfileQuriy, i_User, MethodToBeInvoked, i_ParametersOfTheQuery);
+        }
 
         private bool ValidationRegUserProperty(UserAccount i_User)
         {
