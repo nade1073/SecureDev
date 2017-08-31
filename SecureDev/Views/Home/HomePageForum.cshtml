@@ -1,7 +1,61 @@
 ﻿
-@{
-    ViewBag.Title = "HomePageForum";
-}
 
-<h3 style="text-align:center;color:white;">HomePageForum</h3>
+<h3 style="text-align:center;color:white;">Forum</h3>
+<script>
+    $(document).ready(function () {
+     
+        $('.hover').hover(function () {
+            $(this).addClass('flip');
+        }, function () {
+            $(this).removeClass('flip');
+        });
+    });
+</script>
 
+<link href='https://fonts.googleapis.com/css?family=Didact+Gothic' rel='stylesheet' type='text/css'>
+
+<div class="ForumWarpper">
+    <div class="col_third">
+        <div class="hover panel">
+            <div class="front">
+                <div class="box1">
+                    <p class="front_side">Luxury Forum car</p>
+                </div>
+            </div>
+            <div class="back">
+                <div class="box2">
+                    <p class="back_side">Here you talk about luxury cars</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col_third">
+        <div class="hover panel">
+            <div class="front">
+                <div class="box1">
+                    <p class="front_side">Sport Cars</p>
+                </div>
+            </div>
+            <div class="back">
+                <div class="box2">
+                    <p class="back_side">Here you walk about sports car</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col_third">
+        <div class="hover panel">
+            <div class="front">
+                <div class="box1">
+                    <p class="front_side">Question & Answer</p>
+                </div>
+            </div>
+            <div class="back">
+                <div class="box2">
+                    <p class="back_side">Question and Answers about cars</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
