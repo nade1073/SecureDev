@@ -145,6 +145,7 @@ namespace Vladi2.Controllers
 
         public ActionResult AccountProfile()
         {
+            //adadada
             var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
