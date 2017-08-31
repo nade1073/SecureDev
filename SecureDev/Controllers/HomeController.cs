@@ -145,7 +145,10 @@ namespace Vladi2.Controllers
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
-
+        public ActionResult CreateTopic()
+        {
+            return View();
+        }
 
         public ActionResult HomePageForum()
         {
