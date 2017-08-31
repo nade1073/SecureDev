@@ -13,7 +13,7 @@ namespace Vladi2.Models
         //public event ActionResultDelegate MethodToBeInvoked;
         public string ConnectionDirectoryInMyComputer { get; private set; }
 
-        private const string m_NadavServer = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
+        private const string m_NadavServer = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         private const string m_NetanelServer = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
 
         private TypeMapFromTypeToDbType m_typeConverter;

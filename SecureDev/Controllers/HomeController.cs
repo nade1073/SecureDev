@@ -16,7 +16,7 @@ namespace Vladi2.Controllers
     public class HomeController : BaseController
     {
         const string c_passwordKey = "Nadav&Netanel";
-        const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
+        const string m_ConnectionNadav = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         //entry point for main page as determined in the route config
         public ActionResult Index()
@@ -37,13 +37,11 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             //the path is absolute and should be changed.
-            string encriptedPassword;
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
             var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);      
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
             Func<SQLiteCommand, SQLiteDataReader, RedirectToRouteResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
@@ -88,6 +86,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
         {
+            //CHECK ISIMAGE
             if (file!=null && IsImage(file))
             { 
             byte[] fileInBytes = new byte[file.ContentLength];
