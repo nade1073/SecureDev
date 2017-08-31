@@ -187,7 +187,6 @@ namespace Vladi2.Controllers
         {
             UserAccount UpdateUser = new UserAccount();
         
-
             UpdateUser.Email = Email;
             UpdateUser.FirstName = FirstName;
             UpdateUser.LastName = LastName;
