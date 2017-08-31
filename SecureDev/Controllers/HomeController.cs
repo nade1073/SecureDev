@@ -146,6 +146,19 @@ namespace Vladi2.Controllers
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
 
+
+        public ActionResult HomePageForum()
+        {
+            if(Session["UserName"]!=null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         public ActionResult AccountProfile()
         {
             var connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
