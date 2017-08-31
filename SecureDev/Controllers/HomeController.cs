@@ -234,6 +234,11 @@ namespace Vladi2.Controllers
             return RedirectToAction("AccountProfile", "Home");
         }
 
+        public ActionResult SportsForum()
+        {
+            return View();
+        }
+
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
             bool isValidateFileFormat = true;
