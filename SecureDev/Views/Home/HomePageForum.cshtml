@@ -1,0 +1,60 @@
+﻿
+
+
+<script>
+    $(document).ready(function () {
+
+        $('.hover').hover(function () {
+            $(this).addClass('flip');
+        }, function () {
+            $(this).removeClass('flip');
+        });
+    });
+
+</script>
+<h2 class="Forumheader">Forum </h2>
+<link href='https://fonts.googleapis.com/css?family=Didact+Gothic' rel='stylesheet' type='text/css'>
+<div class="WrapperHomeForum">
+    <div class="col_third">
+        <div id="Luxury" class="hover panel" onclick="location.href='@Url.Action("SportsForum","Home")'">
+            <div class="front">
+                <div class="box1">
+                    <p class="front_side">Luxury Forum car</p>
+                </div>
+            </div>
+            <div class="back">
+                <div class="box2">
+                    <p class="back_side">Here you talk about luxury cars</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col_third">
+        <div id="Sport" class="hover panel" onclick="location.href='@Url.Action("SportsForum","Home")'">
+            <div class="front">
+                <div class="box1">
+                    <p class="front_side">Sport Cars</p>
+                </div>
+            </div>
+            <div class="back">
+                <div class="box2">
+                    <p class="back_side">Here you walk about sports car</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col_third">
+        <div id="Question" class="hover panel" onclick="location.href='@Url.Action("SportsForum","Home")'">
+            <div class="front">
+                <div class="box1">
+                    <p class="front_side">Question & Answer</p>
+                </div>
+            </div>
+            <div class="back">
+                <div class="box2">
+                    <p class="back_side">Question and Answers about cars</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,8 +17,9 @@ namespace Vladi2.Controllers
     {
         const string c_passwordKey = "Nadav&Netanel";
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
+        const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
-        const string m_ConectionBen = @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
+        const string m_ConnectionBen= @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         //entry point for main page as determined in the route config
         public ActionResult Index()
         {
@@ -42,7 +43,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -104,7 +105,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", m_ConectionBen);
+                string connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -144,10 +145,26 @@ namespace Vladi2.Controllers
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
+        public ActionResult CreateTopic()
+        {
+            return View();
+        }
+
+        public ActionResult HomePageForum()
+        {
+            if(Session["UserName"]!=null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
 
         public ActionResult AccountProfile()
         {
-            var connectionString = string.Format("DataSource={0}", m_ConectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -193,7 +210,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -214,10 +231,15 @@ namespace Vladi2.Controllers
 
             if(!isGoodFileFormatToUpload)
             {
-                return View();
+                return RedirectToAction("AccountProfile", "Home");
             }
 
             return RedirectToAction("AccountProfile", "Home");
+        }
+
+        public ActionResult SportsForum()
+        {
+            return View();
         }
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
