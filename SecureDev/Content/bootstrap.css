@@ -7830,32 +7830,49 @@ a {
 }
 .box1{
     background-color: #333;
-    width: 250px;
-    height: 150px;
+    width: 200px;
+    height: 130px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-     white-space: pre-line;
+    padding-top:30px;
+    text-align:center;
 
     
 }
 .box2{
    
     background-color: #cccccc;
-    width: 250px;
-    height: 150px;
+      width: 200px;
+    height: 130px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-    border:5px solid red;
+   padding-top:30px;
     text-align:center;
-   white-space: pre-line;
+
 }
 
+.WellcomeHeader
+{
+    text-align:center;
+    color:black;
+	text-shadow:0 1px 1px rgba(255,255,255,.2);
+    font-family: 'Lobster', cursive;
+     font-size: 36px;
+      font-weight: normal;
+       line-height: 48px;
+        margin: 0 0 18px;
+         text-shadow: 1px 1px 3px #070508;
+         -webkit-text-stroke:white 0.5px;
+         margin-top:20px;
+         padding-left:7px;
+    -webkit-border-radius: 10px;
+}
 
 
 
@@ -7956,26 +7973,29 @@ right:-100px;
     border-left:3px solid #eee;
   }
 
-  .Forumheader { color: #0d0f55;
-                 -webkit-text-stroke: 1px white;
-                  font-family: 'Droid serif', serif;
-                   font-size: 60px;
-                    font-weight: bold;
-                    font-style: italic;
-                     line-height: 60px;
-                     margin-top:20px;
-                     margin-bottom:40px;
-                     margin-left:15%;
-    
-                     
-                                        text-align: left; }
+  .Forumheader 
+  { font-family: "Lusitana";
+        font-weight: normal;
+        line-height: 1em;
+        font-size: 4em;
+        margin: 0;
+        color:indianred;
+        
+        -webkit-text-stroke-width:1px;
+        -webkit-text-stroke-color:black;
+          text-align:left;
+          margin-left:20%;
+          text-decoration: underline;
+          margin-bottom:30px;
+          margin-top:20px;
+  }
 
   .WrapperHomeForum
   {
    
     margin:0 auto;
     text-align:center;
-    margin-bottom:200px;
+    margin-bottom:230px;
   }
 
 
@@ -8067,3 +8087,55 @@ hr.style-two {
 .form-style-6 input[type="button"]:hover{
     background: #2EBC99;
 }
+
+
+
+  hr.style18 { 
+
+  height: 30px; 
+  border-style: solid; 
+  border-color: #999; 
+  border-width: 1px 0 0 0; 
+  border-radius: 20px; 
+} 
+hr.style18:before { 
+  display: block; 
+  content: ""; 
+  height: 30px; 
+  margin-top: -31px; 
+  border-style: solid; 
+  border-color: #8c8b8b; 
+  border-width: 0 0 1px 0; 
+  border-radius: 20px; 
+}
+
+
+.blurred-bg {
+    background-image: url($blurred-img);
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+}
+.tinted
+     {
+background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6)),url($blurred-img);
+	}
+
+
+.boxHeader {
+    width: 300px;
+    height: 100px;
+    margin:0 auto;
+    
+    border-radius: 5px;
+    box-shadow: 0 20px 30px rgba(0,0,0,.6);
+    border: 1px solid rgba(255,255,255,.3);
+   
+    text-align: center;
+    box-sizing: border-box;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    display: flex;
+    transition: box-shadow .3s ease;
+    text-align:center;
+}
+  
