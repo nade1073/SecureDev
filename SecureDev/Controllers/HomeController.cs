@@ -43,7 +43,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -105,7 +105,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
+                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -164,7 +164,7 @@ namespace Vladi2.Controllers
 
         public ActionResult AccountProfile()
         {
-            var connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -210,7 +210,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
