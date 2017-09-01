@@ -14,6 +14,33 @@
         }
     });
 
+    $(function () {
+       
+        $(".deleteA").click(function ()
+        {           
+            var x=document.getElementById("consulat").value;
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("DeleteMessage", "Home")",
+                data: JSON.stringify({
+                    Subject: "nadav",
+                    Topic:"Sport"
+                }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response)
+            {
+                  
+                window.location.href = response.Url;
+            },
+            error: function (error) 
+            {
+                alert(error);
+            }
+        });
+          
+    });
+    });
 
 </script>
 
@@ -58,7 +85,7 @@
                 <article class="hentry">
 
                     <h2 class="entry-title">This be the title</h2>
-                    <div class="deleteButtonForum"><a style="font-size:5px;"> Delete</a></div>
+                    <div class="deleteButtonForum"><a class="deleteA" style="font-size:15px;"> Delete</a></div>
 
                     <footer class="post-info">
                         <abbr class="published" title="2005-10-10T14:07:00-07:00">
