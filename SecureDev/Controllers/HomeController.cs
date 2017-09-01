@@ -241,10 +241,16 @@ namespace Vladi2.Controllers
             return RedirectToAction("AccountProfile", "Home");
         }
 
-        public ActionResult SportsForum()
+        public ActionResult SportsForum(string topic)
         {
             return View();
         }
+        //[HttpPost]
+        //public ActionResult PostMessage(string Subject,string Message,string Topic)
+        //{
+        //    //Logic insert message to DB
+
+        //}
 
         public ActionResult SignOut()
         {
