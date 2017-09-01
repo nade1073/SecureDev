@@ -286,6 +286,23 @@ namespace Vladi2.Controllers
             return View();
         }
 
+        public ActionResult DeleteMessage(string i_Subject, string i_Topic)
+        {
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            ForumMessage messageToDelete = new ForumMessage();
+            messageToDelete.UserName = (string)Session["UserName"];
+            messageToDelete.SubjectMessage = i_Subject;
+            messageToDelete.TopicMessage = i_Topic;
+            string deleteFromDataBaseQuery = "DELETE FROM Forum WHERE UserName = @UserName and Topic = @Topic and Subject = @Subject";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+            MethodToBeInvokedAfterTheValidation = (commad, reader) =>
+            {
+                return View();
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject");
+        }
+
         public ActionResult SignOut()
         {
             Session.Abandon();
