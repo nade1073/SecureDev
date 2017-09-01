@@ -265,21 +265,24 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult PostMessage(string Subject, string Message, string Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            ForumMessage messageToLoad = new ForumMessage();
-            messageToLoad.SubjectMessage = Subject;
-            messageToLoad.Message = Message;
-            messageToLoad.TopicMessage = Topic;
-            messageToLoad.UserName = (string)Session["UserName"];
-            string insetrToDataBaseQuery = "Insert INTO Forum (UserName, Topic, Subject, Message) VALUES(@UserName,@Topic,@Subject,@Message)";
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
-            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+            if (messageValidation(Subject, Message) && (Topic == "Sport" || Topic == "Question" || Topic == "Luxury"))
             {
-                return RedirectToAction("Forum", "Home",new { topic = Topic });
-            };
-            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
-
+                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+                DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+                ForumMessage messageToLoad = new ForumMessage();
+                messageToLoad.SubjectMessage = Subject;
+                messageToLoad.Message = Message;
+                messageToLoad.TopicMessage = Topic;
+                messageToLoad.UserName = (string)Session["UserName"];
+                string insetrToDataBaseQuery = "Insert INTO Forum (UserName, Topic, Subject, Message) VALUES(@UserName,@Topic,@Subject,@Message)";
+                Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+                MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+                {
+                    return RedirectToAction("Forum", "Home", new { topic = Topic });
+                };
+                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
+            }
+            return View();
         }
 
         public ActionResult SignOut()
@@ -444,6 +447,20 @@ namespace Vladi2.Controllers
 
             // linq from Henrik Stenbæk
             return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool messageValidation(string i_Subject, string i_Message)
+        {
+            bool isValide = false;
+
+            if (i_Subject != null && i_Message != null)
+            {
+                if(!(i_Message.Contains("#") || i_Subject.Contains("#")))
+                {
+                    isValide = true;
+                }
+            }
+            return isValide;
         }
     }
 }
