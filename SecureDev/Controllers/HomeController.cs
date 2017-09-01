@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -105,7 +105,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -162,7 +162,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -203,7 +203,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -236,7 +236,12 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            if (!(topic == "Sport" || topic == "Question" || topic == "Luxury"))
+            {
+                return RedirectToAction("HomePageForum", "Home");
+            }
+
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
             ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -265,10 +270,12 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult PostMessage(string Subject, string Message, string Topic)
         {
-            if (messageValidation(Subject, Message) && (Topic == "Sport" || Topic == "Question" || Topic == "Luxury"))
+           
+
+            if (messageValidation(Subject, Message) )
             {
 
-                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
                 messageToLoad.SubjectMessage = Subject;
@@ -283,7 +290,7 @@ namespace Vladi2.Controllers
                 };
                 return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
             }
-            return View();
+            return RedirectToAction("Forum", "Home", new { topic = Topic });
         }
 
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
@@ -309,7 +316,6 @@ namespace Vladi2.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
-
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
@@ -471,7 +477,7 @@ namespace Vladi2.Controllers
         {
             bool isValide = false;
 
-            if (i_Subject != null && i_Message != null)
+            if (i_Subject != "" && i_Message != "")
             {
                 if(!(i_Message.Contains("#") || i_Subject.Contains("#")))
                 {
