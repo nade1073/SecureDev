@@ -7,7 +7,40 @@
     {
         return true;
     }
+    $(document).on('keyup keypress', 'input[type="text"]', function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
 
+    $(function () {
+       
+        $(".deleteA").click(function ()
+        {           
+            var x=document.getElementById("consulat").value;
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("DeleteMessage", "Home")",
+                data: JSON.stringify({
+                    Subject: "nadav",
+                    Topic:"Sport"
+                }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response)
+            {
+                  
+                window.location.href = response.Url;
+            },
+            error: function (error) 
+            {
+                alert(error);
+            }
+        });
+          
+    });
+    });
 
 </script>
 
@@ -18,7 +51,7 @@
 
     <section class="contentForum">
         <ol id="posts-list" class="hfeed">
-            @foreach (var message in ViewBag.ListOfMessages)
+            @*@foreach (var message in ViewBag.ListOfMessages)
             {
                 <li>
                     <article class="hentry">
@@ -26,7 +59,7 @@
                         @{                
                             if ((string)message.UserName == (string)Session["UserName"])
                             {
-                                <div class="deleteButtonForum">Delete</div>
+                                <div class="deleteButtonForum"><a>Delete</a></div>
                             }
                         }
                         
@@ -46,8 +79,33 @@
 
                     </article>
                 </li>
-            }
 
+            }*@
+            <li>
+                <article class="hentry">
+
+                    <h2 class="entry-title">This be the title</h2>
+                    <div class="deleteButtonForum"><a class="deleteA" style="font-size:15px;"> Delete</a></div>
+
+                    <footer class="post-info">
+                        <abbr class="published" title="2005-10-10T14:07:00-07:00">
+                            <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
+                            10th October 2005
+                        </abbr>
+
+                        <address class="vcard author">
+                            By <a class="url fn" href="#">Enrique Ram?rez</a>
+
+                        </address>
+                    </footer><!-- /.post-info -->
+
+                    <div class="entry-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis nunc vitae libero iaculis elementum. Nullam et justo  dapibus blandit nec et leo. Ut ut malesuada tellus.</p>
+
+                    </div><!-- /.entry-content -->
+
+                </article>
+            </li>
        
 
         </ol>
@@ -79,7 +137,7 @@
 
 
                 <div class="submit">
-                    <input type="submit" value="SEND" id="button-blue" />
+                    <input  type="submit" value="SEND" id="button-blue" />
                     <div class="ease"></div>
                 </div>
             </form>
