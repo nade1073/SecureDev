@@ -8114,14 +8114,14 @@ hr.style18:before {
 
 
 .blurred-bg {
-    background-image: url($blurred-img);
+    
     background-repeat: no-repeat;
     background-size: cover;
  
 }
 .tinted
      {
-background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6)),url($blurred-img);
+background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6));
 	}
 
 
@@ -8204,7 +8204,7 @@ background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6)
 
 /* Icons ---------------------------------- */
 #name{
-	background-image: url(http://rexkirby.com/kirbyandson/images/name.svg);
+	
 	background-size: 30px 30px;
 	background-position: 11px 8px;
 	background-repeat: no-repeat;
@@ -8236,7 +8236,7 @@ background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6)
 }
 
 #comment{
-	background-image: url(http://rexkirby.com/kirbyandson/images/comment.svg);
+	
 	background-size: 30px 30px;
 	background-position: 11px 8px;
 	background-repeat: no-repeat;

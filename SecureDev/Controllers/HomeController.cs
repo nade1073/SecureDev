@@ -301,11 +301,21 @@ namespace Vladi2.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteMessage(string Subject, string Topic)
+        public ActionResult DeleteMessage(string i_Subject, string i_Topic)
         {
-            //Delete from Data base by Session UserName
-            //
-            return RedirectToAction("Forum", "Home", new { topic = "Sport" });
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            ForumMessage messageToDelete = new ForumMessage();
+            messageToDelete.UserName = (string)Session["UserName"];
+            messageToDelete.SubjectMessage = i_Subject;
+            messageToDelete.TopicMessage = i_Topic;
+            string deleteFromDataBaseQuery = "DELETE FROM Forum WHERE UserName = @UserName and Topic = @Topic and Subject = @Subject";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+            MethodToBeInvokedAfterTheValidation = (commad, reader) =>
+            {
+                return RedirectToAction("Forum", "Home", new { topic = i_Topic });
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject");
         }
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
