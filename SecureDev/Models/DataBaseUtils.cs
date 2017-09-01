@@ -24,7 +24,7 @@ namespace Vladi2.Models
         }
 
         public ActionResult ContactToDataBaseAndExecute
-            (string i_QueryActionOnDataBase, UserAccount i_User, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
+            (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {
             using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
             {
@@ -37,7 +37,7 @@ namespace Vladi2.Models
                     }
                     foreach (string parameter in i_ParametersOfTheQuery)
                     {
-                        command.Parameters[parameter].Value = matchingParams(parameter, i_User);
+                        command.Parameters[parameter].Value = matchingParams(parameter, i_objectToGetDataFromIt);
                     }
 
                     using (SQLiteDataReader reader = command.ExecuteReader())
@@ -49,12 +49,12 @@ namespace Vladi2.Models
 
         }
 
-        private string matchingParams(string i_parameterForMatcing, UserAccount i_User)
+        private string matchingParams(string i_parameterForMatcing, object i_ObjectParameters)
         {
             string[] words = i_parameterForMatcing.Split('@');
             string wordAfterSplitting = words[1];
-            string UserData = i_User.ToString();
-            string [] UserDataWords = i_User.ToString().Split(new string[] { wordAfterSplitting }, StringSplitOptions.None);
+            string UserData = i_ObjectParameters.ToString();
+            string [] UserDataWords = i_ObjectParameters.ToString().Split(new string[] { wordAfterSplitting }, StringSplitOptions.None);
             string[] anotherAfterStringOperation = UserDataWords[1].Split(' ');
             return anotherAfterStringOperation[1];
         }

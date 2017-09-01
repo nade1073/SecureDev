@@ -147,6 +147,7 @@
     </Compile>
     <Compile Include="Models\DataBaseUtils.cs" />
     <Compile Include="Models\EncryptionManager.cs" />
+    <Compile Include="Models\ForumMessage.cs" />
     <Compile Include="Models\homeVM.cs" />
     <Compile Include="Models\ResultViewDelegate.cs" />
     <Compile Include="Models\TypeMapFromTypeToDbType.cs" />
