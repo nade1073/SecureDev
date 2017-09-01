@@ -75,12 +75,7 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked, "@UserName");
         }
 
-        //this is for xss demonstration.
-        public ActionResult XSS(string xss)
-        {
-            var vm = new homeVM() { data = xss };
-            return View(vm);
-        }
+ 
         //returns the user home page
         public ActionResult UserHome()
         {
@@ -150,14 +145,7 @@ namespace Vladi2.Controllers
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
-        public ActionResult CreateTopic()
-        {
-            if (Session["UserName"] == null)
-            {
-                return RedirectToAction("index", "Home");
-            }
-            return View();
-        }
+ 
 
         public ActionResult HomePageForum()
         {
@@ -242,7 +230,7 @@ namespace Vladi2.Controllers
             return RedirectToAction("AccountProfile", "Home");
         }
 
-        public ActionResult SportsForum(string topic)
+        public ActionResult Forum(string topic)
         {
             if(Session["UserName"]==null)
             {
@@ -288,7 +276,7 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
             {
-                return RedirectToAction("SportsForum", "Home",new { topic = Topic });
+                return RedirectToAction("Forum", "Home",new { topic = Topic });
             };
             return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
 

@@ -196,13 +196,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\XSS.cshtml" />
     <Content Include="Views\Home\UserHome.cshtml" />
     <Content Include="Sqlite\db.sqlite" />
     <Content Include="Views\Home\AccountProfile.cshtml" />
     <Content Include="Views\Home\HomePageForum.cshtml" />
-    <Content Include="Views\Home\SportsForum.cshtml" />
-    <Content Include="Views\Home\CreateTopic.cshtml" />
+    <Content Include="Views\Home\Forum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
