@@ -23,6 +23,10 @@ namespace Vladi2.Controllers
         //entry point for main page as determined in the route config
         public ActionResult Index()
         {
+            if (Session["UserName"] != null)
+            {
+                return RedirectToAction("UserHome", "Home");
+            }
             if (TempData["ErrorUserNameAndPassword"] != null)
             {
                 ViewBag.loginError = TempData["ErrorUserNameAndPassword"];
@@ -43,7 +47,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -105,7 +109,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -147,24 +151,29 @@ namespace Vladi2.Controllers
         }
         public ActionResult CreateTopic()
         {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("index", "Home");
+            }
             return View();
         }
 
         public ActionResult HomePageForum()
         {
-            if(Session["UserName"]!=null)
+            if (Session["UserName"] == null)
             {
-                return View();
+                return RedirectToAction("index", "Home");
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            return View();
         }
 
         public ActionResult AccountProfile()
         {
-            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("index", "Home");
+            }
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -193,12 +202,7 @@ namespace Vladi2.Controllers
             };
 
             return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
-            //if (Session["UserName"]==null)
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
-            //ViewBag.User = userDetails;
-            //return View();
+   
         }
         [HttpPost]
         public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
@@ -210,7 +214,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -241,6 +245,14 @@ namespace Vladi2.Controllers
         {
             return View();
         }
+
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
