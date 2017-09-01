@@ -1,6 +1,7 @@
 ﻿
 
-<h2 class="Forumheader">Forum >"@ViewBag.Topic </h2>
+<h2 class="Forumheader">Forum >@ViewBag.Topic </h2>
+
 <script>
     function PostMessageValidate()
     {
@@ -9,8 +10,7 @@
 
 
 </script>
-@*<td>@student.Name</td>
-<td>@student.Guardian.Name</td>*@
+
 
 
 
@@ -22,10 +22,15 @@
             {
                 <li>
                     <article class="hentry">
-
                         <h2 class="entry-title">@message.SubjectMessage</h2>
-                        <div class="deleteButtonForum">Delete</div>
-
+                        @{                
+                            if ((string)message.UserName == (string)Session["UserName"])
+                            {
+                                <div class="deleteButtonForum">Delete</div>
+                            }
+                        }
+                        
+                        
                         <footer class="post-info">
                             <abbr class="published" title="2005-10-10T14:07:00-07:00">
                                 <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
@@ -43,25 +48,19 @@
                 </li>
             }
 
+       
 
+        </ol>
 
+    </section>
 
+    <hr class="style18" />
+    <div class="boxHeader blurred-bg tinted">
+        <div class="content">
+            <h1 class="WellcomeHeader" cl>Crate New topic</h1>
 
-
-
-
-
-
-
-
-
-
-
-
-        </ol><!-- /#posts-list -->
-
-    </section><!-- /#content -->
-    <h6 style="text-align:center;"> Crate New Topic</h6>
+        </div>
+    </div>
 @using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic="Sport", onsubmit = "return PostMessageValidate()" }))
 {
     <div id="form-main">
