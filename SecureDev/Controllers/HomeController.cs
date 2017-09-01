@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -110,7 +110,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -174,7 +174,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -215,7 +215,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -248,7 +248,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
             ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -277,7 +277,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult PostMessage(string Subject, string Message, string Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToLoad = new ForumMessage();
             messageToLoad.SubjectMessage = Subject;
