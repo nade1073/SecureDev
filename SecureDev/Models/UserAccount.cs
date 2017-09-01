@@ -48,13 +48,13 @@ namespace Vladi2.Models
         public override string ToString()
         {
             return string.Format(
-@"UserName {0} 
-Password {1} 
-Email {2} 
-FirstName {3} 
-LastName {4} 
-PhoneNumber {5} 
-PictureUser {6}", this.UserName, this.Password, this.Email, this.FirstName, this.LastName, this.PhoneNumber, this.PictureUser);
+@"#UserName {0} 
+#Password {1} 
+#Email {2} 
+#FirstName {3} 
+#LastName {4} 
+#PhoneNumber {5} 
+#PictureUser {6}", this.UserName, this.Password, this.Email, this.FirstName, this.LastName, this.PhoneNumber, this.PictureUser);
         }
     }
 }

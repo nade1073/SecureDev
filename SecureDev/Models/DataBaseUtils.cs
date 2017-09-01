@@ -55,8 +55,10 @@ namespace Vladi2.Models
             string wordAfterSplitting = words[1];
             string UserData = i_ObjectParameters.ToString();
             string [] UserDataWords = i_ObjectParameters.ToString().Split(new string[] { wordAfterSplitting }, StringSplitOptions.None);
-            string[] anotherAfterStringOperation = UserDataWords[1].Split(' ');
-            return anotherAfterStringOperation[1];
+            string[] anotherAfterStringOperation = UserDataWords[1].Split('#');
+            string TheStringToBeReturn = anotherAfterStringOperation[0].Trim();
+            return TheStringToBeReturn;
+
         }
     }
 }
