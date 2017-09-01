@@ -15,10 +15,10 @@ namespace Vladi2.Models
         public override string ToString()
         {
             return string.Format(
-@"SubjectMessage {0}
-TopicMessage {1}
-Message {2}
-UseName {3}", SubjectMessage, TopicMessage, Message, UserName);
+@"Subject {0} 
+Topic {1} 
+Message {2} 
+UserName {3}", SubjectMessage, TopicMessage, Message, UserName);
         }
 
 

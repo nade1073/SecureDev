@@ -20,6 +20,7 @@ namespace Vladi2.Controllers
         const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionBen= @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
+        
         //entry point for main page as determined in the route config
         public ActionResult Index()
         {
@@ -109,7 +110,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -243,14 +244,55 @@ namespace Vladi2.Controllers
 
         public ActionResult SportsForum(string topic)
         {
-            return View();
-        }
-        //[HttpPost]
-        //public ActionResult PostMessage(string Subject,string Message,string Topic)
-        //{
-        //    //Logic insert message to DB
+            if(Session["UserName"]==null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
+            ForumMessage MessageofTheDataBase = new ForumMessage();
+            MessageofTheDataBase.TopicMessage = topic;
+            var query = "SELECT * FROM Forum Where Topic = @Topic";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+  
+                while (reader.Read() == true)
+                {
+                    ForumMessage Message = new ForumMessage();    
+                    Message.UserName = reader.GetString(0).Trim();
+                    Message.TopicMessage = reader.GetString(1).Trim();
+                    Message.SubjectMessage = reader.GetString(2).Trim();
+                    Message.Message = reader.GetString(3).Trim();
+                    messagesOFTheForum.Add(Message);
+                }
+                ViewBag.ListOfMessages = messagesOFTheForum;
+                ViewBag.Topic = topic;
+                return View();
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(query, MessageofTheDataBase, MethodToBeInvoked,"@Topic");
 
-        //}
+        }
+        [HttpPost]
+        public ActionResult PostMessage(string Subject, string Message, string Topic)
+        {
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            ForumMessage messageToLoad = new ForumMessage();
+            messageToLoad.SubjectMessage = Subject;
+            messageToLoad.Message = Message;
+            messageToLoad.TopicMessage = Topic;
+            messageToLoad.UserName = (string)Session["UserName"];
+            string insetrToDataBaseQuery = "Insert INTO Forum (UserName, Topic, Subject, Message) VALUES(@UserName,@Topic,@Subject,@Message)";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+            {
+                return RedirectToAction("SportsForum", "Home",new { topic = Topic });
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
+
+        }
 
         public ActionResult SignOut()
         {

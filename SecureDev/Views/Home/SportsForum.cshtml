@@ -1,111 +1,59 @@
 ﻿
 
-<h2 class="Forumheader">Forum > Sprots </h2>
+<h2 class="Forumheader">Forum >"@ViewBag.Topic </h2>
+<script>
+    function PostMessageValidate()
+    {
+        return true;
+    }
+
+
+</script>
+@*<td>@student.Name</td>
+<td>@student.Guardian.Name</td>*@
+
+
+
 <div class="WrapperForum">
 
     <section class="contentForum">
         <ol id="posts-list" class="hfeed">
+            @foreach (var message in ViewBag.ListOfMessages)
+            {
+                <li>
+                    <article class="hentry">
 
-            <li>
-                <article class="hentry">
+                        <h2 class="entry-title">@message.SubjectMessage</h2>
+                        <div class="deleteButtonForum">Delete</div>
 
-                    <h2 class="entry-title">This be the title</h2>
-                    <div class="deleteButtonForum">Delete</div>
+                        <footer class="post-info">
+                            <abbr class="published" title="2005-10-10T14:07:00-07:00">
+                                <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
+                                10th October 2005
+                            </abbr>
+                            <address class="vcard author">
+                                By <a class="url fn" href="#">@message.UserName</a>
+                            </address>
+                        </footer><!-- /.post-info -->
+                        <div class="entry-content">
+                            <p>@message.Message</p>
+                        </div><!-- /.entry-content -->
 
-                    <footer class="post-info">
-                        <abbr class="published" title="2005-10-10T14:07:00-07:00">
-                            <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
-                            10th October 2005
-                        </abbr>
+                    </article>
+                </li>
+            }
 
-                        <address class="vcard author">
-                            By <a class="url fn" href="#">Enrique Ramírez</a>
 
-                        </address>
-                    </footer><!-- /.post-info -->
 
-                    <div class="entry-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis nunc vitae libero iaculis elementum. Nullam et justo  dapibus blandit nec et leo. Ut ut malesuada tellus.</p>
 
-                    </div><!-- /.entry-content -->
 
-                </article>
-            </li>
-            <li>
-                <article class="hentry">
 
-                    <h2 class="entry-title">This be the title</h2>
-                    <div class="deleteButtonForum">Delete</div>
 
-                    <footer class="post-info">
-                        <abbr class="published" title="2005-10-10T14:07:00-07:00">
-                            <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
-                            10th October 2005
-                        </abbr>
 
-                        <address class="vcard author">
-                            By <a class="url fn" href="#">Enrique Ramírez</a>
 
-                        </address>
-                    </footer><!-- /.post-info -->
 
-                    <div class="entry-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis nunc vitae libero iaculis elementum. Nullam et justo  dapibus blandit nec et leo. Ut ut malesuada tellus.</p>
 
-                    </div><!-- /.entry-content -->
 
-                </article>
-            </li>
-            <li>
-                <article class="hentry">
-
-                    <h2 class="entry-title">This be the title</h2>
-                    <div class="deleteButtonForum">Delete</div>
-
-                    <footer class="post-info">
-                        <abbr class="published" title="2005-10-10T14:07:00-07:00">
-                            <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
-                            10th October 2005
-                        </abbr>
-
-                        <address class="vcard author">
-                            By <a class="url fn" href="#">Enrique Ramírez</a>
-
-                        </address>
-                    </footer><!-- /.post-info -->
-
-                    <div class="entry-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis nunc vitae libero iaculis elementum. Nullam et justo  dapibus blandit nec et leo. Ut ut malesuada tellus.</p>
-
-                    </div><!-- /.entry-content -->
-
-                </article>
-            </li>
-            <li>
-                <article class="hentry">
-
-                    <h2 class="entry-title">This be the title</h2>
-                    <div class="deleteButtonForum">Delete</div>
-
-                    <footer class="post-info">
-                        <abbr class="published" title="2005-10-10T14:07:00-07:00">
-                            <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
-                            10th October 2005
-                        </abbr>
-
-                        <address class="vcard author">
-                            By <a class="url fn" href="#">Enrique Ramírez</a>
-
-                        </address>
-                    </footer><!-- /.post-info -->
-
-                    <div class="entry-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis nunc vitae libero iaculis elementum. Nullam et justo  dapibus blandit nec et leo. Ut ut malesuada tellus.</p>
-
-                    </div><!-- /.entry-content -->
-
-                </article>
-            </li>
 
 
 
@@ -114,18 +62,20 @@
 
     </section><!-- /#content -->
     <h6 style="text-align:center;"> Crate New Topic</h6>
+@using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic="Sport", onsubmit = "return PostMessageValidate()" }))
+{
     <div id="form-main">
         <div id="form-div">
             <form class="" id="">
                
                 <p class="name">
-                    <input name="name" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" placeholder="Subject" id="name" />
+                    <input name="Subject" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" placeholder="Subject" id="name" />
                 </p>
 
-
+                <input name="Topic" value="@ViewBag.Topic" hidden />
 
                 <p class="text">
-                    <textarea name="text" class="validate[required,length[6,300]] feedback-input textareaCrateTopic" id="comment" placeholder="Message"></textarea>
+                    <textarea name="Message" class="validate[required,length[6,300]] feedback-input textareaCrateTopic" id="comment" placeholder="Message"></textarea>
                 </p>
 
 
@@ -136,4 +86,5 @@
             </form>
         </div>
     </div>  
+}
 </div>
