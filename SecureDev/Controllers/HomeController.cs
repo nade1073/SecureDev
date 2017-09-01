@@ -267,6 +267,7 @@ namespace Vladi2.Controllers
         {
             if (messageValidation(Subject, Message) && (Topic == "Sport" || Topic == "Question" || Topic == "Luxury"))
             {
+
                 string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
