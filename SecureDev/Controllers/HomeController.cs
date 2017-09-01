@@ -18,9 +18,9 @@ namespace Vladi2.Controllers
         const string c_passwordKey = "Nadav&Netanel";
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionBen = @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-
+        const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
+        const string m_ConnectionBen= @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
+        
         //entry point for main page as determined in the route config
         public ActionResult Index()
         {
@@ -38,7 +38,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            if (!ValidationLoginUserProperty(username, password))
+            if(!ValidationLoginUserProperty(username, password))
             {
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -66,7 +66,7 @@ namespace Vladi2.Controllers
                         Session["UserName"] = username;
                         return RedirectToAction("UserHome", "Home");
                     }
-
+                        
                 }
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
@@ -75,37 +75,37 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked, "@UserName");
         }
 
-
+ 
         //returns the user home page
         public ActionResult UserHome()
         {
-            if (Session["UserName"] == null)
+            if(Session["UserName"]==null)
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            
             return View();
         }
 
         [HttpPost]
         public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
         {
-            if (file != null && IsImage(file))
+            if (file!=null && IsImage(file))
+            { 
+            byte[] fileInBytes = new byte[file.ContentLength];
+            using (BinaryReader theReader = new BinaryReader(file.InputStream))
             {
-                byte[] fileInBytes = new byte[file.ContentLength];
-                using (BinaryReader theReader = new BinaryReader(file.InputStream))
-                {
-                    fileInBytes = theReader.ReadBytes(file.ContentLength);
-                }
-                string fileAsString = Convert.ToBase64String(fileInBytes);
-                user.PictureUser = fileAsString;
+                fileInBytes = theReader.ReadBytes(file.ContentLength);
             }
-            else
+            string fileAsString = Convert.ToBase64String(fileInBytes);
+            user.PictureUser = fileAsString;
+             }
+            else 
             {
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -113,7 +113,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (!ValidationRegUserProperty(user))
+            if(!ValidationRegUserProperty(user))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -145,7 +145,7 @@ namespace Vladi2.Controllers
             //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
             //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
         }
-
+ 
 
         public ActionResult HomePageForum()
         {
@@ -162,7 +162,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -191,19 +191,19 @@ namespace Vladi2.Controllers
             };
 
             return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
-
+   
         }
         [HttpPost]
-        public ActionResult AccountProfile(string PhoneNumber, string LastName, string FirstName, string passwordRegister, string Email, HttpPostedFileBase file)
+        public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
         {
             UserAccount UpdateUser = new UserAccount();
-
+        
             UpdateUser.Email = Email;
             UpdateUser.FirstName = FirstName;
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
-            UpdateUser.UserName = (string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            UpdateUser.UserName =(string)Session["UserName"];
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -213,7 +213,7 @@ namespace Vladi2.Controllers
 
             bool isGoodPassword = passwordCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
 
-            if (!isGoodPassword)
+            if(!isGoodPassword)
             {
                 ViewBag.Error = "Error in password";// Add to view!!!@@#!@#!#!@#!
                 return View();
@@ -222,7 +222,7 @@ namespace Vladi2.Controllers
 
             bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
 
-            if (!isGoodFileFormatToUpload)
+            if(!isGoodFileFormatToUpload)
             {
                 return RedirectToAction("AccountProfile", "Home");
             }
@@ -232,11 +232,11 @@ namespace Vladi2.Controllers
 
         public ActionResult Forum(string topic)
         {
-            if (Session["UserName"] == null)
+            if(Session["UserName"]==null)
             {
                 return RedirectToAction("Index", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
             ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -245,10 +245,10 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
-
+  
                 while (reader.Read() == true)
                 {
-                    ForumMessage Message = new ForumMessage();
+                    ForumMessage Message = new ForumMessage();    
                     Message.UserName = reader.GetString(0).Trim();
                     Message.TopicMessage = reader.GetString(1).Trim();
                     Message.SubjectMessage = reader.GetString(2).Trim();
@@ -259,27 +259,31 @@ namespace Vladi2.Controllers
                 ViewBag.Topic = topic;
                 return View();
             };
-            return databaseConnection.ContactToDataBaseAndExecute(query, MessageofTheDataBase, MethodToBeInvoked, "@Topic");
+            return databaseConnection.ContactToDataBaseAndExecute(query, MessageofTheDataBase, MethodToBeInvoked,"@Topic");
 
         }
         [HttpPost]
         public ActionResult PostMessage(string Subject, string Message, string Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            ForumMessage messageToLoad = new ForumMessage();
-            messageToLoad.SubjectMessage = Subject;
-            messageToLoad.Message = Message;
-            messageToLoad.TopicMessage = Topic;
-            messageToLoad.UserName = (string)Session["UserName"];
-            string insetrToDataBaseQuery = "Insert INTO Forum (UserName, Topic, Subject, Message) VALUES(@UserName,@Topic,@Subject,@Message)";
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
-            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+            if (messageValidation(Subject, Message) && (Topic == "Sport" || Topic == "Question" || Topic == "Luxury"))
             {
-                return RedirectToAction("Forum", "Home", new { topic = Topic });
-            };
-            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
 
+                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+                DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+                ForumMessage messageToLoad = new ForumMessage();
+                messageToLoad.SubjectMessage = Subject;
+                messageToLoad.Message = Message;
+                messageToLoad.TopicMessage = Topic;
+                messageToLoad.UserName = (string)Session["UserName"];
+                string insetrToDataBaseQuery = "Insert INTO Forum (UserName, Topic, Subject, Message) VALUES(@UserName,@Topic,@Subject,@Message)";
+                Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+                MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+                {
+                    return RedirectToAction("Forum", "Home", new { topic = Topic });
+                };
+                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
+            }
+            return View();
         }
 
         public ActionResult SignOut()
@@ -288,11 +292,7 @@ namespace Vladi2.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
-        //[HttpPost]
-        //public ActionResult DeleteMessageByUser(string Subject)
-        //{
 
-        //}
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
@@ -448,6 +448,20 @@ namespace Vladi2.Controllers
 
             // linq from Henrik Stenbæk
             return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool messageValidation(string i_Subject, string i_Message)
+        {
+            bool isValide = false;
+
+            if (i_Subject != null && i_Message != null)
+            {
+                if(!(i_Message.Contains("#") || i_Subject.Contains("#")))
+                {
+                    isValide = true;
+                }
+            }
+            return isValide;
         }
     }
 }
