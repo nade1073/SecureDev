@@ -58,6 +58,7 @@ namespace Vladi2.Models
             string[] anotherAfterStringOperation = UserDataWords[1].Split('#');
             string TheStringToBeReturn = anotherAfterStringOperation[0].Trim();
             return TheStringToBeReturn;
+
         }
     }
 }
