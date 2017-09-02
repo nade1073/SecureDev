@@ -13,19 +13,18 @@
             return false;
         }
     });
-
     $(function () {
 
         $(".deleteA").click(function () {
-            var formData = { i_Subject: "asda", i_Topic: "Question" }; //Array
-          
+            var HeaderObjectText = $(this).parent().prev().text();
+            var Topic="@ViewBag.Topic";
+ 
+            var formData = { i_Subject: HeaderObjectText, i_Topic: Topic }; //Array
             $.ajax({
-           
                 url: "@Url.Action("DeleteMessage", "Home")",
                 type: "POST",
                 data: formData,
                 success: function (response) {
-                    alert("Sucsses");
                     window.location.reload(true);
                 },
                 error: function (error) {
@@ -34,10 +33,7 @@
             })
         });
     });
-
 </script>
-
-
 
 
 <div class="WrapperForum">
