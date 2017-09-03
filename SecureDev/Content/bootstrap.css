@@ -8330,7 +8330,7 @@ input:focus, textarea:focus {
   border: 1px solid #ddd;
   padding: 10px;
   background:#eee;
-  margin-bottom:10%;
+  margin-bottom:150px;
 }
 .panel-head {
   color: white;
@@ -8363,7 +8363,8 @@ input:focus, textarea:focus {
     margin: -8px;
 }
 .UpdateInControlPanel{
-    color: black;
+    color: #1b14b5;
+    text-decoration:underline;
     padding: 14px 0;
     width: 100%;
     height: 100%;
