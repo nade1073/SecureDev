@@ -59,14 +59,23 @@ namespace Vladi2.Controllers
                 {
                     //if we got here - the select succeded , the user exist in db - redirect to userHome page
                     var encriptionPassword = reader.GetString(2).Trim();
+                    var isAdmin = reader.GetInt32(7);
                     var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
                     var userName = reader.GetString(1).Trim();
                     if (decriptionis == password)
                     {
                         Session["UserName"] = username;
+                        if(isAdmin==1)
+                        {
+                            Session["IsAdmin"] = "1";
+                        }
+                        else
+                        { 
+                            Session["IsAdmin"] = "0";
+                        }
                         return RedirectToAction("UserHome", "Home");
                     }
-                        
+
                 }
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
@@ -193,7 +202,7 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
    
         }
-        [HttpPost]
+        [HttpPost]  
         public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
         {
             UserAccount UpdateUser = new UserAccount();
@@ -299,6 +308,20 @@ namespace Vladi2.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult ControlPanel()
+        {
+            if (!(Session["UserName"] != null && (string)Session["isAdmin"] == "1"))
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+            else
+            {
+                return View();
+            }
+        }
+
 
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)

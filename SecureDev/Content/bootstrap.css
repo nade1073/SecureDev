@@ -8298,3 +8298,106 @@ input:focus, textarea:focus {
   background-color:white;
 }
 
+
+/* contronl pannel*/
+
+
+
+.login-info {
+  margin-right: 20px;
+  padding: 10px;
+}
+.td-logo {
+  font-size: 25px;
+  color: #00CC09;
+}
+.aps-logo {
+  font-size: 30px;
+}
+.link-items {
+  margin: 0;
+}
+
+.item {
+    display: inline-block;
+    list-style-type: none;
+    padding: 20px;
+}
+  .item:hover {
+    background: #303030;
+  }
+
+
+.link {
+    color: #eee;
+    text-decoration: none !important;
+}
+ .link:hover {
+    color: white;
+  }
+
+
+/* Panel Styles */
+.simple-panel {
+  border: 1px solid #ddd;
+  padding: 10px;
+  background:#eee;
+  margin-bottom:10%;
+}
+.panel-head {
+  color: white;
+  background: #404040;
+  padding: 5px 10px;
+  margin-bottom: 20px;
+}
+
+
+/* Table Related */
+.table input[type="checkbox"] {
+  position: relative !important;
+  margin-top: 0;
+  margin-left: 0 !important;
+  line-height: normal;
+}
+.table {
+  padding-top: 10px;
+}
+.table p {
+  padding-top: 8px;
+  margin: 0;
+}
+
+.table .add-btn {
+    height: 100%;
+    background: #0395CE;
+    cursor: pointer;
+    margin: -8px;
+}
+  a {
+    color: white;
+    padding: 14px 0;
+    width: 100%;
+    height: 100%;
+    }
+    a:hover {
+      background: #37a4cc;
+    }
+  }
+}
+
+
+/* Bootstrap Overrides */
+.checkBoxControlPanel {
+  margin:500px;
+  border:5px solid red;
+}
+.form-control { border-radius: 0 !important; }
+
+/* Utility Classes */
+
+.u-upper { text-transform: uppercase; }
+.u-left { text-align: left; }
+.u-center { text-align: center; }
+.u-right { text-align: right; }
+.u-bottom { position: absolute; bottom: 1px; margin: 0;  }
+.checkBoxAdmin { text-align: center; margin:0 auto; }
