@@ -317,7 +317,6 @@ namespace Vladi2.Controllers
 
             }
             else
-
             {
                 UserAccount userDetailes = new UserAccount();
                 var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
@@ -345,18 +344,15 @@ namespace Vladi2.Controllers
                        
                  
 
-                        return RedirectToAction("UserHome", "Home");
+                        
                     }
                     ViewBag.usersDetails = users;
                     ViewBag.usersIsAdmin = usersIsAdmin;
-
-                    TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
-                    return RedirectToAction("Index", "Home");
-
+                    return View();
                 };
                 return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked);
-                
 
+             
             }
         }
 
