@@ -59,14 +59,23 @@ namespace Vladi2.Controllers
                 {
                     //if we got here - the select succeded , the user exist in db - redirect to userHome page
                     var encriptionPassword = reader.GetString(2).Trim();
+                    var isAdmin = reader.GetInt32(7);
                     var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
                     var userName = reader.GetString(1).Trim();
                     if (decriptionis == password)
                     {
                         Session["UserName"] = username;
+                        if(isAdmin==1)
+                        {
+                            Session["IsAdmin"] = "1";
+                        }
+                        else
+                        { 
+                            Session["IsAdmin"] = "0";
+                        }
                         return RedirectToAction("UserHome", "Home");
                     }
-                        
+
                 }
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
@@ -193,7 +202,7 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
    
         }
-        [HttpPost]
+        [HttpPost]  
         public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
         {
             UserAccount UpdateUser = new UserAccount();
@@ -244,7 +253,7 @@ namespace Vladi2.Controllers
             string connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
-            ForumMessage MessageofTheDataBase = new ForumMessage();
+             ForumMessage MessageofTheDataBase = new ForumMessage();
             MessageofTheDataBase.TopicMessage = topic;
             var query = "SELECT * FROM Forum Where Topic = @Topic";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
@@ -299,6 +308,59 @@ namespace Vladi2.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost]
+        public ActionResult ControlPanelUpdate(string username,bool checkbox)
+        {
+            return RedirectToAction("ControlPanel", "Home");
+        }
+
+        public ActionResult ControlPanel()
+        {
+            if (!(Session["UserName"] != null && (string)Session["isAdmin"] == "1"))
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+
+            UserAccount userDetailes = new UserAccount();
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+                DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+                List<UserAccount> users = new List<UserAccount>();
+                List<int> usersIsAdmin = new List<int>();
+                string loginQuery = "SELECT * FROM tblusers";
+                Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+                MethodToBeInvoked = (commad, reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                        UserAccount userDetails = new UserAccount();
+                        userDetails.FirstName = reader.GetString(0).Trim();
+                        userDetails.UserName = reader.GetString(1).Trim();
+                        //   userDetailes.Password = reader.GetString(2).Trim();
+                        userDetails.LastName = reader.GetString(3).Trim();
+                        userDetails.PhoneNumber = reader.GetString(4).Trim();
+                        userDetails.Email = reader.GetString(5).Trim();
+                        userDetails.PictureUser = reader.GetString(6).Trim();
+
+                        usersIsAdmin.Add(reader.GetInt32(7));
+                        users.Add(userDetails);
+
+
+
+
+                    }
+                    ViewBag.usersDetails = users;
+                    ViewBag.usersIsAdmin = usersIsAdmin;
+                    return View();
+
+                };
+        
+            return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked);
+            
+        }
+
 
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
