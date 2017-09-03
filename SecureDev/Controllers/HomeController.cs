@@ -309,6 +309,7 @@ namespace Vladi2.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         public ActionResult ControlPanel()
         {
             if (!(Session["UserName"] != null && (string)Session["isAdmin"] == "1"))
@@ -316,10 +317,43 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
-            else
-            {
-                return View();
-            }
+
+            UserAccount userDetailes = new UserAccount();
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+                DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+                List<UserAccount> users = new List<UserAccount>();
+                List<int> usersIsAdmin = new List<int>();
+                string loginQuery = "SELECT * FROM tblusers";
+                Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+                MethodToBeInvoked = (commad, reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                        UserAccount userDetails = new UserAccount();
+                        userDetails.FirstName = reader.GetString(0).Trim();
+                        userDetails.UserName = reader.GetString(1).Trim();
+                        //   userDetailes.Password = reader.GetString(2).Trim();
+                        userDetails.LastName = reader.GetString(3).Trim();
+                        userDetails.PhoneNumber = reader.GetString(4).Trim();
+                        userDetails.Email = reader.GetString(5).Trim();
+                        userDetails.PictureUser = reader.GetString(6).Trim();
+
+                        usersIsAdmin.Add(reader.GetInt32(7));
+                        users.Add(userDetails);
+
+
+
+
+                    }
+                    ViewBag.usersDetails = users;
+                    ViewBag.usersIsAdmin = usersIsAdmin;
+                    return View();
+
+                };
+        
+            return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked);
+            
         }
 
 
