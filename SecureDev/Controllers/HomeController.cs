@@ -309,6 +309,11 @@ namespace Vladi2.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
+        public ActionResult ControlPanelUpdate(string username,bool checkbox)
+        {
+            return RedirectToAction("ControlPanel", "Home");
+        }
 
         public ActionResult ControlPanel()
         {

@@ -1,7 +1,28 @@
-﻿
-@{
-    ViewBag.Title = "ControlPanel";
-}
+﻿<script>
+   $(function () {
+
+       $(".UpdateInControlPanel").click(function ()
+       {
+
+           var checkboxtopass = $(this).parent().parent().prev().children().prop("checked");
+           var usernametopass = $(this).parent().parent().prev().prev().prev().prev().prev().text();
+     
+           var formData = { username: usernametopass, checkbox: checkboxtopass }; //Array
+            $.ajax({
+            url: "@Url.Action("ControlPanelUpdate", "Home")",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+            window.location.reload(true);
+            },
+            error: function (error) {
+            alert("Error");
+            }
+            })
+            });
+       });
+
+</script>
 
 <h2>ControlPanel</h2>
 
@@ -45,29 +66,24 @@
                                 @if (ViewBag.usersIsAdmin[x] == 1)
                                 {
                                     <td class="checkBoxAdmin">
-                                        <input type="checkbox" checked />
+                                        <input  type="checkbox" checked />
                                     </td>
                                 }
                                 else
                                 {
                                     <td class="checkBoxAdmin">
-                                        <input type="checkbox"  />
+                                        <input  type="checkbox" />
                                     </td>
                                 }
 
 
-                                <td class="u-center"><p><a class="UpdateInControlPanel" href="#">Update</a></p></td>
+                                <td class="u-center"><p><a class="UpdateInControlPanel" >Update</a></p></td>
                             </tr>
                                     x++;
                                 }
                             }
 
 
-
-
-
-    
-                        
                     </tbody>
                 </table>
             </div>
