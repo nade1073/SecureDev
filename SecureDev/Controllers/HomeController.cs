@@ -253,7 +253,7 @@ namespace Vladi2.Controllers
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
-            ForumMessage MessageofTheDataBase = new ForumMessage();
+             ForumMessage MessageofTheDataBase = new ForumMessage();
             MessageofTheDataBase.TopicMessage = topic;
             var query = "SELECT * FROM Forum Where Topic = @Topic";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
