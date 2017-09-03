@@ -26,20 +26,47 @@
                             <th class="u-center">Last Name</th>
                             <th class="u-center">Email</th>
                             <th class="u-center">Admin/User</th>
-                            <th class="u-center">Update!</th>
+                            <th class="u-center">Update</th>
                         </tr>
                     </thead>
                     <tbody style="font-size:15px;">
-                        <tr>
-                            <td><p>nade1073</p></td>
-                            <td><p>Nadav</p></td>
-                            <td><p>Shalev</p></td>
-                            <td><p>nade1073@gmail.com</p></td> 
-                            <td class="checkBoxAdmin">
-                                <input type="checkbox" />
-                            </td>
-                            <td class="u-center"><p><a class="UpdateInControlPanel" href="#">Update</a></p></td>
-                        </tr>
+                        
+                        @{
+                            var x=0;
+                            foreach (var user in ViewBag.usersDetails)
+                            {
+
+
+                            <tr>
+                                <td><p>@user.UserName</p></td>
+                                <td><p>@user.FirstName</p></td>
+                                <td><p>@user.LastName</p></td>
+                                <td><p>@user.Email</p></td>
+                                @if (ViewBag.usersIsAdmin[x] == 1)
+                                {
+                                    <td class="checkBoxAdmin">
+                                        <input type="checkbox" checked />
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="checkBoxAdmin">
+                                        <input type="checkbox"  />
+                                    </td>
+                                }
+
+
+                                <td class="u-center"><p><a class="UpdateInControlPanel" href="#">Update</a></p></td>
+                            </tr>
+                                    x++;
+                                }
+                            }
+
+
+
+
+
+    
                         
                     </tbody>
                 </table>
