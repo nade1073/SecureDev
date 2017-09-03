@@ -59,13 +59,13 @@ namespace Vladi2.Controllers
                 {
                     //if we got here - the select succeded , the user exist in db - redirect to userHome page
                     var encriptionPassword = reader.GetString(2).Trim();
-                    var isAdmin = reader.GetInt32(7);
+                    var isAdmin = reader.GetString(7);
                     var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
                     var userName = reader.GetString(1).Trim();
                     if (decriptionis == password)
                     {
                         Session["UserName"] = username;
-                        if(isAdmin==1)
+                        if(isAdmin == "1")
                         {
                             Session["IsAdmin"] = "1";
                         }
@@ -312,7 +312,22 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
-            return RedirectToAction("ControlPanel", "Home");
+            string connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            UserAccount UserDetails = new UserAccount();
+            UserDetails.UserName = username;
+            UserAccountImproved User = new UserAccountImproved();
+            User.UserDetails = UserDetails;
+            User.AdminDetails = (checkbox == true) ? 1 : 0;
+            string profileQuriy = "UPDATE tblusers SET isAdmin = @Admin WHERE UserName = @UserName";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad1, reader1) =>
+            {
+                return RedirectToAction("ControlPanel", "Home");
+            };
+
+
+            return databaseConnection.ContactToDataBaseAndExecute(profileQuriy, User, MethodToBeInvoked, "@UserName", "@Admin");
         }
 
         public ActionResult ControlPanel()
@@ -324,10 +339,10 @@ namespace Vladi2.Controllers
             }
 
             UserAccount userDetailes = new UserAccount();
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionItzik);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 List<UserAccount> users = new List<UserAccount>();
-                List<int> usersIsAdmin = new List<int>();
+                List<string> usersIsAdmin = new List<string>();
                 string loginQuery = "SELECT * FROM tblusers";
                 Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
                 MethodToBeInvoked = (commad, reader) =>
@@ -344,7 +359,7 @@ namespace Vladi2.Controllers
                         userDetails.Email = reader.GetString(5).Trim();
                         userDetails.PictureUser = reader.GetString(6).Trim();
 
-                        usersIsAdmin.Add(reader.GetInt32(7));
+                        usersIsAdmin.Add(reader.GetString(7));
                         users.Add(userDetails);
 
 

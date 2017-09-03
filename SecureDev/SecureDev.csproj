@@ -152,6 +152,7 @@
     <Compile Include="Models\ResultViewDelegate.cs" />
     <Compile Include="Models\TypeMapFromTypeToDbType.cs" />
     <Compile Include="Models\UserAccount.cs" />
+    <Compile Include="Models\UserAccountImproved.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
