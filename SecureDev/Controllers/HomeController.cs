@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -114,7 +114,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -171,7 +171,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -212,7 +212,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -239,17 +239,71 @@ namespace Vladi2.Controllers
             return RedirectToAction("AccountProfile", "Home");
         }
 
-        //[HttpPost]
-        //public ActionResult CarBuyLogic(string CarID)
-        //{
-                //Take all data about the carID
-                //Take all data about the user
-                //Check if the user can buy by amountofcars && amoutleftinusers
-                //down by 1 amountcars and price from user
-                // update the table 
+        [HttpPost]
+        public ActionResult CarBuyLogic(string CarID)
+        {
+            //  Take all data about the carID  V
+            //Take all data about the user V
+            //Check if the user can buy by amountofcars && amoutleftinusers
+            //down by 1 amountcars and price from user
+            // update the table
+            // update the table UsersCar with the that the users buy
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            var query = "SELECT * FROM CarForSell WHERE CarID = @CarID";
+            CarForSell carToLoad = new CarForSell();
+            carToLoad.CarID = CarID;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                    carToLoad.Price = int.Parse(reader.GetString(4));
+                    carToLoad.Inventory = int.Parse(reader.GetString(7));
+                }
+                return RedirectToAction("Index", "Home");
 
-        //    var query = "SELECT * FROM CarForSell WHERE CarID = @UserName";
-        //}
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@CarID");
+            query = "SELECT * FROM tblusers WHERE UserName = @UserName";
+            UserAccount userToLoad = new UserAccount();
+            userToLoad.UserName = (string)Session["UserName"];
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    userToLoad.Amount = int.Parse(reader.GetString(8));
+                }
+                return RedirectToAction("Index", "Home");
+
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, userToLoad, MethodToBeInvoked, "@UserName");
+
+            if(!(userToLoad.Amount >= carToLoad.Price))
+            {
+                return RedirectToAction("CarSellCompany", "Home");
+            }
+
+
+            userToLoad.Amount -= carToLoad.Price;
+            carToLoad.Inventory--;
+            query = "UPDATE tblusers SET Amount = @Amount WHERE UserName = @UserName";
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                return View();
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, userToLoad, MethodToBeInvoked, "@UserName", "@Amount");
+            query = "UPDATE CarForSell SET Inventory = @Inventory WHERE CarID = @CarID";
+            databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@Inventory", "@CarID");
+            query = "Insert INTO UsersCars (UserName,CarID ) VALUES(@UserName,@CarID)";
+            UserNameAndCarID UserCarID = new UserNameAndCarID();
+            UserCarID.CarID = carToLoad.CarID;
+            UserCarID.UserName = userToLoad.UserName;
+            databaseConnection.ContactToDataBaseAndExecute(query, UserCarID, MethodToBeInvoked, "@UserName", "@CarID");
+            return RedirectToAction("CarSellCompany", "Home");
+
+        }
 
         public ActionResult CarSellCompany ()
         {
@@ -258,7 +312,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForSell = new List<CarForSell>();
 
@@ -302,7 +356,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("HomePageForum", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
              ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -336,7 +390,7 @@ namespace Vladi2.Controllers
             if (messageValidation(Subject, Message) )
             {
 
-                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+                string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
                 messageToLoad.SubjectMessage = Subject;
@@ -364,7 +418,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             UserAccount UserDetails = new UserAccount();
             UserDetails.UserName = username;
@@ -391,7 +445,7 @@ namespace Vladi2.Controllers
             }
 
             UserAccount userDetailes = new UserAccount();
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 List<UserAccount> users = new List<UserAccount>();
                 List<string> usersIsAdmin = new List<string>();
@@ -433,7 +487,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNatanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage();
             messageToDelete.UserName = (string)Session["UserName"];
