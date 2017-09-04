@@ -18,7 +18,7 @@ namespace Vladi2.Controllers
         const string c_passwordKey = "Nadav&Netanel";
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionReznik = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
+        const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionBen= @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         
         //entry point for main page as determined in the route config
@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -114,7 +114,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -171,7 +171,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -212,7 +212,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -246,6 +246,7 @@ namespace Vladi2.Controllers
         //    var query = "SELECT * FROM CarForSell WHERE CarID = @UserName";
         //}
 
+
         public ActionResult CarSellCompany ()
         {
             if (Session["UserName"] == null)
@@ -253,7 +254,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForSell = new List<CarForSell>();
 
@@ -297,7 +298,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("HomePageForum", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
              ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -331,7 +332,7 @@ namespace Vladi2.Controllers
             if (messageValidation(Subject, Message) )
             {
 
-                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+                string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
                 messageToLoad.SubjectMessage = Subject;
@@ -359,7 +360,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             UserAccount UserDetails = new UserAccount();
             UserDetails.UserName = username;
@@ -386,7 +387,7 @@ namespace Vladi2.Controllers
             }
 
             UserAccount userDetailes = new UserAccount();
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            var connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 List<UserAccount> users = new List<UserAccount>();
                 List<string> usersIsAdmin = new List<string>();
@@ -428,7 +429,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage();
             messageToDelete.UserName = (string)Session["UserName"];

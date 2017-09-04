@@ -7,9 +7,9 @@
         @foreach (var car in ViewBag.ListOfCarToSell)
         {
         <div class="cardCar">
-            @*<input readonly hidden value="@car.CarID" />*@
+            <input readonly hidden value="@car.CarID" />
         <div class="imgProfile">
-            <img id="PictureProfile" src="@car.Picture" alt="Car">
+            <img id="PictureProfile" src="data:image/png;base64,@car.Picture" alt="Car">
         </div>
         <hr />
        
