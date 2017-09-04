@@ -1,18 +1,39 @@
 ﻿
 
+<script>
+  $(function () {
+
+      $(".cardcarButton").click(function () {
+            var carID = $(this).prev().value();
+            var formData = { CarID: carID }; 
+            $.ajax({
+                url: "@Url.Action("CarBuyLogic", "Home")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    window.location.reload(true);
+                },
+                error: function (error) {
+                    alert("Error");
+                }
+            })
+        });
+    });
+</script>
+
 
 
 <div class="containerofcars">
 
-        @foreach (var car in ViewBag.ListOfCarToSell)
-        {
+    @foreach (var car in ViewBag.ListOfCarToSell)
+    {
         <div class="cardCar">
-            <input readonly hidden value="@car.CarID" />
+            <input  readonly hidden value="@car.CarID" />
         <div class="carProfile">
             <img id="PictureProfile" src="data:image/png;base64,@car.Picture" alt="Car">
         </div>
         <hr />
-       
+            <input  id="carID" name="CarID" value="@car.CarID" hidden />
         <div class="groupOfInput">
             <p class="textCar"> Model:</p>
            <input type="text" class="css-input" readonly value="@car.Model" />
@@ -42,9 +63,8 @@
             <p class="textCar"> Price:</p>
             <input type="text" class="css-input" readonly value="@car.Price" />
         </div>
-
+            <input readonly hidden value="@car.CarID" />
         <button class="cardcarButton" type="submit" id="button" >Buy</button>
     </div>
-        }
-
+       }
 </div>
