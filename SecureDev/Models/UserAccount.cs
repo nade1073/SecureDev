@@ -45,6 +45,8 @@ namespace Vladi2.Models
 
         public string PictureUser { get; set; }
 
+        public int Amount { get; set; }
+
         public override string ToString()
         {
             return string.Format(
@@ -54,7 +56,8 @@ namespace Vladi2.Models
 #FirstName {3} 
 #LastName {4} 
 #PhoneNumber {5} 
-#PictureUser {6}", this.UserName, this.Password, this.Email, this.FirstName, this.LastName, this.PhoneNumber, this.PictureUser);
+#PictureUser {6}
+#Amount {7}", this.UserName, this.Password, this.Email, this.FirstName, this.LastName, this.PhoneNumber, this.PictureUser, this.Amount);
         }
     }
 }

@@ -239,6 +239,50 @@ namespace Vladi2.Controllers
             return RedirectToAction("AccountProfile", "Home");
         }
 
+        //public ActionResult CarBuyLogic()
+        //{
+
+        //}
+
+        public ActionResult FetchCarToSellFromDataBase ()
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            List<CarForSell> carForSell = new List<CarForSell>();
+
+            var query = "SELECT * FROM CarForSell";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+
+                while (reader.Read() == true)
+                {
+                    CarForSell car = new CarForSell();
+                    car.Year = reader.GetString(0).Trim();
+                    car.EngineCapacity = reader.GetString(1).Trim();
+                    car.Gear = reader.GetString(2).Trim();
+                    car.Color = reader.GetString(3).Trim();
+                    car.Price = int.Parse(reader.GetString(4).Trim());
+                    car.Picture = reader.GetString(5).Trim();
+                    car.Model = reader.GetString(6).Trim();
+                    car.Inventory = int.Parse(reader.GetString(7).Trim());
+                    if(car.Inventory > 0)
+                    {
+                        carForSell.Add(car);
+                    }
+                    
+                }
+                ViewBag.ListOfCarToSell = carForSell;
+                return View();
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(query, null, MethodToBeInvoked);
+        }
+
         public ActionResult Forum(string topic)
         {
             if(Session["UserName"]==null)
