@@ -8368,8 +8368,7 @@ input:focus, textarea:focus {
     color: #1b14b5;
     text-decoration:underline;
     padding: 14px 0;
-    width: 100%;
-    height: 100%;
+    font-size:15px;
     }
 .UpdateInControlPanela:hover {
       background: #37a4cc;
