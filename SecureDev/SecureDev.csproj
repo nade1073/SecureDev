@@ -152,6 +152,7 @@
     <Compile Include="Models\ResultViewDelegate.cs" />
     <Compile Include="Models\TypeMapFromTypeToDbType.cs" />
     <Compile Include="Models\UserAccount.cs" />
+    <Compile Include="Models\UserAccountImproved.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,7 @@
     <Content Include="Views\Home\AccountProfile.cshtml" />
     <Content Include="Views\Home\HomePageForum.cshtml" />
     <Content Include="Views\Home\Forum.cshtml" />
+    <Content Include="Views\Home\ControlPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

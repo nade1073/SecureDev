@@ -1,0 +1,87 @@
+﻿<script>
+   $(function () {
+
+       $(".UpdateInControlPanel").click(function ()
+       {
+
+           var checkboxtopass = $(this).parent().parent().prev().children().prop("checked");
+           var usernametopass = $(this).parent().parent().prev().prev().prev().prev().prev().text();
+     
+           var formData = { username: usernametopass, checkbox: checkboxtopass }; //Array
+            $.ajax({
+            url: "@Url.Action("ControlPanelUpdate", "Home")",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+            window.location.reload(true);
+            },
+            error: function (error) {
+            alert("Error");
+            }
+            })
+            });
+       });
+
+</script>
+
+    <div class="simple-panel">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel-head u-upper">
+                    <h4>Control panel Admin</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="background-color: #eee;font-size:18px;">
+                            <th class="u-center">Username</th>
+                            <th class="u-center">First Name</th>
+                            <th class="u-center">Last Name</th>
+                            <th class="u-center">Email</th>
+                            <th class="u-center">Admin/User</th>
+                            <th class="u-center">Update</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:15px;">
+                        
+                        @{
+                            var x=0;
+                            foreach (var user in ViewBag.usersDetails)
+                            {
+
+
+                            <tr>
+                                <td><p>@user.UserName</p></td>
+                                <td><p>@user.FirstName</p></td>
+                                <td><p>@user.LastName</p></td>
+                                <td><p>@user.Email</p></td>
+                                @if (ViewBag.usersIsAdmin[x] == "1")
+                                {
+                                    <td class="checkBoxAdmin">
+                                        <input  type="checkbox" checked />
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="checkBoxAdmin">
+                                        <input  type="checkbox" />
+                                    </td>
+                                }
+
+
+                                <td class="u-center"><p><a class="UpdateInControlPanel" >Update</a></p></td>
+                            </tr>
+                                    x++;
+                                }
+                            }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+

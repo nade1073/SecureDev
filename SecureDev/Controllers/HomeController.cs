@@ -18,9 +18,8 @@ namespace Vladi2.Controllers
         const string c_passwordKey = "Nadav&Netanel";
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-        const string m_ConectionNetanel = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
+        const string m_ConnectionReznik = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionBen= @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-        const string m_conncection = "kvkdnkdnvk";
         
         //entry point for main page as determined in the route config
         public ActionResult Index()
@@ -60,14 +59,23 @@ namespace Vladi2.Controllers
                 {
                     //if we got here - the select succeded , the user exist in db - redirect to userHome page
                     var encriptionPassword = reader.GetString(2).Trim();
+                    var isAdmin = reader.GetString(7);
                     var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
                     var userName = reader.GetString(1).Trim();
                     if (decriptionis == password)
                     {
                         Session["UserName"] = username;
+                        if(isAdmin == "1")
+                        {
+                            Session["IsAdmin"] = "1";
+                        }
+                        else
+                        { 
+                            Session["IsAdmin"] = "0";
+                        }
                         return RedirectToAction("UserHome", "Home");
                     }
-                        
+
                 }
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
@@ -194,7 +202,7 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
    
         }
-        [HttpPost]
+        [HttpPost]  
         public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
         {
             UserAccount UpdateUser = new UserAccount();
@@ -245,7 +253,7 @@ namespace Vladi2.Controllers
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
-            ForumMessage MessageofTheDataBase = new ForumMessage();
+             ForumMessage MessageofTheDataBase = new ForumMessage();
             MessageofTheDataBase.TopicMessage = topic;
             var query = "SELECT * FROM Forum Where Topic = @Topic";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
@@ -294,9 +302,85 @@ namespace Vladi2.Controllers
             return RedirectToAction("Forum", "Home", new { topic = Topic });
         }
 
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult ControlPanelUpdate(string username,bool checkbox)
+        {
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            UserAccount UserDetails = new UserAccount();
+            UserDetails.UserName = username;
+            UserAccountImproved User = new UserAccountImproved();
+            User.UserDetails = UserDetails;
+            User.AdminDetails = (checkbox == true) ? 1 : 0;
+            string profileQuriy = "UPDATE tblusers SET isAdmin = @Admin WHERE UserName = @UserName";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad1, reader1) =>
+            {
+                return RedirectToAction("ControlPanel", "Home");
+            };
+
+
+            return databaseConnection.ContactToDataBaseAndExecute(profileQuriy, User, MethodToBeInvoked, "@UserName", "@Admin");
+        }
+
+        public ActionResult ControlPanel()
+        {
+            if (!(Session["UserName"] != null && (string)Session["isAdmin"] == "1"))
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+
+            UserAccount userDetailes = new UserAccount();
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+                DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+                List<UserAccount> users = new List<UserAccount>();
+                List<string> usersIsAdmin = new List<string>();
+                string loginQuery = "SELECT * FROM tblusers";
+                Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+                MethodToBeInvoked = (commad, reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                        UserAccount userDetails = new UserAccount();
+                        userDetails.FirstName = reader.GetString(0).Trim();
+                        userDetails.UserName = reader.GetString(1).Trim();
+                        //   userDetailes.Password = reader.GetString(2).Trim();
+                        userDetails.LastName = reader.GetString(3).Trim();
+                        userDetails.PhoneNumber = reader.GetString(4).Trim();
+                        userDetails.Email = reader.GetString(5).Trim();
+                        userDetails.PictureUser = reader.GetString(6).Trim();
+
+                        usersIsAdmin.Add(reader.GetString(7));
+                        users.Add(userDetails);
+
+
+
+
+                    }
+                    ViewBag.usersDetails = users;
+                    ViewBag.usersIsAdmin = usersIsAdmin;
+                    return View();
+
+                };
+        
+            return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked);
+            
+        }
+
+
+        [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConectionNetanel);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage();
             messageToDelete.UserName = (string)Session["UserName"];
@@ -306,16 +390,9 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad, reader) =>
             {
-                return View();
+                return RedirectToAction("Forum", "Home", new { topic = i_Topic });
             };
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject");
-        } 
-
-        public ActionResult SignOut()
-        {
-            Session.Abandon();
-            Session.Clear();
-            return RedirectToAction("Index", "Home");
         }
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
