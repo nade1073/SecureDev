@@ -246,7 +246,7 @@ namespace Vladi2.Controllers
                 //Take all data about the user
                 //Check if the user can buy by amountofcars && amoutleftinusers
                 //down by 1 amountcars and price from user
-                // update the table 
+                // update the table UsersCar with the that the users buy
 
         //    var query = "SELECT * FROM CarForSell WHERE CarID = @UserName";
         //}
