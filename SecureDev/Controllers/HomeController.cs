@@ -244,7 +244,7 @@ namespace Vladi2.Controllers
 
         //}
 
-        public ActionResult FetchCarToSellFromDataBase ()
+        public ActionResult CarSellCompany ()
         {
             if (Session["UserName"] == null)
             {
@@ -420,10 +420,6 @@ namespace Vladi2.Controllers
             
         }
 
-        public ActionResult Busineslogic1()
-        {
-            return View();
-        }
 
 
         [HttpPost]
