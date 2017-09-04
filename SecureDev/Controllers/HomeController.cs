@@ -242,6 +242,11 @@ namespace Vladi2.Controllers
         //[HttpPost]
         //public ActionResult CarBuyLogic(string CarID)
         //{
+                //Take all data about the carID
+                //Take all data about the user
+                //Check if the user can buy by amountofcars && amoutleftinusers
+                //down by 1 amountcars and price from user
+                // update the table 
 
         //    var query = "SELECT * FROM CarForSell WHERE CarID = @UserName";
         //}

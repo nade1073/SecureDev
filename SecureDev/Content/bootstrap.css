@@ -8402,16 +8402,16 @@ input:focus, textarea:focus {
     width:15%;
 }
 
-.imgProfile{
+.carProfile{
     text-align:center;
     padding-top:10px;
 }
-    .imgProfile img {
+    .carProfile img {
         text-align:center;
         width: 110px;
         height: 110px;
         object-fit: cover;
-        border-radius: 60%;
+        border-radius: 80%;
     }
 
     .containerofcars{
@@ -8475,21 +8475,15 @@ input:focus, textarea:focus {
         opacity: 0.7;
     }
 
-
-
-
-
-
-
    .cardcarButton {
        margin-left:15%;
        margin-bottom:5px;
        background: #fff;
        color:green;
   outline:none;
-  height: 40px;
+  height: 40%;
   text-align: center;
-  width: 130px;
+  width: 70%;
   border-radius:40px;
   border: 2px solid #048025;
   letter-spacing:1px;
