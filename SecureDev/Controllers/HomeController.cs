@@ -420,6 +420,11 @@ namespace Vladi2.Controllers
             
         }
 
+        public ActionResult Busineslogic1()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
