@@ -239,9 +239,11 @@ namespace Vladi2.Controllers
             return RedirectToAction("AccountProfile", "Home");
         }
 
-        //public ActionResult CarBuyLogic()
+        //[HttpPost]
+        //public ActionResult CarBuyLogic(string CarID)
         //{
 
+        //    var query = "SELECT * FROM CarForSell WHERE CarID = @UserName";
         //}
 
         public ActionResult FetchCarToSellFromDataBase ()
@@ -271,7 +273,8 @@ namespace Vladi2.Controllers
                     car.Picture = reader.GetString(5).Trim();
                     car.Model = reader.GetString(6).Trim();
                     car.Inventory = int.Parse(reader.GetString(7).Trim());
-                    if(car.Inventory > 0)
+                    car.CarID = reader.GetString(8).Trim();
+                    if (car.Inventory > 0)
                     {
                         carForSell.Add(car);
                     }

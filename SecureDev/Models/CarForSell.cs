@@ -23,6 +23,8 @@ namespace Vladi2.Models
 
         public int Inventory { get; set; }
 
+        public string CarID { get; set; }
+
         public override string ToString()
         {
             return string.Format(
@@ -33,7 +35,8 @@ namespace Vladi2.Models
 #EngineCapacity {4} 
 #Picture {5}
 #Model {6}
-# Inventory {7}", this.Price, this.Year, this.Color, this.Gear, this.EngineCapacity, this.Picture, this.Model, this.Inventory);
+# Inventory {7}
+# CarID {8}", this.Price, this.Year, this.Color, this.Gear, this.EngineCapacity, this.Picture, this.Model, this.Inventory, this.CarID);
         }
     }
 }
