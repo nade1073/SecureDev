@@ -2,50 +2,49 @@
 
 
 
-
 <div class="containerofcars">
-        <div class="cardCar">
 
+        @foreach (var car in ViewBag.ListOfCarToSell)
+        {
+        <div class="cardCar">
+            @*<input readonly hidden value="@car.CarID" />*@
         <div class="imgProfile">
-            <img id="PictureProfile" src="~/Content/beautiful-car-background.jpeg" alt="John">
+            <img id="PictureProfile" src="@car.Picture" alt="Car">
         </div>
         <hr />
        
         <div class="groupOfInput">
             <p class="textCar"> Model:</p>
-           <input type="text" class="css-input" readonly value="Honda" />
+           <input type="text" class="css-input" readonly value="@car.Model" />
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Color:</p>
-            <input type="text" class="css-input" readonly value="Yellow" />
+            <input type="text" class="css-input" readonly value="@car.Color" />
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Gear:</p>
-            <input type="text" class="css-input" readonly value="Manual" />
+            <input type="text" class="css-input" readonly value="@car.Gear" />
         </div>
             <div class="groupOfInput">
                 <p class="textCar"> Year:</p>
-                <input type="text" class="css-input" readonly value="1992" />
+                <input type="text" class="css-input" readonly value="@car.Year" />
             </div>
             <div class="groupOfInput">
                 <p class="textCar"> Engine:</p>
-                <input type="text" class="css-input" readonly value="Honda" />
+                <input type="text" class="css-input" readonly value="@car.EngineCapacity" />
             </div>
 
             <div class="groupOfInput">
                 <p class="textCar"> Amount:</p>
-                <input type="text" class="css-input" readonly value="10000" />
+                <input type="text" class="css-input" readonly value="@car.Inventory" />
             </div>
-
         <div class="groupOfInput">
             <p class="textCar"> Price:</p>
-            <input type="text" class="css-input" readonly value="10000" />
+            <input type="text" class="css-input" readonly value="@car.Price" />
         </div>
-     
-         
-    
+
         <button class="cardcarButton" type="submit" id="button" >Buy</button>
     </div>
- 
+        }
 
 </div>

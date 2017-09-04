@@ -246,7 +246,7 @@ namespace Vladi2.Controllers
         //    var query = "SELECT * FROM CarForSell WHERE CarID = @UserName";
         //}
 
-        public ActionResult FetchCarToSellFromDataBase ()
+        public ActionResult CarSellCompany ()
         {
             if (Session["UserName"] == null)
             {
@@ -423,10 +423,6 @@ namespace Vladi2.Controllers
             
         }
 
-        public ActionResult Busineslogic1()
-        {
-            return View();
-        }
 
 
         [HttpPost]
