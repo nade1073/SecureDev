@@ -4,7 +4,7 @@
   $(function () {
 
       $(".cardcarButton").click(function () {
-            var carID = $(this).prev().value();
+            var carID = $(this).prev().val();
             var formData = { CarID: carID }; 
             $.ajax({
                 url: "@Url.Action("CarBuyLogic", "Home")",
@@ -66,5 +66,5 @@
             <input readonly hidden value="@car.CarID" />
         <button class="cardcarButton" type="submit" id="button" >Buy</button>
     </div>
-       }
+    }
 </div>
