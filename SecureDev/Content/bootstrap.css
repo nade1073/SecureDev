@@ -8147,12 +8147,12 @@ background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6)
     max-width:600px;
 	margin-top:50px;
     margin-bottom:30px;
-    margin-left:27%;
+    margin-left:30%;
 }
 
 #form-div {
 	background-color:rgba(72,72,72,0.8);
-	padding-left:35px;
+	padding-left:70px;
 	padding-right:0px;
 
 	padding-top:35px;
@@ -8499,4 +8499,148 @@ input:focus, textarea:focus {
    color:white;
     background: #048025;
   }
+
+
+  .carimagetrade{
+  
+   display:block;
+   
+      margin-bottom:1500px;
+  }
+  .carimagetrade img {
+      
+     
+       width: 130px;
+    
+        height: 130px;
+        object-fit: cover;
+        border-radius: 60%;
+    margin-bottom:20px;
+      
+  }
+   
+  .inputtrade{
+   
+      display:inline-block;
+        
+      width:40%;
+      height:100%;
+  }
+
+        .inputtradetxt
+          {
+         
+            display:inline;
+    width:150px;
+    height:30px;
+     font-size: 12px;
+     border-width: 1px;
+     border-color: #CCCCCC;
+     background-color: #FFFFFF;
+     color: #000000;
+     border-style: solid;
+     border-radius: 0px;
+     box-shadow: -1px 0px 1px rgba(189,189,189,.5);
+     text-shadow:  0px 0px 5px 0px rgba(66,66,66,.75);
+     padding:5px;
  
+}
+ .inputtrade:focus {
+     outline:none;
+}
+
+  .texttradeinput{
+     font-size:15px;
+   
+     width:100%;
+     height:100%;
+  
+  
+     display:inline;
+     
+ }
+
+  .contentcarTrade
+  {
+        background: #FFF;
+ 
+    margin-bottom:0;
+    margin:0 auto;
+   
+  overflow: hidden;
+
+  width: 1100px;
+ padding-right:150px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+    
+    color: #000305;
+    font-size: 1.5em; /* Base font size: 14px */
+    font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.429;
+    text-align: left;
+  }
+  .WraptextTrade{
+
+    
+      margin-bottom:70px;
+  }
+  .Wrapbuyanddelete{
+      bottom:60px;
+        text-decoration:underline;
+      padding-left:30px;
+      padding-top:20px;
+      padding-bottom:20px;
+position:absolute;
+right:-100px;
+    border-left:3px solid #eee;
+ 
+    line-height:50px;
+  }
+
+ .sellcarbutton {
+     position:fixed;
+     margin-top:50px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 24px;
+    border: 3px solid #0a0e0f;
+    border-radius: 18px;
+    background: #32464b;
+    background: -webkit-gradient(linear, left top, left bottom, from(#32464b), to(#0a0e0f));
+    background: -moz-linear-gradient(top, #32464b, #0a0e0f);
+    background: linear-gradient(to bottom, #32464b, #0a0e0f);
+    text-shadow: #050708 1px 1px 1px;
+    font: normal normal bold 21px arial;
+    color: #ffffff;
+    text-decoration: none;
+}
+.sellcarbutton:hover,
+.sellcarbutton:focus {
+    background: #3c545a;
+    background: -webkit-gradient(linear, left top, left bottom, from(#3c545a), to(#0c1112));
+    background: -moz-linear-gradient(top, #3c545a, #0c1112);
+    background: linear-gradient(to bottom, #3c545a, #0c1112);
+    color: #ffffff;
+    text-decoration: none;
+}
+.sellcarbutton:active {
+    background: #0a0e0f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#0a0e0f), to(#0a0e0f));
+    background: -moz-linear-gradient(top, #0a0e0f, #0a0e0f);
+    background: linear-gradient(to bottom, #0a0e0f, #0a0e0f);
+}
+.sellcarbutton:before{
+    content:  "\0000a0";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    margin: 0 4px -6px -4px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEZUlEQVRIie2UOY8cVRRGz3u1V1cv09OzmbHx2AbbeGSwZMmSWSQQpIiAgAAS+BFkgERARAB/AAIkC4kAGYFYEoQEYrGFxxgzgD3j2e3umd6rurb3ishAQ4CRCPmie6Ojcz/pwv/5h4g/L5ffeVLatZm6V5lclE7lCIZdo9CoNNpVafhL1t9dTgd77ZPPnv/3gCvvPn2ofviB18t3HX/Mb5yoSKEY/vg+yvDAm0RRpVBRO+mufNRZufTi4jPvbd8JQN4egsl9b9VnZ57yfF0RyRIkmmx3FcNxsMx1guomvh3WJ2YPPFuanH3jTg1+B7iNs7Vhc494/RKq00Mn3yNtA8I9HJFjVaZw54+BDCjvf2L6TgHm7SHu3pCG5VNaeJTh3g8kt1oUxiwyKxAcpSRPg2wT714g7Af++levPG55E/t0YUqdJ2kWtzfDnV+Wiyxu/rmj3zu4efndpTxsnnQqAiG26Kz+jEoVdslj6sQj+NX9SM8gvH6T3J4lmCojVY/R9ga5aZDLOUD1s3DzUm/1wstHn3z787ETRa1lsyigevdDCGMBv34/tfmHKE+fQSdllJ6jECcw7G3inW+QyoTMgt4WRrFNUF3DlRuV6kT5kfqBxQ9ufP7SwbET+Y2jOh1s0Vv7kkKvEbWv/2HQOIshbiKYRZpzeI0KRXIVPWiRpj1KRh0ji7FnZ8A6jtYtVxt7wRggbF2VTjBHef40UdPBqXgUukBaFsnQwykHSFbIog16TUEycEBphNsgHAVY9gF88wAkVxnd2pLRIBwvuTR1n056aww2vqXQ6yT9X1GpwimXsPfXKdItivwIbv1eKobBYOdDwlYXYUjqh49Tqhwi6f7IaHsD5Sxo35XjgFFnRdp+g/L8KaKWg1P1KZRGWhZZVMLypsBMyIebhC0w7KME0ylCCMirhM0QK3BRZkHa3ZE6z8YBbnVe62zEYPMChb5BOlhD5wV2ycPyKlhWFcE8wlnArWdErc+IdgcIQ2DX7iWYuweVdJByFqvka4r8LwbtVdN0KtQWHyVsebhRlUILDMtAF9MId56i2CLe+5aoP4FVWiQwFAiBEDXibobhGKThEnl8NzpPxwHe5CGtkgHdla9R2TVGeyuoVGGVPLxJSbw7QqiYVC3gN2qEzY+JWl2EFNjBMdzqDDoXWP5xhFEF/mIQd9a16VSoHjzDqO2RjUqoLMd0HUx3AWfiMNIpU2Rv02n2cYOTWLZCSBPTnCDpaYSlyONrpOFMrJUajhvUD+fZcIfutS/QepOks47OFYXnkk96ZGKE41YRxUH8hs/w1kdErR5CCupHjhFMPKhVmvdVJq+Et356Le621scAw52l805l38naPQ/LsHkRlZRBawzHwXD2I71JcmOddvNKmgztN6VhnbP8OdfyG65WtXR3ebnfvnaxnQ46u6de+DT+27MbtVdeFdJY6m9895xKfj0dtVenVaZMy3dxG6UoGY620/72hWivcy5s7Xx86vlPcv7Pf5HfACFfFlb1bTQSAAAAAElFTkSuQmCC") no-repeat left center transparent;
+    background-size: 100% 100%;
+}
