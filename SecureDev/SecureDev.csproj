@@ -206,6 +206,7 @@
     <Content Include="Views\Home\Forum.cshtml" />
     <Content Include="Views\Home\ControlPanel.cshtml" />
     <Content Include="Views\Home\CarSellCompany.cshtml" />
+    <Content Include="Views\Home\CarTrade.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
