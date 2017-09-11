@@ -244,7 +244,7 @@ namespace Vladi2.Controllers
         {
             //  Take all data about the carID  V
             //Take all data about the user V
-            //Check if the user can buy by amountofcars && amoutleftinusers
+            //Check if the user can buy by amountofcars && amout left users
             //down by 1 amountcars and price from user
             // update the table
             // update the table UsersCar with the that the users buy
