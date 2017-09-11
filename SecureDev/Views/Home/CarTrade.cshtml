@@ -5,36 +5,38 @@
 <a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
 <section class="contentcarTrade">
     <ol id="posts-list" class="hfeed">
-       
+       @foreach (var car in ViewBag.ListOfCarsTrade)
+       {
         <li>
             <article class="hentry">
-                <h2 id="subjectMessage" class="entry-title">Model:Mercedes</h2>
+                <h2 id="subjectMessage" class="entry-title">Model:@car.Model</h2>
                 <div class="WraptextTrade">
                     <div class="groupOfInput inputtrade">
                         <p class="texttradeinput"> Year:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
+                        <input type="text" class="inputtradetxt" readonly value="@car.Year" />
                     </div>
                     <div class="groupOfInput inputtrade">
                         <p class="texttradeinput"> EngineCapcity:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
+                        <input type="text" class="inputtradetxt" readonly value="@car.EngineCapacity" />
                     </div>
                     <div class="groupOfInput inputtrade">
                         <p class="texttradeinput"> Gear:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
+                        <input type="text" class="inputtradetxt" readonly value="@car.Gear" />
                     </div>
                     <div class="groupOfInput inputtrade">
                         <p class="texttradeinput"> Color:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
+                        <input type="text" class="inputtradetxt" readonly value="@car.Color" />
                     </div>
                     <div class="groupOfInput inputtrade">
                         <p class="texttradeinput"> Price:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
+                        <input type="text" class="inputtradetxt" readonly value="@car.Price" />
                     </div>
                     <div class="Wrapbuyanddelete">
                         <div class="deleteButtontrade ">
                             <a class="deleteA" style="font-size:15px;"> Delete</a>
                         </div>
                         <div class="BuyButtonTrade">
+                            <input readonly hidden value="@car.PostID" />
                             <a class="buyA" style="font-size:15px;"> Buy</a>
                         </div>
                     </div>
@@ -44,7 +46,7 @@
                 <footer class="post-info">
 
                     <address class="vcard author">
-                        By <a class="url fn" href="#">UserName</a>
+                        Posted By: <a class="url fn" href="#">@car.UserName</a>
                         <div class="carimagetrade">
                             <img id="picture" src="~/Content/CarsPictures/audi.jpg" alt="John">
                         </div>
@@ -54,154 +56,29 @@
 
             </article>
         </li>
-
-        <li>
-            <article class="hentry">
-                <h2 id="subjectMessage" class="entry-title">Model:Mercedes</h2>
-                <div class="WraptextTrade">
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Year:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> EngineCapcity:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Gear:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Color:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Price:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="Wrapbuyanddelete">
-                        <div class="deleteButtontrade ">
-                            <a class="deleteA" style="font-size:15px;"> Delete</a>
-                        </div>
-                        <div class="BuyButtonTrade">
-                            <a class="buyA" style="font-size:15px;"> Buy</a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <footer class="post-info">
-
-                    <address class="vcard author">
-                        By <a class="url fn" href="#">UserName</a>
-                        <div class="carimagetrade">
-                            <img id="picture" src="~/Content/CarsPictures/audi.jpg" alt="John">
-                        </div>
-                    </address>
-                </footer><!-- /.post-info -->
-
-
-            </article>
-        </li>
-
-        <li>
-            <article class="hentry">
-                <h2 id="subjectMessage" class="entry-title">Model:Mercedes</h2>
-                <div class="WraptextTrade">
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Year:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> EngineCapcity:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Gear:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Color:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Price:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="Wrapbuyanddelete">
-                        <div class="deleteButtontrade ">
-                            <a class="deleteA" style="font-size:15px;"> Delete</a>
-                        </div>
-                        <div class="BuyButtonTrade">
-                            <a class="buyA" style="font-size:15px;"> Buy</a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <footer class="post-info">
-
-                    <address class="vcard author">
-                        By <a class="url fn" href="#">UserName</a>
-                        <div class="carimagetrade">
-                            <img id="picture" src="~/Content/CarsPictures/audi.jpg" alt="John">
-                        </div>
-                    </address>
-                </footer><!-- /.post-info -->
-
-
-            </article>
-        </li>
-
-        <li>
-            <article class="hentry">
-                <h2 id="subjectMessage" class="entry-title">Model:Mercedes</h2>
-                <div class="WraptextTrade">
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Year:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> EngineCapcity:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Gear:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Color:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="groupOfInput inputtrade">
-                        <p class="texttradeinput"> Price:</p>
-                        <input type="text" class="inputtradetxt" readonly value="Nadav" />
-                    </div>
-                    <div class="Wrapbuyanddelete">
-                        <div class="deleteButtontrade ">
-                            <a class="deleteA" style="font-size:15px;"> Delete</a>
-                        </div>
-                        <div class="BuyButtonTrade">
-                            <a class="buyA" style="font-size:15px;"> Buy</a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <footer class="post-info">
-
-                    <address class="vcard author">
-                        By <a class="url fn" href="#">UserName</a>
-                        <div class="carimagetrade">
-                            <img id="picture" src="~/Content/CarsPictures/audi.jpg" alt="John">
-                        </div>
-                    </address>
-                </footer><!-- /.post-info -->
-
-
-            </article>
-        </li>
+       }
+       
     </ol>
 
 </section>
 
+<script>
+  $(function () {
+
+      $(".buyA").click(function () {
+            var PostId = $(this).prev().val();
+            var formData = { PostID: PostId };
+            $.ajax({
+                url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    window.location.reload(true);
+                },
+                error: function (error) {
+                    alert("Error");
+                }
+            })
+        });
+    });
+</script>
