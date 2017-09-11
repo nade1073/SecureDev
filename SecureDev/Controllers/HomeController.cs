@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -90,7 +90,35 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            List<CarTrade> CarForumObjects = new List<CarTrade>();
+            var query = "SELECT * FROM PublishCars";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+
+                while (reader.Read() == true)
+                {
+                    CarTrade CarToSee = new CarTrade();
+                    CarToSee.UserName = reader.GetString(0).Trim();
+                    CarToSee.Year = reader.GetString(1).Trim();
+                    CarToSee.UniqueID = int.Parse(reader.GetString(2).Trim());
+                    CarToSee.EngineCapacity = reader.GetString(3).Trim();
+                    CarToSee.Gear = reader.GetString(4).Trim();
+                    CarToSee.Color = reader.GetString(5).Trim();
+                    CarToSee.Price = int.Parse(reader.GetString(6).Trim());
+                    CarToSee.Picture = reader.GetString(7).Trim();
+                    CarToSee.Model = reader.GetString(8).Trim();
+                    CarToSee.PostID = int.Parse(reader.GetString(9).Trim());
+                    CarForumObjects.Add(CarToSee);
+                }
+                ViewBag.ListOfCarsTrade = CarForumObjects;
+          
+                return View();
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(query, null, MethodToBeInvoked);
         }
 
 
@@ -124,7 +152,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -181,7 +209,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -222,7 +250,7 @@ namespace Vladi2.Controllers
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -258,7 +286,7 @@ namespace Vladi2.Controllers
             //down by 1 amountcars and price from user
             // update the table
             // update the table UsersCar with the that the users buy
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM CarForSell WHERE CarID = @CarID";
             CarForSell carToLoad = new CarForSell();
@@ -314,6 +342,120 @@ namespace Vladi2.Controllers
             return RedirectToAction("CarSellCompany", "Home");
 
         }
+        [HttpPost]
+        public ActionResult BuyCarsFromUserLogic2(int PostID)
+        {
+            //upload Post Details to var  V
+            //get username from the post and take the data  V
+            //get username from the session and take the data  V
+            //Check if the user can buy by amount left from tblusers V
+            //Delete  Post Details  from dataBase V
+            //down the price from amount from the user in current session V
+            // add the price to the amount to the user that the car bought from V
+            // update the table V
+            //check  if UniqueID is null if yes add new row to table UsersCars with CarID = 0 else just update the userName of the Table usersCars
+            //
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            var query = "SELECT * FROM PublishCars WHERE PostID = @PostID";
+            CarTrade carToLoad = new CarTrade();
+            carToLoad.PostID = PostID;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
+                    
+                    carToLoad.UserName = reader.GetString(0).Trim();
+                    carToLoad.Year = reader.GetString(1).Trim();
+                    carToLoad.UniqueID = int.Parse(reader.GetString(2));
+                    carToLoad.EngineCapacity = reader.GetString(3).Trim();
+                    carToLoad.Gear = reader.GetString(4).Trim();
+                    carToLoad.Color = reader.GetString(5).Trim();
+                    carToLoad.Price = int.Parse(reader.GetString(6));
+                    carToLoad.Picture = reader.GetString(7).Trim();
+                    carToLoad.Model = reader.GetString(8).Trim();
+                }
+                return RedirectToAction("Index", "Home");
+
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@PostID");
+            query = "SELECT * FROM tblusers WHERE UserName = @UserName";
+            UserAccount userToLoad = new UserAccount();
+            userToLoad.UserName = (string)Session["UserName"];
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    userToLoad.Amount = int.Parse(reader.GetString(8));
+                }
+                return RedirectToAction("Index", "Home");
+
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, userToLoad, MethodToBeInvoked, "@UserName");
+
+            bool isUserSucCessedTobuy =  UpdatePriceOfUserName((string)Session["UserName"], -carToLoad.Price,
+                (price) => { if (!(userToLoad.Amount >= -price)) return false; return true; });
+
+            if (isUserSucCessedTobuy == false)
+            {
+                return RedirectToAction("CarTrade", "Home");
+            }
+            UpdatePriceOfUserName(carToLoad.UserName, carToLoad.Price, (price) => true);
+            DeleteCarTrade(PostID);
+
+            if (carToLoad.UniqueID == 0)
+            {
+                query = "Insert INTO UsersCars (UserName,Year,EngineCapacity,Gear,Color,Price,Picture,Model ) VALUES(@UserName,@Year,@EngineCapacity,@Gear,@Color,@Price,@Picture,@Model)";
+                MethodToBeInvoked = (commad, reader) =>
+                {
+                    return View();
+                };
+                databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@UserName", "@Year", "@EngineCapacity", "@Gear", "@Color", "@Price", "@Picture", "@Model");
+            }
+
+            else
+            {
+                query = "UPDATE UsersCars SET UserName = @UserName WHERE UniqueID = @UniqueID";
+                databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@UserName", "@UniqueID");
+            }
+            return RedirectToAction("CarTrade", "Home");
+
+        }
+
+        private bool UpdatePriceOfUserName(string UserName, int Price , Predicate<int> ConditionToUpdate)
+        {
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            string query = "SELECT * FROM tblusers WHERE UserName = @UserName";
+            UserAccount user = new UserAccount();
+            user.UserName = (string)Session["UserName"];
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    user.Amount = int.Parse(reader.GetString(8));
+                }
+                return RedirectToAction("Index", "Home");
+
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
+            bool needToUpdate = ConditionToUpdate.Invoke(Price);
+            if (needToUpdate)
+            {
+                user.Amount += Price;
+
+                query = "UPDATE tblusers SET Amount = @Amount WHERE UserName = @UserName";
+                MethodToBeInvoked = (commad, reader) =>
+                {
+                    return View();
+                };
+                databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Amount");
+            }
+            return needToUpdate;
+        }
 
         public ActionResult CarSellCompany ()
         {
@@ -322,7 +464,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForSell = new List<CarForSell>();
 
@@ -366,7 +508,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("HomePageForum", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
              ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -400,7 +542,7 @@ namespace Vladi2.Controllers
             if (messageValidation(Subject, Message) )
             {
 
-                string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+                string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
                 messageToLoad.SubjectMessage = Subject;
@@ -428,7 +570,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             UserAccount UserDetails = new UserAccount();
             UserDetails.UserName = username;
@@ -455,7 +597,7 @@ namespace Vladi2.Controllers
             }
 
             UserAccount userDetailes = new UserAccount();
-            var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 List<UserAccount> users = new List<UserAccount>();
                 List<string> usersIsAdmin = new List<string>();
@@ -497,7 +639,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage();
             messageToDelete.UserName = (string)Session["UserName"];
@@ -507,9 +649,26 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad, reader) =>
             {
-                return RedirectToAction("Forum", "Home", new { topic = i_Topic });
+                return RedirectToAction("CarTrade", "Home");
             };
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject");
+        }
+        [HttpPost]
+        public ActionResult DeleteCarTrade(int PostID)
+        {
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNetanel);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            CarTrade CarToDelete = new CarTrade();
+            CarToDelete.UserName = (string)Session["UserName"];
+            CarToDelete.PostID = PostID;
+            string deleteFromDataBaseQuery = "DELETE FROM PublishCars WHERE UserName = @UserName and PostID = @PostID";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+            MethodToBeInvokedAfterTheValidation = (commad, reader) =>
+            {
+                return RedirectToAction("CarTrade", "Home");
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, CarToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject");
+
         }
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
