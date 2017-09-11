@@ -8644,3 +8644,59 @@ right:-100px;
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAEZUlEQVRIie2UOY8cVRRGz3u1V1cv09OzmbHx2AbbeGSwZMmSWSQQpIiAgAAS+BFkgERARAB/AAIkC4kAGYFYEoQEYrGFxxgzgD3j2e3umd6rurb3ishAQ4CRCPmie6Ojcz/pwv/5h4g/L5ffeVLatZm6V5lclE7lCIZdo9CoNNpVafhL1t9dTgd77ZPPnv/3gCvvPn2ofviB18t3HX/Mb5yoSKEY/vg+yvDAm0RRpVBRO+mufNRZufTi4jPvbd8JQN4egsl9b9VnZ57yfF0RyRIkmmx3FcNxsMx1guomvh3WJ2YPPFuanH3jTg1+B7iNs7Vhc494/RKq00Mn3yNtA8I9HJFjVaZw54+BDCjvf2L6TgHm7SHu3pCG5VNaeJTh3g8kt1oUxiwyKxAcpSRPg2wT714g7Af++levPG55E/t0YUqdJ2kWtzfDnV+Wiyxu/rmj3zu4efndpTxsnnQqAiG26Kz+jEoVdslj6sQj+NX9SM8gvH6T3J4lmCojVY/R9ga5aZDLOUD1s3DzUm/1wstHn3z787ETRa1lsyigevdDCGMBv34/tfmHKE+fQSdllJ6jECcw7G3inW+QyoTMgt4WRrFNUF3DlRuV6kT5kfqBxQ9ufP7SwbET+Y2jOh1s0Vv7kkKvEbWv/2HQOIshbiKYRZpzeI0KRXIVPWiRpj1KRh0ji7FnZ8A6jtYtVxt7wRggbF2VTjBHef40UdPBqXgUukBaFsnQwykHSFbIog16TUEycEBphNsgHAVY9gF88wAkVxnd2pLRIBwvuTR1n056aww2vqXQ6yT9X1GpwimXsPfXKdItivwIbv1eKobBYOdDwlYXYUjqh49Tqhwi6f7IaHsD5Sxo35XjgFFnRdp+g/L8KaKWg1P1KZRGWhZZVMLypsBMyIebhC0w7KME0ylCCMirhM0QK3BRZkHa3ZE6z8YBbnVe62zEYPMChb5BOlhD5wV2ycPyKlhWFcE8wlnArWdErc+IdgcIQ2DX7iWYuweVdJByFqvka4r8LwbtVdN0KtQWHyVsebhRlUILDMtAF9MId56i2CLe+5aoP4FVWiQwFAiBEDXibobhGKThEnl8NzpPxwHe5CGtkgHdla9R2TVGeyuoVGGVPLxJSbw7QqiYVC3gN2qEzY+JWl2EFNjBMdzqDDoXWP5xhFEF/mIQd9a16VSoHjzDqO2RjUqoLMd0HUx3AWfiMNIpU2Rv02n2cYOTWLZCSBPTnCDpaYSlyONrpOFMrJUajhvUD+fZcIfutS/QepOks47OFYXnkk96ZGKE41YRxUH8hs/w1kdErR5CCupHjhFMPKhVmvdVJq+Et356Le621scAw52l805l38naPQ/LsHkRlZRBawzHwXD2I71JcmOddvNKmgztN6VhnbP8OdfyG65WtXR3ebnfvnaxnQ46u6de+DT+27MbtVdeFdJY6m9895xKfj0dtVenVaZMy3dxG6UoGY620/72hWivcy5s7Xx86vlPcv7Pf5HfACFfFlb1bTQSAAAAAElFTkSuQmCC") no-repeat left center transparent;
     background-size: 100% 100%;
 }
+
+
+.wrapSellCar
+  {
+        background: #FFF;
+ border:5px solid #000;
+    margin-bottom:0;
+    margin:0 auto;
+   
+  overflow: hidden;
+
+  width: 1100px;
+ padding-right:150px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+    
+    color: #000305;
+    font-size: 1.5em; /* Base font size: 14px */
+    font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.429;
+    text-align: left;
+  }
+
+.wrapSellCar .cardCar{
+    width:500px;
+
+
+}
+.wrapperComboBox{
+    position:absolute;
+    margin-top:50px;
+    display:inline-block;
+    width:150px;
+    height:150px;
+    border:5px solid red;
+}
+
+.ui-combobox {
+    position: relative;
+    display: inline-block;
+}
+.ui-combobox-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+    /* adjust styles for IE 6/7 */
+    *height: 1.7em;
+    *top: 0.1em;
+}
+
+.ui-autocomplete-input {
+    margin: 0;
+    padding: 0.3em;
+}

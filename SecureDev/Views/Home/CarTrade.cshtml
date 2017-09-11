@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "CarTrade";
 }
-<a class="sellcarbutton" href="#">Sell your car</a>
+<a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
 <section class="contentcarTrade">
     <ol id="posts-list" class="hfeed">
        
@@ -205,10 +205,3 @@
 
 </section>
 
-<hr class="style18" />
-<div class="boxHeader blurred-bg tinted">
-    <div class="content">
-        <h1 class="WellcomeHeader" cl>Crate New topic</h1>
-
-    </div>
-</div>

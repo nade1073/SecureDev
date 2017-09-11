@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "PostCar";
+}
+
+    
+
+    <script>
+     
+        $(document).ready(function () {
+            $("select").change(function () {
+                var x = $(this).attr.valueOf();
+                $("select option:selected").each(function () {
+                    if ($(this).attr("value") == "red") {
+                        $(".box").hide();
+                        $(".red").show();
+                    }
+                    if ($(this).attr("value") == "green") {
+                        $(".box").hide();
+                        $(".green").show();
+                    }
+                    if ($(this).attr("value") == "blue") {
+                        $(".box").hide();
+                        $(".blue").show();
+                    }
+                    if ($(this).attr("value") == "choose") {
+                        $(".box").hide();
+                        $(".choose").show();
+                    }
+                });
+            }).change();
+        });
+      
+    </script>
+
+
+
+
+<section class="wrapSellCar">
+
+   
+    <div class="cardCar">
+
+        <div class="carProfile">
+            <img id="PictureProfile" src="~/Content/beautiful-car-background.jpeg" alt="Car">
+        </div>
+        <hr />
+        <div class="groupOfInput">
+            <p class="textCar"> Model:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Color:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Gear:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Year:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Engine:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+
+        <div class="groupOfInput">
+            <p class="textCar"> Amount:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Price:</p>
+            <input type="text" class="css-input"  value="nadav" />
+        </div>
+      
+        <button class="cardcarButton" type="submit" id="button">Sell!</button>
+    </div>
+
+    <div class="wrapperComboBox">
+        <div class="ui-widget">
+            <select id="combobox">
+                <option value="-1" selected="selected">Select Car From Garage:</option>
+                <option value="ActionScript">ActionScript</option>
+                <option value="AppleScript">AppleScript</option>
+                <option value="Asp">Asp</option>
+                <option value="BASIC">BASIC</option>
+                <option value="C">C</option>
+                <option value="C++">C++</option>
+                <option value="Clojure">Clojure</option>
+                <option value="COBOL">COBOL</option>
+                <option value="ColdFusion">ColdFusion</option>
+                <option value="Erlang">Erlang</option>
+                <option value="Fortran">Fortran</option>
+            </select>
+        </div>
+        <div id='log'>Nothing happened</div>
+    </div>
+   
+  
+</section>

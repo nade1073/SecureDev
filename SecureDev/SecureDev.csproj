@@ -207,6 +207,7 @@
     <Content Include="Views\Home\ControlPanel.cshtml" />
     <Content Include="Views\Home\CarSellCompany.cshtml" />
     <Content Include="Views\Home\CarTrade.cshtml" />
+    <Content Include="Views\Home\PostCar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

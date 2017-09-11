@@ -491,7 +491,15 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked);
             
         }
+        public ActionResult PostCar()
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
 
+        }
 
 
         [HttpPost]
