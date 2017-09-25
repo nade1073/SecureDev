@@ -692,7 +692,7 @@ namespace Vladi2.Controllers
             }
             if (carToPost.UniqueID == 0)
             {
-                string PossiblePicture = ConfertToBase64IfPossible(Picture);
+                string PossiblePicture = ConfertToBase64IfPossible(file);
 
                 if (PossiblePicture == null)
                 {
@@ -726,28 +726,28 @@ namespace Vladi2.Controllers
             }
             else
             {
-                string QueryForTakingData = @"select B.Year,B.EngineCapacity,B.Gear,B.Color,B.picture,B.Model
-                                              from UsersCars as A
-                                                join CarForSell as B
-                                                where A.uniqueID == @UniqueID AND A.CarID == B.CarID And A.UserName == @UserName";
+                string QueryForTakingData = "select B.Year,B.EngineCapacity,B.Gear,B.Color,B.picture,B.Model from UsersCars as A join CarForSell as B where A.uniqueID ==@UniqueID AND A.CarID == B.CarID And A.UserName == @UserName";
                 MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
                 {
-                    carToPost.Year = reader1.GetString(0);
-                    carToPost.EngineCapacity = reader1.GetString(1);
-                    carToPost.Gear = reader1.GetString(2);
-                    carToPost.Color = reader1.GetString(3);
-                    carToPost.Picture = reader1.GetString(4);
-                    carToPost.Model = reader1.GetString(5);
+                    if (reader1.Read() == true)// it's mean that I found the user name in the data base
+                    {
+                        carToPost.Year = reader1.GetString(0);
+                        carToPost.EngineCapacity = reader1.GetString(1);
+                        carToPost.Gear = reader1.GetString(2);
+                        carToPost.Color = reader1.GetString(3);
+                        carToPost.Picture = reader1.GetString(4);
+                        carToPost.Model = reader1.GetString(5);
+                    }
                     return RedirectToAction("CarTrade", "Home");
                 };
-                databaseConnection.ContactToDataBaseAndExecute(QueryForTakingData, carToPost, MethodToBeInvokedAfterTheValidation, "@UserName", "@Year", "@UniqueID", "@EnigneCapacity", "@Gear", "@Color", "@Price", "@Picture", "@Model");
+                databaseConnection.ContactToDataBaseAndExecute(QueryForTakingData, carToPost, MethodToBeInvokedAfterTheValidation, "@UniqueID", "@UserName");
             }
-            string insetrToDataBaseQuery = "Insert INTO PublishCars (UserName, Year, UniqueID, EngineCapacity,Gear,Color,Price,Picture,Model) VALUES(@UserName,@Year,@UniqueID,@EnigneCapacity,@Gear,@Color,@Price,@Picture,@Model)";
+            string insetrToDataBaseQuery = "Insert INTO PublishCars (UserName, Year, UniqueID, EngineCapacity,Gear,Color,Price,Picture,Model) VALUES(@UserName,@Year,@UniqueID,@EngineCapacity,@Gear,@Color,@Price,@Picture,@Model)";
             MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
             {
                 return RedirectToAction("CarTrade", "Home");
             };
-            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, carToPost, MethodToBeInvokedAfterTheValidation, "@UserName", "@Year", "@UniqueID", "@EnigneCapacity", "@Gear", "@Color", "@Price", "@Picture","@Model");
+            return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, carToPost, MethodToBeInvokedAfterTheValidation, "@UserName", "@Year", "@UniqueID", "@EngineCapacity", "@Gear", "@Color", "@Price", "@Picture","@Model");
         }
 
         [HttpPost]
