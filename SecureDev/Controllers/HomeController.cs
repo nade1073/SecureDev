@@ -673,7 +673,7 @@ namespace Vladi2.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostCar(string Model,string Color,string Gear,string Year,string EngineCapacity,string Price,HttpPostedFileBase Picture,string UniqueId)
+        public ActionResult PostCar(string Model,string Color,string Gear,string Year,string EngineCapacity,string Price,HttpPostedFileBase file,string UniqueId)
         {
             //Picture is pitcure and convert base64
             //price not minus
