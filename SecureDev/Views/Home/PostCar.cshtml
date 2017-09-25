@@ -112,10 +112,12 @@
             <p class="textCar"> Price:</p>
             <input id="Price" type="text" class="css-input" readonly value="Fill this field" />
         </div>
-      
+ @using (Html.BeginForm("login", "home", FormMethod.Post, new { onsubmit = "return loginFormValidation()" }))
+ {
         <button class="cardcarButton" type="submit" id="button">Sell!</button>
+ }
     </div>
-  
+
     <div class="wrapperComboBox">
         <p>Choose a car from the list</p>
         <div class="select_style">
