@@ -170,6 +170,7 @@
     <Content Include="Content\CarsPictures\overlay.png" />
     <Content Include="Content\CarsPictures\watermark-template.jpg" />
     <Content Include="Content\CarsPictures\Wolfsagen.jpg" />
+    <Content Include="Content\Upload.ico" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -208,6 +209,7 @@
     <Content Include="Views\Home\ControlPanel.cshtml" />
     <Content Include="Views\Home\CarSellCompany.cshtml" />
     <Content Include="Views\Home\CarTrade.cshtml" />
+    <Content Include="Views\Home\PostCar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

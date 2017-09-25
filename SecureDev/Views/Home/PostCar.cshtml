@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "PostCar";
+}
+
+
+<script>
+        var carsArray = @Html.Raw(Json.Encode(ViewBag.CarUsers));
+        function FillFieldsAuto(car)
+        {
+
+            document.getElementById("Model").value = car.Model;
+            document.getElementById('Model').readOnly = true;
+            document.getElementById("Color").value = car.Color;
+            document.getElementById('Color').readOnly = true;
+            document.getElementById("Gear").value = car.Gear;
+            document.getElementById('Gear').readOnly = true;
+            document.getElementById("Year").value = car.Year;
+            document.getElementById('Year').readOnly = true;
+            document.getElementById("Engine").value = car.EngineCapacity;
+            document.getElementById('Engine').readOnly = true;
+            document.getElementById("Color").value = car.Color;
+            document.getElementById('Color').readOnly = true;
+            document.getElementById('Price').value = "0";
+       
+            document.getElementById('Price').readOnly = false;
+            $('#PictureProfile').attr('src',"data:image;base64,"+car.Picture);
+        }
+        $(function () {
+            $('select').on('change', function () {
+                var lenthofarray=carsArray.length;
+                var indexofselectedcombox=this.selectedIndex;
+                if(lenthofarray!=indexofselectedcombox)
+                {
+                    $('#uploadico').replaceWith(" <a id=uploadico ></a>");
+                    FillFieldsAuto(carsArray[indexofselectedcombox]);
+
+                }
+                else
+                {
+                    $(".css-input").each(function() {
+                        $(this).val("---");
+                        $(this).prop('readonly', false);
+                        $('#PictureProfile').attr('src',null);
+                       
+                    });
+                    $( ".carProfile" ).after( " <a id=uploadico class=ico></a>" );
+                }
+
+            });
+          
+            $(document).on('click', '.ico', function(e) {
+                $('#file').click();
+
+            });
+            $("#file").change(function () 
+            {
+                if (this.files && this.files[0])
+                {
+                    var reader = new FileReader();
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(this.files[0]);
+
+                }
+            }); 
+            function imageIsLoaded(e)
+            {
+
+                $('#PictureProfile').attr('src', e.target.result);
+            };
+           
+    
+        });
+     
+
+      
+</script>
+
+
+<section class="wrapSellCar">
+
+    <input type="file" name="file" id="file" accept="image/jpg,image/jpeg" style="display:none" />
+    <div class="cardCar">
+
+        <div class="carProfile">
+            <img id="PictureProfile"  alt="UploadPicture">
+        </div>
+        <a id="uploadico" ></a>
+        <hr />
+        <div class="groupOfInput">
+            <p class="textCar"> Model:</p>
+            <input id="Model" type="text" class="css-input" readonly value="Fill this field" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Color:</p>
+            <input id="Color" type="text" class="css-input"  readonly value="Fill this field" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Gear:</p>
+            <input id="Gear" type="text" class="css-input" readonly value="Fill this field" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Year:</p>
+            <input id="Year" type="text" class="css-input"  readonly value="Fill this field" />
+        </div>
+        <div class="groupOfInput">
+            <p class="textCar"> Engine:</p>
+            <input id="Engine" type="text" class="css-input"  readonly value="Fill this field" />
+        </div>
+
+        <div class="groupOfInput">
+            <p class="textCar"> Price:</p>
+            <input id="Price" type="text" class="css-input" readonly value="Fill this field" />
+        </div>
+ @using (Html.BeginForm("login", "home", FormMethod.Post, new { onsubmit = "return loginFormValidation()" }))
+ {
+        <button class="cardcarButton" type="submit" id="button">Sell!</button>
+ }
+    </div>
+
+    <div class="wrapperComboBox">
+        <p>Choose a car from the list</p>
+        <div class="select_style">
+            <select value="selectcar" id="combobox"> Select Car!
+                @foreach (var car in ViewBag.CarUsers)
+                {
+                    <option>@car.Model ID-@car.UniqueID</option>
+                }
+                <option>other</option>
+           
+            </select>
+            <span></span>
+        </div>
+    </div>
+   
+  
+</section>
