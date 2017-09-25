@@ -2,6 +2,33 @@
 @{
     ViewBag.Title = "CarTrade";
 }
+
+<script>
+    $(function () {
+
+        $(".deleteA").click(function () {
+            var PostID = $(this).prev().val();
+            
+ 
+            var formData = { PostiD: PostID}; //Array
+            $.ajax({
+                url: "@Url.Action("DeleteCarTrade", "Home")",
+                type: "POST",
+            data: formData,
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (error) {
+                alert("Error");
+            }
+        })
+        });
+    });
+
+
+</script>
+
+
 <a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
 <section class="contentcarTrade">
     <ol id="posts-list" class="hfeed">
@@ -32,13 +59,20 @@
                         <input type="text" class="inputtradetxt" readonly value="@car.Price" />
                     </div>
                     <div class="Wrapbuyanddelete">
+                        @if ((string)car.UserName == (string)Session["UserName"])
+                        {
                         <div class="deleteButtontrade ">
+                            <input readonly hidden value="@car.PostID" />
                             <a class="deleteA" style="font-size:15px;"> Delete</a>
                         </div>
+                        }
+                        @if ((string)car.UserName != (string)Session["UserName"])
+                        {
                         <div class="BuyButtonTrade">
                             <input readonly hidden value="@car.PostID" />
                             <a class="buyA" style="font-size:15px;"> Buy</a>
                         </div>
+                        }
                     </div>
                  
                 </div>
