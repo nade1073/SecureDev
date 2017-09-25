@@ -642,7 +642,14 @@ namespace Vladi2.Controllers
             }
             string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string query="select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model from userscars as A join carforsell as B where A.carID = B.carID And A.UserName = @UserName Union select UserName,UniqueID,Year,EngineCapacity,Gear,Color,Price,Picture,Model from userscars where carid = 0 And UserName = @UserName";
+            string query= @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
+from userscars as A
+join carforsell as B
+ where A.carID = B.carID And A.UserName = @UserName  and not exists(select UniqueID from PublishCars p where p.UniqueID = A.UniqueID)
+ Union
+ select UserName,UniqueID,Year,EngineCapacity,Gear,Color,Price,Picture,Model
+ from userscars as u2
+ where carid = 0 And UserName = @UserName and not exists(select UniqueID from PublishCars p where p.UniqueID = u2.UniqueID)";
             UserAccount user = new UserAccount();
             user.UserName = (string)Session["UserName"];
             List<CarTrade> AllCarsOfUser = new List<CarTrade>();
@@ -682,9 +689,26 @@ namespace Vladi2.Controllers
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             int price = int.Parse(Price);
+            int CurrentCarId = -1;
+            bool isExistMoreThanOnes = false;
+            string QueryForTakingData;
             CarTrade carToPost = new CarTrade();
             carToPost.UniqueID = int.Parse(UniqueId);
             carToPost.UserName = (string)Session["UserName"];
+            string QueryForcheckingUniqueID = "select * from PublishCars where UniqueId=@UniqueId and uniqueId!=0";
+            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+            {
+                if (reader1.Read() == true)
+                {
+                    isExistMoreThanOnes = true;
+                }
+                return RedirectToAction("CarTrade", "Home");
+            };
+            databaseConnection.ContactToDataBaseAndExecute(QueryForcheckingUniqueID, carToPost, MethodToBeInvokedAfterTheValidation, "@UniqueID");
+            if(isExistMoreThanOnes)
+            {
+                return RedirectToAction("CarTrade", "Home");
+            }
             carToPost.Price = IsDigitsOnly(Price) && price > 0 ? price : -1;
             if (carToPost.Price == -1)
             {
@@ -726,7 +750,28 @@ namespace Vladi2.Controllers
             }
             else
             {
-                string QueryForTakingData = "select B.Year,B.EngineCapacity,B.Gear,B.Color,B.picture,B.Model from UsersCars as A join CarForSell as B where A.uniqueID ==@UniqueID AND A.CarID == B.CarID And A.UserName == @UserName";
+                string AnotherQueryForLogic = "select CarID from UsersCars where UniqueID = @UniqueID";
+                MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+                {
+                    if (reader1.Read() == true)
+                    {
+                        CurrentCarId = int.Parse(reader1.GetString(0));
+                    }
+                    return RedirectToAction("CarTrade", "Home");
+                };
+                databaseConnection.ContactToDataBaseAndExecute(AnotherQueryForLogic, carToPost, MethodToBeInvokedAfterTheValidation, "@UniqueID");
+                if (CurrentCarId == -1)
+                {
+                    return RedirectToAction("CarTrade", "Home");
+                }
+                else if (CurrentCarId != 0)
+                {
+                    QueryForTakingData = "select B.Year,B.EngineCapacity,B.Gear,B.Color,B.picture,B.Model from UsersCars as A join CarForSell as B where A.uniqueID ==@UniqueID AND A.CarID == B.CarID And A.UserName == @UserName";
+                }
+                else
+                {
+                    QueryForTakingData = "select Year,EngineCapacity,Gear,Color,picture,Model from UsersCars where uniqueID ==@UniqueID  And UserName == @UserName";
+                }
                 MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
                 {
                     if (reader1.Read() == true)// it's mean that I found the user name in the data base
