@@ -170,6 +170,7 @@
     <Content Include="Content\CarsPictures\overlay.png" />
     <Content Include="Content\CarsPictures\watermark-template.jpg" />
     <Content Include="Content\CarsPictures\Wolfsagen.jpg" />
+    <Content Include="Content\Upload.ico" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
