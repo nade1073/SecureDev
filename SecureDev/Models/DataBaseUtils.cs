@@ -49,6 +49,44 @@ namespace Vladi2.Models
 
         }
 
+        public bool CheckingInformation(string Tabel,string ClumnName, string UniqueData, object i_ObjectToCompare)
+        {
+            List<DataBaseObject> RowFromDatabase = new List<DataBaseObject>();
+            var query = string.Format("SELECT * FROM {0} Where {1} = @UniqueData", Tabel, ClumnName);
+            using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
+            {
+                m_dbConnection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(query, m_dbConnection))
+                {
+                    command.Parameters.Add("@UniqueData", m_typeConverter.typeMap[UniqueData.GetType()]);
+                    command.Parameters["@UniqueData"].Value = UniqueData;
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        for(int i=0; i<reader.FieldCount;i++)
+                        {
+                            RowFromDatabase.Add(new DataBaseObject(reader.GetName(i), reader.GetString(i)));
+                        }
+                    }
+                }
+            }
+            bool isAllGood = true;
+            foreach(DataBaseObject obj in RowFromDatabase)
+            {
+                if(isAllGood)
+                {
+                    isAllGood = matchingParamsForCheckingInformation(obj.ColumnName, obj.ColumnValue, i_ObjectToCompare);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return isAllGood;
+
+
+        }
+
         private string matchingParams(string i_parameterForMatcing, object i_ObjectParameters)
         {
             string[] words = i_parameterForMatcing.Split('@');
@@ -58,6 +96,18 @@ namespace Vladi2.Models
             string[] anotherAfterStringOperation = UserDataWords[1].Split('#');
             string TheStringToBeReturn = anotherAfterStringOperation[0].Trim();
             return TheStringToBeReturn;
+
+        }
+
+        private bool matchingParamsForCheckingInformation(string i_parameterForMatcing, string TheValue, object i_ObjectParameters)
+        {
+            //string[] words = i_parameterForMatcing.Split('@');
+            string wordAfterSplitting = i_parameterForMatcing;
+            string UserData = i_ObjectParameters.ToString();
+            string[] UserDataWords = i_ObjectParameters.ToString().Split(new string[] { wordAfterSplitting }, StringSplitOptions.None);
+            string[] anotherAfterStringOperation = UserDataWords[1].Split('#');
+            string TheStringToBeReturn = anotherAfterStringOperation[0].Trim();
+            return TheStringToBeReturn == TheValue;
 
         }
     }
