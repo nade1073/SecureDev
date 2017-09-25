@@ -404,7 +404,7 @@ namespace Vladi2.Controllers
             }
             UpdatePriceOfUserName(carToLoad.UserName, carToLoad.Price, (price) => true);
             DeleteCarTrade(PostID);
-
+            carToLoad.UserName = (string)Session["UserName"];
             if (carToLoad.UniqueID == 0)
             {
                 query = "Insert INTO UsersCars (UserName,Year,EngineCapacity,Gear,Color,Price,Picture,Model ) VALUES(@UserName,@Year,@EngineCapacity,@Gear,@Color,@Price,@Picture,@Model)";
