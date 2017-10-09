@@ -192,7 +192,7 @@ namespace Vladi2.Controllers
         }
  
 
-        public ActionResult InformationAccount()
+        public ActionResult Information()
         {
             UserAccount user = new UserAccount();
             user.UserName = (string)Session["UserName"];
@@ -226,7 +226,7 @@ join carforsell as B
                     car.Color = reader.GetString(5).Trim();
                     car.Picture = reader.GetString(7).Trim();
                     car.Model = reader.GetString(8).Trim();
-
+                    carForInfo.Add(car);
                 }
                 ViewBag.CarsDetailes = carForInfo;
                 return View();
@@ -241,7 +241,7 @@ join carforsell as B
                 {
                     user.Amount = int.Parse(reader.GetString(8).Trim());
                 }
-                ViewBag.Amount = user;
+                ViewBag.Amount = user.Amount;
                 return View();
             };
 
@@ -580,6 +580,8 @@ join carforsell as B
                     Message.TopicMessage = reader.GetString(1).Trim();
                     Message.SubjectMessage = reader.GetString(2).Trim();
                     Message.Message = reader.GetString(3).Trim();
+                    Message.UniqueID = reader.GetInt32(4);
+
                     messagesOFTheForum.Add(Message);
                 }
                 ViewBag.ListOfMessages = messagesOFTheForum;
@@ -851,21 +853,21 @@ join carforsell as B
         }
 
         [HttpPost]
-        public ActionResult DeleteMessage(string i_Subject, string i_Topic)
+        public ActionResult DeleteMessage(string i_Subject, string i_UniqueID)
         {
             string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage();
             messageToDelete.UserName = (string)Session["UserName"];
             messageToDelete.SubjectMessage = i_Subject;
-            messageToDelete.TopicMessage = i_Topic;
-            string deleteFromDataBaseQuery = "DELETE FROM Forum WHERE UserName = @UserName and Topic = @Topic and Subject = @Subject";
+            messageToDelete.UniqueID = int.Parse(i_UniqueID);
+            string deleteFromDataBaseQuery = "DELETE FROM Forum WHERE UserName = @UserName and UniqueID = @UniqueID";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad, reader) =>
             {
                 return RedirectToAction("CarTrade", "Home");
             };
-            return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject");
+            return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@UniqueID");
         }
         [HttpPost]
         public ActionResult DeleteCarTrade(int PostID)
@@ -884,10 +886,6 @@ join carforsell as B
 
         }
         
-        public ActionResult Information()
-        {
-            return View();
-        }
 
 
 

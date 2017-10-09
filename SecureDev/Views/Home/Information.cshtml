@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="u-center divoflabelprice">
-        <input value="Current Amount:@ViewBag.Amount $" type="text" id="pricelabel" />
+        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
 
     </div>
 
@@ -36,7 +36,7 @@
                         {
 
                             <tr class="centertable1">
-                                <td><p ><img id="picture" src="car.Picture" alt="John"></p></td>
+                                <td><p ><img id="picture" src="data:image/*;base64,@car.Picture" alt="John"></p></td>
                                 <td ><p >@car.Model</p></td>
                                 <td><p >@car.Color</p></td>
                                 <td > <p >@car.Gear</p></td>

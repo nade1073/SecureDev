@@ -11,6 +11,7 @@ namespace Vladi2.Models
         public string TopicMessage { get; set; }
         public string Message { get; set; }
         public string UserName { get; set;}
+        public int UniqueID { get; set; }
 
         public override string ToString()
         {
@@ -18,7 +19,8 @@ namespace Vladi2.Models
 @"#Subject {0} 
 #Topic {1} 
 #Message {2} 
-#UserName {3}", SubjectMessage, TopicMessage, Message, UserName);
+#UserName {3} 
+#UniqueID {4}", SubjectMessage, TopicMessage, Message, UserName, UniqueID);
         }
 
 

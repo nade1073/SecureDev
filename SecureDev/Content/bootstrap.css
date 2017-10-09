@@ -8749,7 +8749,8 @@ right:-100px;
 }
 
 #pricelabel {
-    padding: 25px;
+   padding-top:30px;
+   padding-bottom:30px;
      font-size: 22px;
      border-width: 1px;
      border-color: #B4C7FF;
@@ -8757,6 +8758,7 @@ right:-100px;
      color: #FFFFFF;
      border-style: solid;
      border-radius: 20px;
+     
      box-shadow: 0px 0px 0px rgba(66,66,66,.0);
      text-align:center;
     
