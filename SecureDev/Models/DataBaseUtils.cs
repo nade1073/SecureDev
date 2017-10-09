@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Web.Mvc;
+using System.Web.Security.AntiXss;
 
 namespace Vladi2.Models
 {
@@ -23,6 +24,7 @@ namespace Vladi2.Models
             m_typeConverter = new TypeMapFromTypeToDbType();
         }
 
+        [ValidateAntiForgeryToken]
         public ActionResult ContactToDataBaseAndExecute
             (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {
@@ -91,7 +93,7 @@ namespace Vladi2.Models
         {
             string[] words = i_parameterForMatcing.Split('@');
             string wordAfterSplitting = words[1];
-            string UserData = i_ObjectParameters.ToString();
+            string UserData = AntiXssEncoder.HtmlEncode(i_ObjectParameters.ToString(),false);
             string [] UserDataWords = i_ObjectParameters.ToString().Split(new string[] { wordAfterSplitting }, StringSplitOptions.None);
             string[] anotherAfterStringOperation = UserDataWords[1].Split('#');
             string TheStringToBeReturn = anotherAfterStringOperation[0].Trim();
