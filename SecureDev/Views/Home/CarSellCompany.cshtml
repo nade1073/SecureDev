@@ -24,7 +24,10 @@
 
 
 <div class="containerofcars">
+    <div class="u-center divoflabelprice">
+        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
 
+    </div>
     @foreach (var car in ViewBag.ListOfCarToSell)
     {
         <div class="cardCar">
