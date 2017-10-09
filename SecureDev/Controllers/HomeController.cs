@@ -675,10 +675,10 @@ join carforsell as B
                         userDetails.PictureUser = reader.GetString(6).Trim();
 
                         usersIsAdmin.Add(reader.GetString(7));
-                        users.Add(userDetails);
-
-
-
+                        if (userDetailes.UserName != (string)Session["UserName"])
+                        {
+                            users.Add(userDetails);
+                        }
 
                     }
                     ViewBag.usersDetails = users;
