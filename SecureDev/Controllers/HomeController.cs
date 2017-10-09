@@ -121,8 +121,6 @@ namespace Vladi2.Controllers
             return databaseConnection.ContactToDataBaseAndExecute(query, null, MethodToBeInvoked);
         }
 
-
- 
         //returns the user home page
         public ActionResult UserHome()
         {
@@ -886,6 +884,23 @@ join carforsell as B
 
         }
         
+        public ActionResult Information()
+        {
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
