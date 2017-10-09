@@ -30,8 +30,17 @@
 
 
 <a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
+<div class="u-center divoflabelprice">
+    <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
+
+</div>
 <section class="contentcarTrade">
+
+ 
+
+
     <ol id="posts-list" class="hfeed">
+
        @foreach (var car in ViewBag.ListOfCarsTrade)
        {
         <li>
