@@ -7925,7 +7925,8 @@ blockquote {font-style: italic;}
    
 }
 .WrapperForum{
-    margin-bottom:20px;
+    border:5px solid red;
+    margin-bottom:200px;
    
 }
 
@@ -7996,7 +7997,7 @@ right:-100px;
    
     margin:0 auto;
     text-align:center;
-    margin-bottom:230px;
+    margin-bottom:290px;
   }
 
 
@@ -8860,4 +8861,7 @@ margin-bottom:50px;
 
        margin-bottom:500px;
 
+   }
+   .containerofinformation{
+       margin-bottom:300px;
    }

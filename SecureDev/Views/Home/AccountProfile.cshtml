@@ -55,12 +55,6 @@
                 alert("Please check the Errors");
                 return false;
             }
-            //var x = document.getElementById("file");
-            //if (document.getElementById("file").files.length == 0) {
-
-            //    alert("Please check the Errors");
-            //    return false;
-            //}
 
             return true;
         }
@@ -190,7 +184,7 @@
                 $('#PictureProfile').attr('src', e.target.result);
             };
         });
-       // window.onload = OnCreate;
+   
 
 </script>
 @using (Html.BeginForm("AccountProfile", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
