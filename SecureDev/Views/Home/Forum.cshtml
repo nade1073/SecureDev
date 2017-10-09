@@ -86,9 +86,10 @@
 
         </div>
     </div>
-@using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic="Sport", onsubmit = "return PostMessageValidate()" }))
+@using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic = "Sport", onsubmit = "return PostMessageValidate()" }))
 {
-   
+    @Html.AntiForgeryToken()
+
     <div id="form-main">
         <div id="form-div">
             <form class="" id=""> 

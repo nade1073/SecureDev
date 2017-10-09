@@ -195,6 +195,8 @@
 </script>
 @using (Html.BeginForm("AccountProfile", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
 {
+    @Html.AntiForgeryToken()
+
     <div class="card">
         <p class="title">Account Details</p>
    

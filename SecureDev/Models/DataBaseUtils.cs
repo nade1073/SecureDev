@@ -24,7 +24,7 @@ namespace Vladi2.Models
             m_typeConverter = new TypeMapFromTypeToDbType();
         }
 
-        [ValidateAntiForgeryToken]
+   
         public ActionResult ContactToDataBaseAndExecute
             (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {

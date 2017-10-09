@@ -35,6 +35,7 @@ namespace Vladi2.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
@@ -147,6 +148,7 @@ namespace Vladi2.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
         {
@@ -310,6 +312,8 @@ join carforsell as B
             return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
    
         }
+
+        [ValidateAntiForgeryToken]
         [HttpPost]  
         public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
         {
@@ -347,6 +351,7 @@ join carforsell as B
             return RedirectToAction("AccountProfile", "Home");
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult CarBuyLogic(string CarID)
         {
@@ -412,6 +417,8 @@ join carforsell as B
             return RedirectToAction("CarSellCompany", "Home");
 
         }
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult BuyCarsFromUserLogic2(int PostID)
         {
@@ -622,6 +629,8 @@ join carforsell as B
             return databaseConnection.ContactToDataBaseAndExecute(query, MessageofTheDataBase, MethodToBeInvoked,"@Topic");
 
         }
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult PostMessage(string Subject, string Message, string Topic)
         {
@@ -655,6 +664,7 @@ join carforsell as B
             return RedirectToAction("Index", "Home");
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
@@ -767,6 +777,7 @@ join carforsell as B
 
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult PostCar(string Model,string Color,string Gear,string Year,string EngineCapacity,string Price,HttpPostedFileBase file,string UniqueId)
         {
@@ -883,6 +894,7 @@ join carforsell as B
             return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, carToPost, MethodToBeInvokedAfterTheValidation, "@UserName", "@Year", "@UniqueID", "@EngineCapacity", "@Gear", "@Color", "@Price", "@Picture","@Model");
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_UniqueID)
         {
@@ -900,6 +912,8 @@ join carforsell as B
             };
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@UniqueID");
         }
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult DeleteCarTrade(int PostID)
         {

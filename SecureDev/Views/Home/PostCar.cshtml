@@ -250,7 +250,7 @@
     <div class="cardCar">
 @using (Html.BeginForm("PostCar", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
 {
-
+        @Html.AntiForgeryToken()
 
         <div class="carProfile">
             <img id="PictureProfile"  alt="UploadPicture">
