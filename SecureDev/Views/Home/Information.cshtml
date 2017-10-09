@@ -1,53 +1,54 @@
 ﻿
 
+<div class="containerofinformation">
+    <div class="simple-panel">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel-head u-upper">
+                    <h4 style="text-align:center;">My Cars</h4>
+                </div>
 
-<div class="simple-panel">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="panel-head u-upper">
-                <h4 style="text-align:center;">My Cars</h4>
             </div>
-            
         </div>
-    </div>
-    <div class="u-center divoflabelprice">
-        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
+        <div class="u-center divoflabelprice">
+            <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
 
-    </div>
+        </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-        
-            <table class="table table-bordered">
-                <thead>
-                    <tr style="background-color: #eee;font-size:18px;">
-                        <th class="u-center">Picture</th>
-                        <th class="u-center">Model </th>
-                        <th class="u-center">Color</th>
-                        <th class="u-center">Gear</th>
-                        <th class="u-center">Engine Capacity</th>
-                        <th class="u-center">Year</th>
-                    </tr>
-                </thead>
-                <tbody style="font-size:15px;">
-                    @{
-              
-                        foreach (var car in ViewBag.CarsDetailes)
-                        {
+        <div class="row">
+            <div class="col-xs-12">
 
-                            <tr class="centertable1">
-                                <td><p ><img id="picture" src="data:image/*;base64,@car.Picture" alt="John"></p></td>
-                                <td ><p >@car.Model</p></td>
-                                <td><p >@car.Color</p></td>
-                                <td > <p >@car.Gear</p></td>
-                                <td> <p>@car.EngineCapacity</p></td>
-                                <td> <p>@car.Year</p></td>
-                            </tr>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="background-color: #eee;font-size:18px;">
+                            <th class="u-center">Picture</th>
+                            <th class="u-center">Model </th>
+                            <th class="u-center">Color</th>
+                            <th class="u-center">Gear</th>
+                            <th class="u-center">Engine Capacity</th>
+                            <th class="u-center">Year</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:15px;">
+                        @{
+
+                            foreach (var car in ViewBag.CarsDetailes)
+                            {
+
+                                <tr class="centertable1">
+                                    <td><p><img id="picture" src="data:image/*;base64,@car.Picture" alt="John"></p></td>
+                                    <td><p>@car.Model</p></td>
+                                    <td><p>@car.Color</p></td>
+                                    <td> <p>@car.Gear</p></td>
+                                    <td> <p>@car.EngineCapacity</p></td>
+                                    <td> <p>@car.Year</p></td>
+                                </tr>
 
                             }
                         }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
