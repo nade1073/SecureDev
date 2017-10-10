@@ -777,6 +777,78 @@ join carforsell as B
 
         }
 
+
+        public ActionResult Search(string searchString)
+        {
+            CarTrade CarForSearchString = new CarTrade();
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            CarForSearchString.UserName = searchString;
+
+            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            List<CarForSell> carForInfo = new List<CarForSell>();
+            List<CarTrade> carTradeInfo = new List<CarTrade>();
+            string query = @"select * from CarForSell where Year LIKE %@UserName%  or EngineCapacity LIKE %@UserName% or Gear LIKE %@UserName%
+            or Color LIKE %@UserName% or Price LIKE %@UserName%  or Model LIKE %@UserName%";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+
+                while (reader.Read() == true)
+                {
+                    CarForSell car = new CarForSell();
+                    car.Year = reader.GetString(0).Trim();
+                    car.EngineCapacity = reader.GetString(1).Trim();
+                    car.Gear = reader.GetString(2).Trim();
+                    car.Color = reader.GetString(3).Trim();
+                    car.Price = int.Parse(reader.GetString(4).Trim());
+                    car.Model = reader.GetString(6).Trim();
+                    car.Inventory = reader.GetInt32(7);
+                    car.CarID = reader.GetString(8).Trim();
+                    
+                    if (car.Inventory > 0)
+                    {
+                        carForInfo.Add(car);
+                    }
+                }
+                ViewBag.CarsDetailes = carForInfo;
+                return View();
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, CarForSearchString, MethodToBeInvoked, "@UserName");
+
+            query = @"select * from PublishCars where Year LIKE %@UserName%  or EngineCapacity LIKE %@UserName% or Gear LIKE %@UserName%
+            or Color LIKE %@UserName% or Price LIKE %@UserName%  or Model LIKE %@UserName% or UserName LIKE %@UserName%"; 
+            MethodToBeInvoked = (commad, reader) =>
+            {
+
+                if (reader.Read() == true)
+                {
+                    CarTrade cars = new CarTrade();
+                    cars.UserName = reader.GetString(0).Trim();
+                    cars.Year = reader.GetString(1).Trim();
+                    cars.UniqueID = reader.GetInt32(2);
+                    cars.EngineCapacity = reader.GetString(3).Trim();
+                    cars.Gear = reader.GetString(4).Trim();
+                    cars.Color = reader.GetString(5).Trim();
+                    cars.Price = int.Parse(reader.GetString(6).Trim());
+                    cars.Model = reader.GetString(8).Trim();
+                    cars.PostID = reader.GetInt32(9);
+                    carTradeInfo.Add(cars);
+                }
+                ViewBag.CarTradeDetails = carTradeInfo;
+                return View();
+            };
+
+            return databaseConnection.ContactToDataBaseAndExecute(query, CarForSearchString, MethodToBeInvoked, "@UserName");
+
+
+
+
+        }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult PostCar(string Model,string Color,string Gear,string Year,string EngineCapacity,string Price,HttpPostedFileBase file,string UniqueId)
