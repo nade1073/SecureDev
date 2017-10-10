@@ -4,7 +4,14 @@
   $(function () {
 
       $(".cardcarButton").click(function () {
-            var carID = $(this).prev().val();
+          var carID = $(this).prev().val();
+          var priceofcurrentcar = $(this).prev().prev().val();
+          if(@ViewBag.Amount < priceofcurrentcar )
+          {
+              alert("Not enough money");
+          }
+          else
+              {
             var formData = { CarID: carID, __RequestVerificationToken: gettoken() };
             $.ajax({
                 url: "@Url.Action("CarBuyLogic", "Home")",
@@ -17,6 +24,7 @@
                     alert("Error");
                 }
             })
+          }
         });
     });
 </script>
@@ -72,6 +80,7 @@
             <p class="textCar"> Price:</p>
             <input type="text" class="css-input" readonly value="@car.Price" />
         </div>
+            <input readonly  hidden value="@car.Price" />
             <input readonly hidden value="@car.CarID" />
         <button class="cardcarButton" type="submit" id="button" >Buy</button>
     </div>
