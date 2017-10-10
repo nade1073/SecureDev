@@ -8,25 +8,56 @@
 
         $(".deleteA").click(function () {
             var PostID = $(this).prev().val();
+    
+                var formData = { PostiD: PostID, __RequestVerificationToken: gettoken() }; //Array
+                $.ajax({
+                    url: "@Url.Action("DeleteCarTrade", "Home")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        window.location.reload(true);
+                    },
+                    error: function (error) {
+                        alert("Error");
+                    }
             
- 
-            var formData = { PostiD: PostID, __RequestVerificationToken: gettoken() }; //Array
-            $.ajax({
-                url: "@Url.Action("DeleteCarTrade", "Home")",
-                type: "POST",
-            data: formData,
-            success: function (response) {
-                window.location.reload(true);
-            },
-            error: function (error) {
-                alert("Error");
-            }
-        })
+                })
+            
         });
     });
 
 
 </script>
+
+<script>
+  $(function () {
+
+      $(".buyA").click(function () {
+          var PostId = $(this).prev().val();
+          var priceofcurrentcar = $(this).prev().prev().val();
+          if(@ViewBag.Amount < priceofcurrentcar )
+          {
+              alert("Not enough money");
+          }
+          else
+          {
+              var formData = { PostID: PostId, __RequestVerificationToken: gettoken() };
+              $.ajax({
+                  url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
+                  type: "POST",
+                  data: formData,
+                  success: function (response) {
+                      window.location.reload(true);
+                  },
+                  error: function (error) {
+                      alert("Error");
+                  }
+              })
+          }
+        });
+    });
+</script>
+
 
 <script type="text/javascript">
     function gettoken() {
@@ -35,13 +66,15 @@
         return token;
    }
 </script>
-<a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
-<div class="u-center divoflabelprice">
-    <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
 
-</div>
+
 <section class="contentcarTrade">
 
+    <div class="u-center divoflabelprice2">
+        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
+        <a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
+
+    </div>
  
 
 
@@ -84,6 +117,7 @@
                         @if ((string)car.UserName != (string)Session["UserName"])
                         {
                         <div class="BuyButtonTrade">
+                            <input type="text" hidden value="@car.Price" />
                             <input readonly hidden value="@car.PostID" />
                             <a class="buyA" style="font-size:15px;"> Buy</a>
                         </div>
@@ -111,23 +145,3 @@
 
 </section>
 
-<script>
-  $(function () {
-
-      $(".buyA").click(function () {
-            var PostId = $(this).prev().val();
-            var formData = { PostID: PostId, __RequestVerificationToken: gettoken() };
-            $.ajax({
-                url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
-                type: "POST",
-                data: formData,
-                success: function (response) {
-                    window.location.reload(true);
-                },
-                error: function (error) {
-                    alert("Error");
-                }
-            })
-        });
-    });
-</script>

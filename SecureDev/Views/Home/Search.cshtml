@@ -7,45 +7,51 @@
     $(function () {
 
         $(".buyFromSite").click(function () {
-    
-            var prevCell = $(this).closest('td').prev('td');
-       
-            var value1 = prevCell.outerHTML;
-            var value2 = prevCell.find("td.CarID");
-            var value3 = prevCell.find("td.CarID").html();
-            var row = $(this).closest('tr');
-            var next = row.next();
-            var prev = row.prev();
-            var x=row.ce
-            var i_CarID = $(this).prev().prev();
-            var formData = { CarID: i_CarID, __RequestVerificationToken: gettoken() }; 
-            $.ajax({
-                url: "@Url.Action("CarBuyLogic", "Home")",
-                type: "POST",
-            data: formData,
-            success: function (response) {
-                window.location.reload(true);
-            },
-            error: function (error) {
-                alert("Error");
+            var i_CarID = $(this).closest('tr').find('td:eq(7)').text();
+            var priceofcurrentcar = $(this).closest('tr').find('td:eq(6)').text();
+            if(@ViewBag.Amount < priceofcurrentcar )
+            {
+                alert("Not enough money");
             }
-        })
+            else
+            {
+                var formData = { CarID: i_CarID, __RequestVerificationToken: gettoken() }; 
+                $.ajax({
+                    url: "@Url.Action("CarBuyLogic", "Home")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        window.location.reload(true);
+                    },
+                    error: function (error) {
+                        alert("Error");
+                    }
+                })
+            }
     });
  
-    $(".buyFromUsers").click(function () {
-        var i_PostID = $(this).prev().val();
-        var formData = { PostID: i_PostID, __RequestVerificationToken: gettoken() }; 
-        $.ajax({
-            url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
-            type: "POST",
-        data: formData,
-        success: function (response) {
-            window.location.reload(true);
-        },
-        error: function (error) {
-            alert("Error");
-        }
-    })
+        $(".buyFromUsers").click(function () {
+            var i_PostID = $(this).closest('tr').find('td:eq(7)').text();
+            var priceofcurrentcar = $(this).closest('tr').find('td:eq(6)').text();
+            if(@ViewBag.Amount < priceofcurrentcar )
+            {
+                alert("Not enough money");
+            }
+            else
+            {
+                var formData = { PostID: i_PostID, __RequestVerificationToken: gettoken() }; 
+                $.ajax({
+                    url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        window.location.reload(true);
+                    },
+                    error: function (error) {
+                        alert("Error");
+                    }
+                })
+            }
     });
     });
 
@@ -67,6 +73,10 @@
 
 
 <div id="wrapper2">
+    <div class="u-center divoflabelprice">
+        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
+
+    </div>
     <h1 style="text-align:center">Results:</h1>
 
     <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
@@ -81,7 +91,7 @@
                 <th><span>Gear</span></th>      
                 <th><span>Published</span></th>
                 <th><span>Price</span></th>
-                <th ><span></span></th>
+                <th style="display:none"><span></span></th>
                 
                 <th><span>Buy</span></th>
             </tr>
@@ -104,7 +114,7 @@
                                 <td>@car.Gear</td>
                                 <td>@car.UserName</td>
                                 <td>@car.Price</td>
-                                <td id="PostID" value="@car.PostID">@car.PostID</td> 
+                                <td id="PostID" value="@car.PostID" style="display:none">@car.PostID</td> 
                                 <td><a class="buyFromUsers">Buy now!</a></td>
                             </tr>
                     }
@@ -123,7 +133,7 @@
                     <td>@car.Gear</td>
                     <td style="color:red">Site</td>
                     <td >@car.Price</td>
-                    <td id ="CarID" name="CarID" value="@car.CarID" >@car.CarID</td>
+                    <td id ="CarID" name="CarID" value="@car.CarID" style="display:none" >@car.CarID</td>
              
                     <td><a class="buyFromSite">Buy now!</a></td>
                 </tr>

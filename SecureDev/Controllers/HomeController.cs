@@ -839,7 +839,12 @@ join carforsell as B
                     cars.Price = int.Parse(reader.GetString(6).Trim());
                     cars.Model = reader.GetString(8).Trim();
                     cars.PostID = reader.GetInt32(9);
-                    carTradeInfo.Add(cars);
+                    if(cars.UserName!=(string)Session["UserName"])
+                    {
+                        carTradeInfo.Add(cars);
+                    }
+                
+                    
                 }
                 TempData["CarsTradeDetails"] = carTradeInfo;
                 
@@ -1011,6 +1016,11 @@ join carforsell as B
 
         public ActionResult Search()
         {
+
+            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             if (Session["UserName"] == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -1030,6 +1040,21 @@ join carforsell as B
             {
                 ViewBag.CarDetails = TempData["CarsDetailes"];
             }
+            UserAccount user = new UserAccount();
+            user.UserName = (string)Session["UserName"];
+           string  query = "SELECT * FROM tblusers WHERE UserName = @UserName";
+            MethodToBeInvoked = (commad, reader) =>
+            {
+
+                if (reader.Read() == true)
+                {
+                    user.Amount = int.Parse(reader.GetString(8).Trim());
+                }
+                ViewBag.Amount = user.Amount;
+                return View();
+            };
+
+          databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
 
             return View();
         }
