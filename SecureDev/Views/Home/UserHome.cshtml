@@ -20,10 +20,11 @@
 
 <hr class="style18" />
 <div class="searchdiv">
-@using (Html.BeginForm("Search", "home", FormMethod.Post, new { @class = "searchform", onsubmit = "return PostMessageValidate()" }))
+@using (Html.BeginForm("Search", "home", FormMethod.Post, new { @class = "searchform" }))
 {
+    @Html.AntiForgeryToken()
 
-        <input type="text" placeholder="Is it me you’re looking for?" />
+        <input name="searchString" id="searchString" type="text" placeholder="Is it me you’re looking for?" />
         <button type="submit">Search</button>
 }
 
