@@ -5,7 +5,7 @@
 
       $(".cardcarButton").click(function () {
             var carID = $(this).prev().val();
-            var formData = { CarID: carID }; 
+            var formData = { CarID: carID, __RequestVerificationToken: gettoken() };
             $.ajax({
                 url: "@Url.Action("CarBuyLogic", "Home")",
                 type: "POST",
@@ -21,7 +21,13 @@
     });
 </script>
 
-
+<script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+   }
+</script>
 
 <div class="containerofcars">
     <div class="u-center divoflabelprice">

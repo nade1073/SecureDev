@@ -20,10 +20,12 @@
 
 <hr class="style18" />
 <div class="searchdiv">
-    <form class="searchform">
+@using (Html.BeginForm("Search", "home", FormMethod.Post, new { @class = "searchform", onsubmit = "return PostMessageValidate()" }))
+{
+
         <input type="text" placeholder="Is it me you’re looking for?" />
         <button type="submit">Search</button>
-    </form>
+}
 
 </div>
 <hr class="style18" />

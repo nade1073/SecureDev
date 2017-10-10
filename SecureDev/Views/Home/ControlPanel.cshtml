@@ -7,11 +7,12 @@
            var checkboxtopass = $(this).parent().parent().prev().children().prop("checked");
            var usernametopass = $(this).parent().parent().prev().prev().prev().prev().prev().text();
      
-           var formData = { username: usernametopass, checkbox: checkboxtopass }; //Array
+           var formData = { username: usernametopass, checkbox: checkboxtopass, __RequestVerificationToken: gettoken()}; //Array
             $.ajax({
             url: "@Url.Action("ControlPanelUpdate", "Home")",
             type: "POST",
             data: formData,
+
             success: function (response) {
             window.location.reload(true);
             },
@@ -22,6 +23,14 @@
             });
        });
 
+</script>
+
+<script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+   }
 </script>
 
     <div class="simple-panel">

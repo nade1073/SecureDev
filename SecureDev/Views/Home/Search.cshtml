@@ -1,0 +1,111 @@
+﻿
+
+
+
+<script>
+
+    $(function () {
+
+        $(".buyFromSite").click(function () {
+            var i_CarID = $(this).prev().val();
+            var formData = { CarID: i_CarID, __RequestVerificationToken: gettoken() }; 
+            $.ajax({
+                url: "@Url.Action("CarBuyLogic", "Home")",
+                type: "POST",
+            data: formData,
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (error) {
+                alert("Error");
+            }
+        })
+    });
+ 
+    $(".buyFromUsers").click(function () {
+        var i_PostID = $(this).prev().val();
+        var formData = { PostID: i_PostID, __RequestVerificationToken: gettoken() }; 
+        $.ajax({
+            url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
+            type: "POST",
+        data: formData,
+        success: function (response) {
+            window.location.reload(true);
+        },
+        error: function (error) {
+            alert("Error");
+        }
+    })
+    });
+    });
+
+
+
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+</script>
+
+
+
+<div id="wrapper2">
+    <h1 style="text-align:center">Results:</h1>
+
+    <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
+
+        <thead>
+
+            <tr>
+                <th><span>Model</span></th>
+                <th><span>Year</span></th>
+                <th><span>Engine</span></th>
+                <th><span>Color</span></th>
+                <th><span>Gear</span></th>      
+                <th><span>Published</span></th>
+                <th><span>Price</span></th>
+                <th><span>Buy</span></th>
+            </tr>
+
+         
+        </thead>
+        <tbody>
+            @foreach (var car in ViewBag.CarTradeDetails)
+            {
+
+                <tr>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.EngineCapacity</td>
+                    <td>@car.Color</td>
+                    <td>@car.Gear</td>
+                    <td>@car.UserName</td>
+                    <td>@car.Price</td>
+                    <td id="PostID" value="@car.PostID" style="display:none" />
+                    <td><a class="buyFromUsers">Buy now!</a></td>
+                </tr>
+            
+            }
+            @foreach (var car in ViewBag.CarDetails)
+            {
+
+                <tr>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.EngineCapacity</td>
+                    <td>@car.Color</td>
+                    <td>@car.Gear</td>
+                    <td>Site</td>
+                    <td>@car.Price</td>
+                    <td name="CarID" value="@car.CarID" style="display:none" />
+                    <td><a class="buyFromSite">Buy now!</a></td>
+                </tr>
+
+            }
+
+        </tbody>
+     
+     
+    </table>
+    </div>

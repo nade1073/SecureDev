@@ -10,7 +10,7 @@
             var PostID = $(this).prev().val();
             
  
-            var formData = { PostiD: PostID}; //Array
+            var formData = { PostiD: PostID, __RequestVerificationToken: gettoken() }; //Array
             $.ajax({
                 url: "@Url.Action("DeleteCarTrade", "Home")",
                 type: "POST",
@@ -28,7 +28,13 @@
 
 </script>
 
-
+<script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+   }
+</script>
 <a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
 <div class="u-center divoflabelprice">
     <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
@@ -110,7 +116,7 @@
 
       $(".buyA").click(function () {
             var PostId = $(this).prev().val();
-            var formData = { PostID: PostId };
+            var formData = { PostID: PostId, __RequestVerificationToken: gettoken() };
             $.ajax({
                 url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
                 type: "POST",

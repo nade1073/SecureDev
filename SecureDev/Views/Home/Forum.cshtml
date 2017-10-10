@@ -17,9 +17,9 @@
 
         $(".deleteA").click(function () {
             var UniqueID = $(this).parent().prev().val();
-         //   var tempUniqueID="@ViewBag.UniqueID";
+     
  
-            var formData = { i_UniqueID: UniqueID }; //Array
+            var formData = { i_UniqueID: UniqueID, __RequestVerificationToken: gettoken() }; //Array
             $.ajax({
                 url: "@Url.Action("DeleteMessage", "Home")",
                 type: "POST",
@@ -34,7 +34,13 @@
         });
     });
 </script>
-
+<script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+   }
+</script>
 
 <div class="WrapperForum">
 
