@@ -21,7 +21,6 @@ namespace Vladi2.Controllers
         const string m_ConnectionReznik = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionBen = @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         
-        //entry point for main page as determined in the route config
         public ActionResult Index()
         {
             if (Session["UserName"] != null)
@@ -44,21 +43,17 @@ namespace Vladi2.Controllers
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
             }
-            //the path is absolute and should be changed.
-            string encriptedPassword;
-            UserAccount userDetailes = new UserAccount();
-            userDetailes.UserName = username;
-            userDetailes.Password = password;
+
+            UserAccount userDetailes = new UserAccount() { UserName = username, Password = password };
             var connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
+            string encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
             Func<SQLiteCommand, SQLiteDataReader, RedirectToRouteResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
                 while (reader.Read())
                 {
-                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
                     var encriptionPassword = reader.GetString(2).Trim();
                     var isAdmin = reader.GetString(7);
                     var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
@@ -83,6 +78,137 @@ namespace Vladi2.Controllers
 
             };
             return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked, "@UserName");
+        }
+
+        public ActionResult UserHome()
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
+        {
+            user.PictureUser = ConfertToBase64IfPossible(file);
+            if(user.PictureUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            if (user.Password != ConfirmPassword)
+            {
+                ViewBag.errorConfirm = "The passwords are not the same";
+                return RedirectToAction("Index", "Home");
+            }
+            if (!ValidationRegUserProperty(user))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            string encriptedPassword = EncryptionManager.Encrypt(user.Password, c_passwordKey);
+            user.Password = encriptedPassword;
+
+            var query = "SELECT * FROM tblusers Where Username = @UserName or Email = @Email";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
+            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
+            {
+                return RedirectToAction("Index", "Home");
+            };
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)
+                {
+
+                    ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email, PictureUser) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email,@PictureUser)";
+                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvokedAfterTheValidation, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email", "@PictureUser");
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Email");
+        }
+
+        public ActionResult AccountProfile()
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("index", "Home");
+            }
+            var connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            string userNameFromSession = (string)Session["UserName"];
+            string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
+            UserAccount userDetails = new UserAccount() { UserName = userNameFromSession } ;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)
+                {
+                    var userName = reader.GetString(1).Trim();
+                    userDetails.FirstName = reader.GetString(0).Trim();
+                    userDetails.LastName = reader.GetString(3).Trim();
+                    userDetails.PhoneNumber = reader.GetString(4).Trim();
+                    userDetails.Email = reader.GetString(5).Trim();
+                    userDetails.PictureUser = reader.GetString(6).Trim();
+                    ViewBag.User = userDetails;
+                    return View();
+                }
+                return RedirectToAction("Index", "Home");
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult AccountProfile(string PhoneNumber, string LastName, string FirstName, string passwordRegister, string Email, HttpPostedFileBase file)
+        {
+            UserAccount UpdateUser = new UserAccount();
+            UpdateUser.Email = Email;
+            UpdateUser.FirstName = FirstName;
+            UpdateUser.LastName = LastName;
+            UpdateUser.PhoneNumber = PhoneNumber;
+            UpdateUser.UserName = (string)Session["UserName"];
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
+
+            updateUserBasicInformatiom(profileQuriy, databaseConnection, UpdateUser, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
+
+            profileQuriy = "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
+
+            bool isGoodPassword = passwordCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
+
+            if (!isGoodPassword)
+            {
+                ViewBag.Error = "Error in password";
+                return View();
+            }
+            profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
+
+            bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
+
+            if (!isGoodFileFormatToUpload)
+            {
+                return RedirectToAction("AccountProfile", "Home");
+            }
+
+            return RedirectToAction("AccountProfile", "Home");
+        }
+
+        public ActionResult HomePageForum()
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("index", "Home");
+            }
+            return View();
         }
 
         public ActionResult CarTrade()
@@ -136,79 +262,7 @@ namespace Vladi2.Controllers
 
             return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
         }
-
-        //returns the user home page
-        public ActionResult UserHome()
-        {
-            if(Session["UserName"]==null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            
-            return View();
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult Register(UserAccount user, string ConfirmPassword, HttpPostedFileBase file)
-        {
-            if (file!=null && IsImage(file))
-            { 
-            byte[] fileInBytes = new byte[file.ContentLength];
-            using (BinaryReader theReader = new BinaryReader(file.InputStream))
-            {
-                fileInBytes = theReader.ReadBytes(file.ContentLength);
-            }
-            string fileAsString = Convert.ToBase64String(fileInBytes);
-            user.PictureUser = fileAsString;
-             }
-            else 
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            if (user.Password != ConfirmPassword)
-            {
-                ViewBag.errorConfirm = "The passwords is not same";
-                return RedirectToAction("Index", "Home");
-            }
-
-            if(!ValidationRegUserProperty(user))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            encriptedPassword = EncryptionManager.Encrypt(user.Password, c_passwordKey);
-            user.Password = encriptedPassword;
-
-            var query = "SELECT * FROM tblusers Where Username = @UserName or Email = @Email";
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
-            MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
-            {
-                return RedirectToAction("Index", "Home");
-            };
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
-            MethodToBeInvoked = (commad, reader) =>
-            {
-                if (reader.Read() == true)
-                {
-
-                    ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
-                    return RedirectToAction("Index", "Home");
-                }
-
-                string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email, PictureUser) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email,@PictureUser)";
-                return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvokedAfterTheValidation, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email", "@PictureUser");
-            };
-            return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Email");
-
-            //string insetrToDataBaseQuery = "Insert INTO tblusers (FirstName, UserName, Password, LastName, PhoneNumber, Email) VALUES(@FirstName,@UserName,@Password,@LastName,@PhoneNumber,@Email)";
-            //return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, user, MethodToBeInvoked, "@FirstName", "@Password", "@UserName", "@LastName", "@PhoneNumber", "@Email");
-        }
  
-
         public ActionResult Information()
         {
             UserAccount user = new UserAccount();
@@ -264,91 +318,6 @@ join carforsell as B
 
             return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
 
-        }
-
-        public ActionResult HomePageForum()
-        {
-            if (Session["UserName"] == null)
-            {
-                return RedirectToAction("index", "Home");
-            }
-            return View();
-        }
-
-        public ActionResult AccountProfile()
-        {
-            if (Session["UserName"] == null)
-            {
-                return RedirectToAction("index", "Home");
-            }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string userNameFromSession = (string)Session["UserName"];
-            string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
-            UserAccount userDetails = new UserAccount();//new UserAccount("nadav", "@Nade87491", "nade1073@gmail.com", "0546960200", "Nadav", "Shalev");
-            userDetails.UserName = userNameFromSession;
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
-            MethodToBeInvoked = (commad, reader) =>
-            {
-                if (reader.Read() == true)// it's mean that I found the user name in the data base
-                {
-                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
-                    var encriptionPassword = reader.GetString(2).Trim();
-                    var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
-                    var userName = reader.GetString(1).Trim();
-                    userDetails.FirstName = reader.GetString(0).Trim();
-                    userDetails.LastName = reader.GetString(3).Trim();
-                    userDetails.PhoneNumber = reader.GetString(4).Trim();
-                    userDetails.Email = reader.GetString(5).Trim();
-                    userDetails.PictureUser = reader.GetString(6).Trim();
-                    ViewBag.User = userDetails;
-                    return View();
-
-                }
-                return RedirectToAction("Index", "Home");
-
-            };
-
-            return databaseConnection.ContactToDataBaseAndExecute(accountProfileQuery, userDetails, MethodToBeInvoked, "@UserName");
-   
-        }
-
-        [ValidateAntiForgeryToken]
-        [HttpPost]  
-        public ActionResult AccountProfile(string PhoneNumber,string LastName,string FirstName,string passwordRegister,string Email,HttpPostedFileBase file)
-        {
-            UserAccount UpdateUser = new UserAccount();
-        
-            UpdateUser.Email = Email;
-            UpdateUser.FirstName = FirstName;
-            UpdateUser.LastName = LastName;
-            UpdateUser.PhoneNumber = PhoneNumber;
-            UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
-
-            updateUserBasicInformatiom(profileQuriy, databaseConnection, UpdateUser, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
-
-            profileQuriy = "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
-
-            bool isGoodPassword = passwordCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
-
-            if(!isGoodPassword)
-            {
-                ViewBag.Error = "Error in password";// Add to view!!!@@#!@#!#!@#!
-                return View();
-            }
-            profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
-
-            bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
-
-            if(!isGoodFileFormatToUpload)
-            {
-                return RedirectToAction("AccountProfile", "Home");
-            }
-
-            return RedirectToAction("AccountProfile", "Home");
         }
 
         [ValidateAntiForgeryToken]
@@ -501,39 +470,6 @@ join carforsell as B
 
         }
 
-        private bool UpdatePriceOfUserName(string UserName, int Price , Predicate<int> ConditionToUpdate)
-        {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string query = "SELECT * FROM tblusers WHERE UserName = @UserName";
-            UserAccount user = new UserAccount();
-            user.UserName = UserName;
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
-            MethodToBeInvoked = (commad, reader) =>
-            {
-                if (reader.Read() == true)// it's mean that I found the user name in the data base
-                {
-                    user.Amount = int.Parse(reader.GetString(8));
-                }
-                return RedirectToAction("Index", "Home");
-
-            };
-            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
-            bool needToUpdate = ConditionToUpdate.Invoke(Price);
-            if (needToUpdate)
-            {
-                user.Amount += Price;
-
-                query = "UPDATE tblusers SET Amount = @Amount WHERE UserName = @UserName";
-                MethodToBeInvoked = (commad, reader) =>
-                {
-                    return View();
-                };
-                databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Amount");
-            }
-            return needToUpdate;
-        }
-
         public ActionResult CarSellCompany ()
         {
             if (Session["UserName"] == null)
@@ -604,13 +540,11 @@ join carforsell as B
             string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
-             ForumMessage MessageofTheDataBase = new ForumMessage();
-            MessageofTheDataBase.TopicMessage = topic;
+            ForumMessage MessageofTheDataBase = new ForumMessage() { TopicMessage = topic };
             var query = "SELECT * FROM Forum Where Topic = @Topic";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
-  
                 while (reader.Read() == true)
                 {
                     ForumMessage Message = new ForumMessage();    
@@ -627,18 +561,14 @@ join carforsell as B
                 return View();
             };
             return databaseConnection.ContactToDataBaseAndExecute(query, MessageofTheDataBase, MethodToBeInvoked,"@Topic");
-
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult PostMessage(string Subject, string Message, string Topic)
         {
-           
-
             if (messageValidation(Subject, Message) )
             {
-
                 string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
@@ -1017,7 +947,7 @@ join carforsell as B
         public ActionResult Search()
         {
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
 
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
@@ -1059,10 +989,38 @@ join carforsell as B
             return View();
         }
 
+        private bool UpdatePriceOfUserName(string UserName, int Price, Predicate<int> ConditionToUpdate)
+        {
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            string query = "SELECT * FROM tblusers WHERE UserName = @UserName";
+            UserAccount user = new UserAccount();
+            user.UserName = UserName;
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                {
+                    user.Amount = int.Parse(reader.GetString(8));
+                }
+                return RedirectToAction("Index", "Home");
 
+            };
+            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
+            bool needToUpdate = ConditionToUpdate.Invoke(Price);
+            if (needToUpdate)
+            {
+                user.Amount += Price;
 
-
-
+                query = "UPDATE tblusers SET Amount = @Amount WHERE UserName = @UserName";
+                MethodToBeInvoked = (commad, reader) =>
+                {
+                    return View();
+                };
+                databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName", "@Amount");
+            }
+            return needToUpdate;
+        }
 
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
