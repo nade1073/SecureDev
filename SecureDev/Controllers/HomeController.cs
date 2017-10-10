@@ -19,7 +19,7 @@ namespace Vladi2.Controllers
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionReznik = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionBen= @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
+        const string m_ConnectionBen = @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         
         //entry point for main page as determined in the route config
         public ActionResult Index()
@@ -49,7 +49,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount();
             userDetailes.UserName = username;
             userDetailes.Password = password;
-            var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -92,7 +92,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarTrade> CarForumObjects = new List<CarTrade>();
             var query = "SELECT * FROM PublishCars";
@@ -167,7 +167,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             string encriptedPassword;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -218,7 +218,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForInfo = new List<CarForSell>();
 
@@ -281,7 +281,7 @@ join carforsell as B
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -324,7 +324,7 @@ join carforsell as B
             UpdateUser.LastName = LastName;
             UpdateUser.PhoneNumber = PhoneNumber;
             UpdateUser.UserName =(string)Session["UserName"];
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
 
@@ -361,7 +361,7 @@ join carforsell as B
             //down by 1 amountcars and price from user
             // update the table
             // update the table UsersCar with the that the users buy
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM CarForSell WHERE CarID = @CarID";
             CarForSell carToLoad = new CarForSell();
@@ -432,7 +432,7 @@ join carforsell as B
             // update the table V
             //check  if UniqueID is null if yes add new row to table UsersCars with CarID = 0 else just update the userName of the Table usersCars
             //
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM PublishCars WHERE PostID = @PostID";
             CarTrade carToLoad = new CarTrade();
@@ -503,7 +503,7 @@ join carforsell as B
 
         private bool UpdatePriceOfUserName(string UserName, int Price , Predicate<int> ConditionToUpdate)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string query = "SELECT * FROM tblusers WHERE UserName = @UserName";
             UserAccount user = new UserAccount();
@@ -541,7 +541,7 @@ join carforsell as B
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForSell = new List<CarForSell>();
 
@@ -601,7 +601,7 @@ join carforsell as B
                 return RedirectToAction("HomePageForum", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
              ForumMessage MessageofTheDataBase = new ForumMessage();
@@ -639,7 +639,7 @@ join carforsell as B
             if (messageValidation(Subject, Message) )
             {
 
-                string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+                string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage();
                 messageToLoad.SubjectMessage = Subject;
@@ -668,7 +668,7 @@ join carforsell as B
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             UserAccount UserDetails = new UserAccount();
             UserDetails.UserName = username;
@@ -695,7 +695,7 @@ join carforsell as B
             }
 
             UserAccount userDetailes = new UserAccount();
-            var connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            var connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 List<UserAccount> users = new List<UserAccount>();
                 List<string> usersIsAdmin = new List<string>();
@@ -738,7 +738,7 @@ join carforsell as B
             {
                 return RedirectToAction("Index", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string query= @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
 from userscars as A
@@ -789,7 +789,7 @@ join carforsell as B
             string newString = "%" + searchString + "%";
             CarForSearchString.UserName = newString;
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForInfo = new List<CarForSell>();
             List<CarTrade> carTradeInfo = new List<CarTrade>();
@@ -860,7 +860,7 @@ join carforsell as B
             //Picture is pitcure and convert base64
             //price not minus
             //Bdikot ota mechonit
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             int price = int.Parse(Price);
@@ -975,7 +975,7 @@ join carforsell as B
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_UniqueID)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage();
             messageToDelete.UserName = (string)Session["UserName"];
@@ -994,7 +994,7 @@ join carforsell as B
         [HttpPost]
         public ActionResult DeleteCarTrade(int PostID)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionBen);
+            string connectionString = string.Format("DataSource={0}", m_ConnectionReznik);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             CarTrade CarToDelete = new CarTrade();
             CarToDelete.PostID = PostID;
