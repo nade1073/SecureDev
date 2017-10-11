@@ -671,7 +671,11 @@ namespace Vladi2.Controllers
             return View();
 
         }
-
+        [HttpPost]
+        public ActionResult PostCar(string Model,string Color,string Gear,string Year,string Engine,string Price,string UniqueID, HttpPostedFileBase PictureProfile)
+        {
+            return View();
+        }
 
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_Topic)

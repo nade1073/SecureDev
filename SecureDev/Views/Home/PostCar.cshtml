@@ -22,7 +22,7 @@
             document.getElementById("Color").value = car.Color;
             document.getElementById('Color').readOnly = true;
             document.getElementById('Price').value = "0";
-       
+            document.getElementById('UniqueID').value=car.UniqueID;
             document.getElementById('Price').readOnly = false;
             $('#PictureProfile').attr('src',"data:image;base64,"+car.Picture);
         }
@@ -39,11 +39,12 @@
                 else
                 {
                     $(".css-input").each(function() {
-                        $(this).val("---");
+                        $(this).val(null);
                         $(this).prop('readonly', false);
                         $('#PictureProfile').attr('src',null);
                        
                     });
+                    document.getElementById('UniqueID').value=0;
                     $( ".carProfile" ).after( " <a id=uploadico class=ico></a>" );
                 }
 
@@ -71,51 +72,79 @@
            
     
         });
-     
+    
+        function FormValidate() {
+    
+            var model = document.getElementById("Model").value;
+            var color = document.getElementById("Color").value;
+            var gear = document.getElementById("Gear").value;
+            var year = document.getElementById("Year").value;
+            var engine = document.getElementById("Engine").value;
+            var price = document.getElementById("Price").value;
 
-      
+            if (model == "" || color == "" || gear == "" || year == "" || engine == "" || price == "")
+            {
+                alert("Please check the Errors");
+                return false;
+            }
+
+            if (isNaN(price) || price<0) 
+            {
+                alert("Please check the Errors");
+                return false;
+            }
+
+            if(isNan(Year))
+            {
+                alert("Please check the Errors");
+                return false;
+            }
+            return true;
+        }
+     
 </script>
 
 
 <section class="wrapSellCar">
-
+@using (Html.BeginForm("PostCar", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
+{
     <input type="file" name="file" id="file" accept="image/jpg,image/jpeg" style="display:none" />
     <div class="cardCar">
 
         <div class="carProfile">
-            <img id="PictureProfile"  alt="UploadPicture">
+            <img name="PictureProfile" id="PictureProfile"  alt="UploadPicture">
         </div>
         <a id="uploadico" ></a>
         <hr />
         <div class="groupOfInput">
             <p class="textCar"> Model:</p>
-            <input id="Model" type="text" class="css-input" readonly value="Fill this field" />
+            <input name="Model" id="Model" type="text" class="css-input" placeholder="Fill this field" readonly value="Fill this field" />
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Color:</p>
-            <input id="Color" type="text" class="css-input"  readonly value="Fill this field" />
+            <input name="Color" id="Color" type="text" class="css-input"  readonly  placeholder="Fill this field" value="Fill this field" />
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Gear:</p>
-            <input id="Gear" type="text" class="css-input" readonly value="Fill this field" />
+            <input name="Gear" id="Gear" type="text" class="css-input" placeholder="Fill this field" readonly value="Fill this field" />
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Year:</p>
-            <input id="Year" type="text" class="css-input"  readonly value="Fill this field" />
+            <input name="Year" id="Year" type="text" class="css-input" placeholder="Fill this field"  readonly value="Fill this field" />
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Engine:</p>
-            <input id="Engine" type="text" class="css-input"  readonly value="Fill this field" />
+            <input name="Engine" id="Engine" type="text" class="css-input" placeholder="Fill this field"  readonly value="Fill this field" />
         </div>
 
         <div class="groupOfInput">
             <p class="textCar"> Price:</p>
-            <input id="Price" type="text" class="css-input" readonly value="Fill this field" />
+            <input name="Price" id="Price" type="text" class="css-input" placeholder="Fill this field" readonly value="Fill this field" />
         </div>
-      
+        <input name="UniqueID" id="UniqueID" value="0" hidden readonly />
         <button class="cardcarButton" type="submit" id="button">Sell!</button>
     </div>
-  
+
     <div class="wrapperComboBox">
         <p>Choose a car from the list</p>
         <div class="select_style">
@@ -130,6 +159,6 @@
             <span></span>
         </div>
     </div>
-   
+}
   
 </section>
