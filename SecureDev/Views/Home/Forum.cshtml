@@ -16,10 +16,10 @@
     $(function () {
 
         $(".deleteA").click(function () {
-            var HeaderObjectText = $(this).parent().prev().text();
-            var Topic="@ViewBag.Topic";
+            var UniqueID = $(this).parent().prev().val();
+     
  
-            var formData = { i_Subject: HeaderObjectText, i_Topic: Topic }; //Array
+            var formData = { i_UniqueID: UniqueID, __RequestVerificationToken: gettoken() }; //Array
             $.ajax({
                 url: "@Url.Action("DeleteMessage", "Home")",
                 type: "POST",
@@ -34,7 +34,13 @@
         });
     });
 </script>
-
+<script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+   }
+</script>
 
 <div class="WrapperForum">
 
@@ -46,6 +52,7 @@
                     <article class="hentry">
                         <h2 id="subjectMessage" class="entry-title">@message.SubjectMessage</h2>
                         @{
+                            <input name ="UniqueID" value="@message.UniqueID" hidden/>
                             if ((string)message.UserName == (string)Session["UserName"])
                             {
                                 <div class="deleteButtonForum">
@@ -85,11 +92,13 @@
 
         </div>
     </div>
-@using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic="Sport", onsubmit = "return PostMessageValidate()" }))
+@using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic = "Sport", onsubmit = "return PostMessageValidate()" }))
 {
+    @Html.AntiForgeryToken()
+
     <div id="form-main">
         <div id="form-div">
-            <form class="" id="">
+            <form class="" id=""> 
                
                 <p class="name">
                     <input name="Subject" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" placeholder="Subject" id="name" />

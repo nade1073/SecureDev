@@ -22,9 +22,21 @@
             document.getElementById("Color").value = car.Color;
             document.getElementById('Color').readOnly = true;
             document.getElementById('Price').value = "0";
-            document.getElementById('UniqueID').value=car.UniqueID;
+           
+            
             document.getElementById('Price').readOnly = false;
             $('#PictureProfile').attr('src',"data:image;base64,"+car.Picture);
+        }
+        function ResetFields()
+        {
+            $(".css-input").each(function() {
+                $(this).val("");
+                $(this).prop('readonly', false);
+                $('#PictureProfile').attr('src',null);
+                       
+            });
+            document.getElementById("UniqueId").value = 0;
+            $( ".carProfile" ).after( "<a id=uploadico class=ico></a>" );
         }
         $(function () {
             $('select').on('change', function () {
@@ -34,18 +46,12 @@
                 {
                     $('#uploadico').replaceWith(" <a id=uploadico ></a>");
                     FillFieldsAuto(carsArray[indexofselectedcombox]);
-
+                    document.getElementById("UniqueId").value = carsArray[indexofselectedcombox].UniqueID;
                 }
                 else
                 {
-                    $(".css-input").each(function() {
-                        $(this).val(null);
-                        $(this).prop('readonly', false);
-                        $('#PictureProfile').attr('src',null);
-                       
-                    });
-                    document.getElementById('UniqueID').value=0;
-                    $( ".carProfile" ).after( " <a id=uploadico class=ico></a>" );
+                    ResetFields();
+                    document.getElementById("UniqueId").value = 0;
                 }
 
             });
@@ -72,79 +78,223 @@
            
     
         });
-    
-        function FormValidate() {
-    
-            var model = document.getElementById("Model").value;
-            var color = document.getElementById("Color").value;
-            var gear = document.getElementById("Gear").value;
-            var year = document.getElementById("Year").value;
-            var engine = document.getElementById("Engine").value;
-            var price = document.getElementById("Price").value;
+        window.onload=ResetFields;
 
-            if (model == "" || color == "" || gear == "" || year == "" || engine == "" || price == "")
-            {
-                alert("Please check the Errors");
-                return false;
-            }
-
-            if (isNaN(price) || price<0) 
-            {
-                alert("Please check the Errors");
-                return false;
-            }
-
-            if(isNan(Year))
-            {
-                alert("Please check the Errors");
-                return false;
-            }
-            return true;
+      
+</script>
+<script>
+    function FormValidate()
+    {
+           
+        var model = document.getElementById("Model").value;
+        var color = document.getElementById("Color").value;
+        var gear = document.getElementById("Gear").value;
+        var year = document.getElementById("Year").value;
+        var engine = document.getElementById("Engine").value;
+        var price = document.getElementById("Price").value;
+       
+        if (model == "" || color == "" || gear == "" || year == "" || engine == "" || price == "")
+        {
+            alert("Please fill all of the fields");
+            return false;
         }
-     
+        if (!(/^[a-zA-Z]+$/.test(model))) {
+            alert("Please check the Errors");
+            return false;
+        }
+
+        if (!(/^[a-zA-Z]+$/.test(color))) {
+            alert("Please check the Errors");
+            return false;
+        }
+        if (!(/^[a-zA-Z]+$/.test(gear))) {
+            alert("Please check the Errors");
+            return false;
+        }
+        if (isNaN(year))
+        {
+            alert("Please check the Errors");
+            return false;
+        }
+        if (isNaN(engine))
+        {
+            alert("Please check the Errors");
+            return false;
+        }
+        if (isNaN(price) || price<=0)
+        {
+            alert("Please check the Errors");
+            return false;
+        }
+       
+        if(document.getElementById("UniqueId").value == 0)
+        {
+            if (document.getElementById("file").files.length == 0)
+            {
+          
+                alert("UploadPicture");
+                return false;
+            }
+        }
+    }
+    $(function () {
+   
+        $('#Model').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#modelError').replaceWith("<p id=modelError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#modelError').replaceWith("<p id=modelError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#modelError').replaceWith("<p id=modelError ></p>");
+            }
+        });
+        $('#Color').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#colorError').replaceWith("<p id=colorError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#colorError').replaceWith("<p id=colorError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#colorError').replaceWith("<p id=colorError ></p>");
+            }
+        });
+        $('#Gear').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#gearError').replaceWith("<p id=gearError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#gearError').replaceWith("<p id=gearError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#gearError').replaceWith("<p id=gearError ></p>");
+            }
+        });
+        $('#Year').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0)
+            {
+
+                $('#yearError').replaceWith("<p id=yearError class=msgError>Error:Field is required. </p>");
+            } 
+
+            else if (!(value.match(/^\d+$/)))
+            {
+                $('#yearError').replaceWith("<p id=yearError class=msgError>Error:Only numbers are accepted. </p>");
+
+            }
+            else {
+                $('#yearError').replaceWith("<p id=yearError ></p>");
+            }
+        });
+        $('#Engine').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0)
+            {
+
+                $('#engineError').replaceWith("<p id=engineError class=msgError>Error:Field is required. </p>");
+            } 
+
+            else if (!(value.match(/^\d+$/)))
+            {
+                $('#engineError').replaceWith("<p id=engineError class=msgError>Error:Only numbers are accepted. </p>");
+
+            }
+            else {
+                $('#engineError').replaceWith("<p id=engineError ></p>");
+            }
+        });
+        $('#Price').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0)
+            {
+
+                $('#priceError').replaceWith("<p id=priceError class=msgError>Error:Field is required. </p>");
+            } 
+
+            else if (!(value.match(/^\d+$/)))
+            {
+                $('#priceError').replaceWith("<p id=priceError class=msgError>Error:Only numbers are accepted. </p>");
+
+            }
+            else if (value <=0)
+            {
+                $('#priceError').replaceWith("<p id=priceError class=msgError>Error:The amount can be only positive </p>");
+
+            }
+            else {
+                $('#priceError').replaceWith("<p id=priceError ></p>");
+            }
+        });
+    });
+
 </script>
 
-
 <section class="wrapSellCar">
+
+  
+    <div class="cardCar">
 @using (Html.BeginForm("PostCar", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
 {
-    <input type="file" name="file" id="file" accept="image/jpg,image/jpeg" style="display:none" />
-    <div class="cardCar">
+        @Html.AntiForgeryToken()
 
         <div class="carProfile">
-            <img name="PictureProfile" id="PictureProfile"  alt="UploadPicture">
+            <img id="PictureProfile"  alt="UploadPicture">
         </div>
         <a id="uploadico" ></a>
         <hr />
         <div class="groupOfInput">
             <p class="textCar"> Model:</p>
-            <input name="Model" id="Model" type="text" class="css-input" placeholder="Fill this field" readonly value="Fill this field" />
+            <input name="Model" id="Model" type="text" class="css-input" readonly placeholder="Fill this field" />
+            <p id="modelError"></p>
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Color:</p>
-            <input name="Color" id="Color" type="text" class="css-input"  readonly  placeholder="Fill this field" value="Fill this field" />
+            <input name="Color" id="Color" type="text" class="css-input"  readonly placeholder="Fill this field" />
+            <p id="colorError"></p>
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Gear:</p>
-            <input name="Gear" id="Gear" type="text" class="css-input" placeholder="Fill this field" readonly value="Fill this field" />
+            <input name="Gear" id="Gear" type="text" class="css-input" readonly placeholder="Fill this field" />
+            <p id="gearError"></p>
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Year:</p>
-            <input name="Year" id="Year" type="text" class="css-input" placeholder="Fill this field"  readonly value="Fill this field" />
+            <input name="Year" id="Year" type="text" class="css-input"  readonly placeholder="Fill this field" />
+            <p id="yearError"></p>
         </div>
         <div class="groupOfInput">
             <p class="textCar"> Engine:</p>
-            <input name="Engine" id="Engine" type="text" class="css-input" placeholder="Fill this field"  readonly value="Fill this field" />
+            <input name="EngineCapacity" id="Engine" type="text" class="css-input"  readonly placeholder="Fill this field" />
+            <p id="engineError"></p>
         </div>
 
         <div class="groupOfInput">
             <p class="textCar"> Price:</p>
-            <input name="Price" id="Price" type="text" class="css-input" placeholder="Fill this field" readonly value="Fill this field" />
+            <input name="Price" id="Price" type="number" class="css-input" readonly placeholder="Fill this field" />
+            <p id="priceError"></p>
         </div>
-        <input name="UniqueID" id="UniqueID" value="0" hidden readonly />
-        <button class="cardcarButton" type="submit" id="button">Sell!</button>
-    </div>
+        <input name="UniqueId" id="UniqueId" type="text" hidden />
 
+    <input type="file" name="file" id="file" accept="image/jpg,image/jpeg" style="display:none" />
+        <button class="cardcarButton" type="submit" id="button">Sell!</button>
+}
+    </div>
+  
     <div class="wrapperComboBox">
         <p>Choose a car from the list</p>
         <div class="select_style">
@@ -153,12 +303,12 @@
                 {
                     <option>@car.Model ID-@car.UniqueID</option>
                 }
-                <option>other</option>
+                <option selected="selected">other</option>
            
             </select>
             <span></span>
         </div>
     </div>
-}
+   
   
 </section>

@@ -1,0 +1,148 @@
+﻿
+
+
+
+<script>
+
+    $(function () {
+
+        $(".buyFromSite").click(function () {
+            var i_CarID = $(this).closest('tr').find('td:eq(7)').text();
+            var priceofcurrentcar = $(this).closest('tr').find('td:eq(6)').text();
+            if(@ViewBag.Amount < priceofcurrentcar )
+            {
+                alert("Not enough money");
+            }
+            else
+            {
+                var formData = { CarID: i_CarID, __RequestVerificationToken: gettoken() }; 
+                $.ajax({
+                    url: "@Url.Action("CarBuyLogic", "Home")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        window.location.reload(true);
+                    },
+                    error: function (error) {
+                        alert("Error");
+                    }
+                })
+            }
+    });
+ 
+        $(".buyFromUsers").click(function () {
+            var i_PostID = $(this).closest('tr').find('td:eq(7)').text();
+            var priceofcurrentcar = $(this).closest('tr').find('td:eq(6)').text();
+            if(@ViewBag.Amount < priceofcurrentcar )
+            {
+                alert("Not enough money");
+            }
+            else
+            {
+                var formData = { PostID: i_PostID, __RequestVerificationToken: gettoken() }; 
+                $.ajax({
+                    url: "@Url.Action("BuyCarsFromUserLogic2", "Home")",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        window.location.reload(true);
+                    },
+                    error: function (error) {
+                        alert("Error");
+                    }
+                })
+            }
+    });
+    });
+
+
+
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+</script>
+@using (Html.BeginForm("Search", "home", FormMethod.Post, new { @class = "searchform" }))
+{
+    @Html.AntiForgeryToken()
+
+    <input name="searchString" id="searchString" type="text" placeholder="Is it me you’re looking for?" />
+        <button type="submit">Search</button>
+}
+
+
+<div id="wrapper2">
+    <div class="u-center divoflabelprice">
+        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
+
+    </div>
+    <h1 style="text-align:center">Results:</h1>
+
+    <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
+
+        <thead>
+
+            <tr>
+                <th><span>Model</span></th>
+                <th><span>Year</span></th>
+                <th><span>Engine</span></th>
+                <th><span>Color</span></th>
+                <th><span>Gear</span></th>      
+                <th><span>Published</span></th>
+                <th><span>Price</span></th>
+                <th style="display:none"><span></span></th>
+                
+                <th><span>Buy</span></th>
+            </tr>
+
+         
+        </thead>
+        <tbody>
+            @{ 
+
+                if (ViewBag.CarTradeDetails != null)
+                {
+                    foreach (var car in ViewBag.CarTradeDetails)
+                    {
+
+                            <tr>
+                                <td>@car.Model</td>
+                                <td>@car.Year</td>
+                                <td>@car.EngineCapacity</td>
+                                <td>@car.Color</td>
+                                <td>@car.Gear</td>
+                                <td>@car.UserName</td>
+                                <td>@car.Price</td>
+                                <td id="PostID" value="@car.PostID" style="display:none">@car.PostID</td> 
+                                <td><a class="buyFromUsers">Buy now!</a></td>
+                            </tr>
+                    }
+                }
+
+                if (ViewBag.CarDetails != null)
+                {
+                    foreach (var car in ViewBag.CarDetails)
+                    {
+                        
+                <tr>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.EngineCapacity</td>
+                    <td>@car.Color</td>
+                    <td>@car.Gear</td>
+                    <td style="color:red">Site</td>
+                    <td >@car.Price</td>
+                    <td id ="CarID" name="CarID" value="@car.CarID" style="display:none" >@car.CarID</td>
+             
+                    <td><a class="buyFromSite">Buy now!</a></td>
+                </tr>
+                        }
+                    }
+             }
+
+        </tbody>
+     
+     
+    </table>
+    </div>

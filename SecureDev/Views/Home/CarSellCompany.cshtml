@@ -4,8 +4,15 @@
   $(function () {
 
       $(".cardcarButton").click(function () {
-            var carID = $(this).prev().val();
-            var formData = { CarID: carID }; 
+          var carID = $(this).prev().val();
+          var priceofcurrentcar = $(this).prev().prev().val();
+          if(@ViewBag.Amount < priceofcurrentcar )
+          {
+              alert("Not enough money");
+          }
+          else
+              {
+            var formData = { CarID: carID, __RequestVerificationToken: gettoken() };
             $.ajax({
                 url: "@Url.Action("CarBuyLogic", "Home")",
                 type: "POST",
@@ -17,14 +24,24 @@
                     alert("Error");
                 }
             })
+          }
         });
     });
 </script>
 
-
+<script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+   }
+</script>
 
 <div class="containerofcars">
+    <div class="u-center divoflabelprice">
+        <input value="Current Amount: @ViewBag.Amount$" type="text" id="pricelabel" />
 
+    </div>
     @foreach (var car in ViewBag.ListOfCarToSell)
     {
         <div class="cardCar">
@@ -63,6 +80,7 @@
             <p class="textCar"> Price:</p>
             <input type="text" class="css-input" readonly value="@car.Price" />
         </div>
+            <input readonly  hidden value="@car.Price" />
             <input readonly hidden value="@car.CarID" />
         <button class="cardcarButton" type="submit" id="button" >Buy</button>
     </div>

@@ -141,6 +141,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CntrollerUtils.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -152,6 +153,7 @@
     <Compile Include="Models\ForumMessage.cs" />
     <Compile Include="Models\homeVM.cs" />
     <Compile Include="Models\ResultViewDelegate.cs" />
+    <Compile Include="Models\DataBaseObject.cs" />
     <Compile Include="Models\TypeMapFromTypeToDbType.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserAccountImproved.cs" />
@@ -170,6 +172,7 @@
     <Content Include="Content\CarsPictures\overlay.png" />
     <Content Include="Content\CarsPictures\watermark-template.jpg" />
     <Content Include="Content\CarsPictures\Wolfsagen.jpg" />
+    <Content Include="Content\organic-tiles.png" />
     <Content Include="Content\Upload.ico" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -210,6 +213,8 @@
     <Content Include="Views\Home\CarSellCompany.cshtml" />
     <Content Include="Views\Home\CarTrade.cshtml" />
     <Content Include="Views\Home\PostCar.cshtml" />
+    <Content Include="Views\Home\Information.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

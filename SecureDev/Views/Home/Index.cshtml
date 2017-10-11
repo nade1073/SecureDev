@@ -208,6 +208,8 @@
             <div class="login-form">
                 @using (Html.BeginForm("login", "home", FormMethod.Post, new { onsubmit = "return loginFormValidation()" }))
                 {
+                    @Html.AntiForgeryToken()
+
                     <div class="sign-in-htm">
                         <div class="group">
                             <label for="userSignin" class="label">Username</label>

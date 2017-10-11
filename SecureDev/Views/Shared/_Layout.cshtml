@@ -44,7 +44,8 @@
         <li><a onclick="location.href='@Url.Action("CarSellCompany", "home")'" class="active">Buy a car</a></li>
         <li><a onclick="location.href='@Url.Action("CarTrade", "home")'" class="active">Car Trade</a></li>
         <li class="rightfloat"><a onclick="location.href='@Url.Action("SignOut", "home")'" id="signOutButton">Sign Out</a></li>
-        <li class="rightfloat"><a onclick="location.href='@Url.Action("HomePageForum", "home")'" id="signOutButton">Forum</a></li>
+        <li class="rightfloat"><a onclick="location.href='@Url.Action("HomePageForum", "home")'" id="Forum">Forum</a></li>
+        <li class="rightfloat"><a onclick="location.href='@Url.Action("Information", "home")'" id="information">Information</a></li>
             if ((string)Session["isAdmin"] == "1")
             {
             <li class="rightfloat"><a onclick="location.href='@Url.Action("ControlPanel", "home")'" id="signOutButton">Control Panel</a></li>
