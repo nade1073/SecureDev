@@ -64,8 +64,8 @@ body {
    position:relative;
         margin:0;
     color:#6a6f8c;
-    background:url(beautiful-car-background.jpeg) no-repeat center fixed; 
-      
+    background:url(az_subtle_@2X.png);
+    
   
 }
 
@@ -6743,8 +6743,10 @@ a{color:inherit;text-decoration:none}
     width:800px;
     height:850px;
     position: relative;
-
-    background:rgba(40,57,101,.9);
+    background:url(carbon_fibre_v2_@2X.png) ;
+    background-repeat: repeat;
+    background-size: 20px;
+    /*background:rgba(55,69,81,.9);*/
     
     padding:90px 70px 50px 70px;
     
@@ -7870,6 +7872,7 @@ a {
          margin-top:20px;
          padding-left:7px;
     -webkit-border-radius: 10px;
+
 }
 
 
@@ -7976,12 +7979,13 @@ right:-100px;
   }
 
   .Forumheader 
-  { font-family: "Lusitana";
+  { 
+      font-family: "Lusitana";
         font-weight: normal;
         line-height: 1em;
         font-size: 4em;
         margin: 0;
-        color:indianred;
+        color:grey;
         
         -webkit-text-stroke-width:1px;
         -webkit-text-stroke-color:black;
@@ -8125,18 +8129,21 @@ background-image:linear-gradient(0deg, rgba(255,255,255,.6),rgba(255,255,255,.6)
 
 
 .boxHeader {
-    width: 300px;
-    height: 100px;
+
+padding:20px;
     margin:0 auto;
-    
+    margin-top:20px;
+  opacity:.9;
     border-radius: 5px;
     box-shadow: 0 20px 30px rgba(0,0,0,.6);
     border: 1px solid rgba(255,255,255,.3);
-   
+     background:url(crissXcross_@2X.png);
+background-size:150px;
+ background-repeat: repeat;
     text-align: center;
     box-sizing: border-box;
     text-shadow: 0 1px 1px rgba(0,0,0,.4);
-    display: flex;
+    display: table;
     transition: box-shadow .3s ease;
     text-align:center;
 }
@@ -8523,15 +8530,13 @@ input:focus, textarea:focus {
   .inputtrade{
    
       display:inline-block;
-        
       width:40%;
       height:100%;
   }
 
         .inputtradetxt
-          {
-         
-            display:inline;
+       {
+  display:inline;
     width:150px;
     height:30px;
      font-size: 12px;
@@ -8551,12 +8556,9 @@ input:focus, textarea:focus {
 }
 
   .texttradeinput{
-     font-size:15px;
-   
+     font-size:15px; 
      width:100%;
      height:100%;
-  
-  
      display:inline;
      
  }
@@ -8752,6 +8754,14 @@ right:-100px;
 
 }
 
+.centertable1 img{
+     width: 200px;
+        height: 200px;
+        object-fit: cover;
+   
+
+
+}
 #pricelabel {
    padding-top:30px;
    padding-bottom:30px;
@@ -8839,13 +8849,11 @@ margin-bottom:50px;
 	}
 
 .searchform button {
-	background: rgb(52,173,236);
-	background: -moz-linear-gradient(top, rgba(52,173,236,1) 0%, rgba(38,145,220,1) 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(52,173,236,1)), color-stop(100%,rgba(38,145,220,1)));
-	background: -webkit-linear-gradient(top, rgba(52,173,236,1) 0%,rgba(38,145,220,1) 100%);
-	background: -o-linear-gradient(top, rgba(52,173,236,1) 0%,rgba(38,145,220,1) 100%);
-	background: -ms-linear-gradient(top, rgba(52,173,236,1) 0%,rgba(38,145,220,1) 100%);
-	background: linear-gradient(to bottom, rgba(52,173,236,1) 0%,rgba(38,145,220,1) 100%);
+
+
+
+
+  background: #696969;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34adec', endColorstr='#2691dc',GradientType=0 );
 	border: none;
 	color:#fff;
@@ -8853,9 +8861,9 @@ margin-bottom:50px;
 	font: 13px/13px 'HelveticaNeue', Helvetica, Arial, sans-serif;
 	padding: 10px;
 	width:106px;
-	box-shadow: 0 0 2px #2692dd inset;
-	-moz-box-shadow: 0 0 2px #2692dd inset;
-	-webkit-box-shadow: 0 0 2px #2692dd inset;
+	box-shadow: 0 0 2px #333 inset;
+	-moz-box-shadow: 0 0 2px #333 inset;
+	-webkit-box-shadow: 0 0 2px #333 inset;
   border-radius: 9px;
   -moz-border-radius: 9px;
   -webkit-border-radius: 9px;

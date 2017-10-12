@@ -1,15 +1,10 @@
-﻿
-@{
-    ViewBag.Title = "CarTrade";
-}
-
-<script>
+﻿<script>
     $(function () {
 
         $(".deleteA").click(function () {
             var PostID = $(this).prev().val();
     
-                var formData = { PostiD: PostID, __RequestVerificationToken: gettoken() }; //Array
+                var formData = { PostiD: PostID, __RequestVerificationToken: gettoken() };
                 $.ajax({
                     url: "@Url.Action("DeleteCarTrade", "Home")",
                     type: "POST",
@@ -28,9 +23,9 @@
 
 
 </script>
-
 <script>
-  $(function () {
+    $(function ()
+    {
 
       $(".buyA").click(function () {
           var PostId = $(this).prev().val();
@@ -75,11 +70,7 @@
         <a class="sellcarbutton" onclick="location.href='@Url.Action("PostCar", "home")'">Sell your car</a>
 
     </div>
- 
-
-
     <ol id="posts-list" class="hfeed">
-
        @foreach (var car in ViewBag.ListOfCarsTrade)
        {
         <li>
@@ -125,23 +116,19 @@
                     </div>
                  
                 </div>
-
                 <footer class="post-info">
-
                     <address class="vcard author">
                         Posted By: <a class="url fn" href="#">@car.UserName</a>
                         <div class="carimagetrade">
                             <img id="picture" src="data:image/*;base64,@car.Picture" alt="Picture car">
                         </div>
                     </address>
-                </footer><!-- /.post-info -->
-
+                </footer>
 
             </article>
         </li>
        }
        
     </ol>
-
 </section>
 

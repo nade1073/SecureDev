@@ -63,28 +63,22 @@
   
                         <footer class="post-info">
                             <abbr class="published" title="2005-10-10T14:07:00-07:00">
-                                <!-- YYYYMMDDThh:mm:ss+ZZZZ -->
+                             
                                 10th October 2005
                             </abbr>
                             <address class="vcard author">
                                 By <a class="url fn" href="#">@message.UserName</a>
                             </address>
-                        </footer><!-- /.post-info -->
+                        </footer>
                         <div class="entry-content">
                             <p>@message.Message</p>
-                        </div><!-- /.entry-content -->
+                        </div>
 
                     </article>
                 </li>
-
             }
-           
-       
-
         </ol>
-
     </section>
-
     <hr class="style18" />
     <div class="boxHeader blurred-bg tinted">
         <div class="content">
@@ -95,7 +89,6 @@
 @using (Html.BeginForm("PostMessage", "home", FormMethod.Post, new { Topic = "Sport", onsubmit = "return PostMessageValidate()" }))
 {
     @Html.AntiForgeryToken()
-
     <div id="form-main">
         <div id="form-div">
             <form class="" id=""> 

@@ -161,15 +161,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\az_subtle_%402X.png" />
     <Content Include="Content\beautiful-car-background.jpeg" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\carbon_fibre_v2_%402X.png" />
     <Content Include="Content\CarsPictures\audi.jpg" />
     <Content Include="Content\CarsPictures\driving-1995-lamborghini-cala-concept-4.jpg" />
     <Content Include="Content\CarsPictures\dsc_8582.jpg" />
     <Content Include="Content\CarsPictures\ferrariportofino02.jpg" />
     <Content Include="Content\CarsPictures\mercedes_amg-gt4-2.jpg" />
     <Content Include="Content\CarsPictures\overlay.png" />
+    <Content Include="Content\crissXcross_%402X.png" />
+    <Content Include="Content\ravenna.png" />
     <Content Include="Content\CarsPictures\watermark-template.jpg" />
     <Content Include="Content\CarsPictures\Wolfsagen.jpg" />
     <Content Include="Content\organic-tiles.png" />
@@ -192,7 +196,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

@@ -1,41 +1,24 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-
-
-
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>AutoCar Site</title>
     @*Renders and minifes site css*@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 
-
-
-
-
-
-
-
 <body>
-  
     <header id="mynav">
     <ul>
         @if (Session["UserName"] == null)
         {
         <li><a disable class="active">Hello Geust</a></li>
-
-
-
         }
         else
         {
@@ -51,26 +34,18 @@
             <li class="rightfloat"><a onclick="location.href='@Url.Action("ControlPanel", "home")'" id="signOutButton">Control Panel</a></li>
             }
         }
-
     </ul>
     </header>
 
 <div class="container5">
-
     @RenderBody()
 
-
 </div>
-
     @*renders and minifies scripts with the mvc bundles*@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <footer id="sticky">
-
-
-   
-
         <div class="container2 contact">
             <h4> Contact Us!</h4>
             <a style="color:white; text-decoration:underline;">Secure_Dev@gmail.com</a>
@@ -78,10 +53,8 @@
                 Holon institute <br />
                 of technology<br />
                Holon, Israel<br />
-            
             </address>
         </div>
-
         <div class="container2 cta">
             <h4>
                 Want more info?<br />
@@ -89,7 +62,6 @@
             </h4>
             <button style="color:black">Learn More!</button>
         </div>
-
     </footer>
 </body>
 </html>

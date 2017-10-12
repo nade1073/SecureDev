@@ -1,9 +1,8 @@
 ﻿<script>
-   $(function () {
-
+    $(function ()
+    {
        $(".UpdateInControlPanel").click(function ()
        {
-
            var checkboxtopass = $(this).parent().parent().prev().children().prop("checked");
            var usernametopass = $(this).parent().parent().prev().prev().prev().prev().prev().text();
      
@@ -12,7 +11,6 @@
             url: "@Url.Action("ControlPanelUpdate", "Home")",
             type: "POST",
             data: formData,
-
             success: function (response) {
             window.location.reload(true);
             },
@@ -24,7 +22,6 @@
        });
 
 </script>
-
 <script type="text/javascript">
     function gettoken() {
         var token = '@Html.AntiForgeryToken()';
@@ -54,8 +51,7 @@
                             <th class="u-center">Update</th>
                         </tr>
                     </thead>
-                    <tbody style="font-size:15px;">
-                        
+                    <tbody style="font-size:15px;">  
                         @{
                             var x=0;
                             foreach (var user in ViewBag.usersDetails)
@@ -79,15 +75,11 @@
                                         <input  type="checkbox" />
                                     </td>
                                 }
-
-
                                 <td class="u-center"><p><a class="UpdateInControlPanel" >Update</a></p></td>
                             </tr>
                                     x++;
                                 }
                             }
-
-
                     </tbody>
                 </table>
             </div>

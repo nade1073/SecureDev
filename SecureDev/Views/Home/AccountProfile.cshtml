@@ -1,28 +1,17 @@
 ﻿
-
-    @{
-        ViewBag.Title = "AccountProfile";
-    }
-
-
-
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     </head>
-
 <script type="text/javascript">
-  
 
-        function FormValidate() {
-
+    function FormValidate()
+    {
             var password = document.getElementById("passwordRegister").value;
             var phonenumber = document.getElementById("PhoneNumber").value;
             var Email = document.getElementById("Email").value;
             var firstname = document.getElementById("FirstName").value;
             var lastname = document.getElementById("LastName").value;
        
-
             if (password == "" || Email == "" || firstname == "" || lastname == "" || phonenumber == "") {
                 alert("Please check the Errors");
                 return false;
@@ -184,8 +173,7 @@
                 $('#PictureProfile').attr('src', e.target.result);
             };
         });
-   
-
+  
 </script>
 @using (Html.BeginForm("AccountProfile", "home", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return FormValidate()" }))
 {
