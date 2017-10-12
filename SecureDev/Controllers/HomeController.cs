@@ -169,12 +169,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult AccountProfile(string PhoneNumber, string LastName, string FirstName, string passwordRegister, string Email, HttpPostedFileBase file)
         {
-            UserAccount UpdateUser = new UserAccount();
-            UpdateUser.Email = Email;
-            UpdateUser.FirstName = FirstName;
-            UpdateUser.LastName = LastName;
-            UpdateUser.PhoneNumber = PhoneNumber;
-            UpdateUser.UserName = (string)Session["UserName"];
+            UserAccount UpdateUser = new UserAccount() { Email = Email, FirstName = FirstName, LastName= LastName, PhoneNumber= PhoneNumber, UserName= (string)Session["UserName"] };
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
@@ -191,14 +186,11 @@ namespace Vladi2.Controllers
                 return View();
             }
             profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
-
             bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
-
             if (!isGoodFileFormatToUpload)
             {
                 return RedirectToAction("AccountProfile", "Home");
             }
-
             return RedirectToAction("AccountProfile", "Home");
         }
 
@@ -210,7 +202,6 @@ namespace Vladi2.Controllers
             }
             return View();
         }
-
         public ActionResult CarTrade()
         {
             if (Session["UserName"] == null)
@@ -239,10 +230,9 @@ namespace Vladi2.Controllers
                     CarToSee.Picture = reader.GetString(7).Trim();
                     CarToSee.Model = reader.GetString(8).Trim();
                     CarToSee.PostID = reader.GetInt32(9);
-                        CarForumObjects.Add(CarToSee);                  
+                    CarForumObjects.Add(CarToSee);                  
                 }
                 ViewBag.ListOfCarsTrade = CarForumObjects;
-          
                 return View();
             };
             databaseConnection.ContactToDataBaseAndExecute(query, null, MethodToBeInvoked);
@@ -262,28 +252,25 @@ namespace Vladi2.Controllers
 
             return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
         }
- 
+
         public ActionResult Information()
         {
-            UserAccount user = new UserAccount();
-            user.UserName = (string)Session["UserName"];
-            if (user.UserName == null)
+            if (Session["UserName"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            UserAccount user = new UserAccount() { UserName = (string)Session["UserName"] };
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForInfo = new List<CarForSell>();
-
             string query = @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
-from userscars as A
-join carforsell as B
- where A.carID = B.carID And A.UserName = @UserName 
- Union
- select UserName,UniqueID,Year,EngineCapacity,Gear,Color,Price,Picture,Model
- from userscars as u2
- where carid = 0 And UserName = @UserName and not exists(select UniqueID from PublishCars p where p.UniqueID = u2.UniqueID)";
+                            from userscars as A
+                            join carforsell as B
+                            where A.carID = B.carID And A.UserName = @UserName 
+                            Union
+                            select UserName,UniqueID,Year,EngineCapacity,Gear,Color,Price,Picture,Model
+                            from userscars as u2
+                            where carid = 0 And UserName = @UserName and not exists(select UniqueID from PublishCars p where p.UniqueID = u2.UniqueID)";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
@@ -303,7 +290,6 @@ join carforsell as B
                 return View();
             };
             databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
-
             query = "SELECT * FROM tblusers WHERE UserName = @UserName";
             MethodToBeInvoked = (commad, reader) =>
             {
@@ -315,9 +301,7 @@ join carforsell as B
                 ViewBag.Amount = user.Amount;
                 return View();
             };
-
             return databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
-
         }
 
         [ValidateAntiForgeryToken]
@@ -536,7 +520,6 @@ join carforsell as B
             {
                 return RedirectToAction("HomePageForum", "Home");
             }
-
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
@@ -594,6 +577,43 @@ join carforsell as B
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult ControlPanel()
+        {
+            if (!(Session["UserName"] != null && (string)Session["isAdmin"] == "1"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            List<UserAccount> users = new List<UserAccount>();
+            List<string> usersIsAdmin = new List<string>();
+            string loginQuery = "SELECT * FROM tblusers";
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
+            MethodToBeInvoked = (commad, reader) =>
+            {
+                while (reader.Read())
+                {
+                    UserAccount userDetails = new UserAccount();
+                    userDetails.FirstName = reader.GetString(0).Trim();
+                    userDetails.UserName = reader.GetString(1).Trim();
+                    userDetails.LastName = reader.GetString(3).Trim();
+                    userDetails.PhoneNumber = reader.GetString(4).Trim();
+                    userDetails.Email = reader.GetString(5).Trim();
+                    userDetails.PictureUser = reader.GetString(6).Trim();
+                    if (userDetails.UserName != (string)Session["UserName"])
+                    {
+                        usersIsAdmin.Add(reader.GetString(7));
+                        users.Add(userDetails);
+                    }
+                }
+                ViewBag.usersDetails = users;
+                ViewBag.usersIsAdmin = usersIsAdmin;
+                return View();
+
+            };
+            return databaseConnection.ContactToDataBaseAndExecute(loginQuery, null, MethodToBeInvoked);
+
+        }
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
@@ -611,57 +631,9 @@ join carforsell as B
             {
                 return RedirectToAction("ControlPanel", "Home");
             };
-
-
             return databaseConnection.ContactToDataBaseAndExecute(profileQuriy, User, MethodToBeInvoked, "@UserName", "@Admin");
         }
 
-        public ActionResult ControlPanel()
-        {
-            if (!(Session["UserName"] != null && (string)Session["isAdmin"] == "1"))
-            {
-                return RedirectToAction("Index", "Home");
-
-            }
-
-            UserAccount userDetailes = new UserAccount();
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
-                DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-                List<UserAccount> users = new List<UserAccount>();
-                List<string> usersIsAdmin = new List<string>();
-                string loginQuery = "SELECT * FROM tblusers";
-                Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
-                MethodToBeInvoked = (commad, reader) =>
-                {
-                    while (reader.Read())
-                    {
-                        //if we got here - the select succeded , the user exist in db - redirect to userHome page
-                        UserAccount userDetails = new UserAccount();
-                        userDetails.FirstName = reader.GetString(0).Trim();
-                        userDetails.UserName = reader.GetString(1).Trim();
-                        //   userDetailes.Password = reader.GetString(2).Trim();
-                        userDetails.LastName = reader.GetString(3).Trim();
-                        userDetails.PhoneNumber = reader.GetString(4).Trim();
-                        userDetails.Email = reader.GetString(5).Trim();
-                        userDetails.PictureUser = reader.GetString(6).Trim();
-
-                       
-                        if (userDetails.UserName != (string)Session["UserName"])
-                        {
-                            usersIsAdmin.Add(reader.GetString(7));
-                            users.Add(userDetails);
-                        }
-
-                    }
-                    ViewBag.usersDetails = users;
-                    ViewBag.usersIsAdmin = usersIsAdmin;
-                    return View();
-
-                };
-        
-            return databaseConnection.ContactToDataBaseAndExecute(loginQuery, userDetailes, MethodToBeInvoked);
-            
-        }
         public ActionResult PostCar()
         {
 
@@ -671,66 +643,59 @@ join carforsell as B
             }
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string query= @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
-from userscars as A
-join carforsell as B
- where A.carID = B.carID And A.UserName = @UserName  and not exists(select UniqueID from PublishCars p where p.UniqueID = A.UniqueID)
- Union
- select UserName,UniqueID,Year,EngineCapacity,Gear,Color,Price,Picture,Model
- from userscars as u2
- where carid = 0 And UserName = @UserName and not exists(select UniqueID from PublishCars p where p.UniqueID = u2.UniqueID)";
-            UserAccount user = new UserAccount();
-            user.UserName = (string)Session["UserName"];
+            string query = @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
+                             from userscars as A
+                             join carforsell as B
+                             where A.carID = B.carID And A.UserName = @UserName  and not exists(select UniqueID from PublishCars p where p.UniqueID = A.UniqueID)
+                             Union
+                             select UserName,UniqueID,Year,EngineCapacity,Gear,Color,Price,Picture,Model
+                             from userscars as u2
+                             where carid = 0 And UserName = @UserName and not exists(select UniqueID from PublishCars p where p.UniqueID = u2.UniqueID)";
+            UserAccount user = new UserAccount(){UserName=(string)Session["UserName"]};
             List<CarTrade> AllCarsOfUser = new List<CarTrade>();
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
                 while (reader.Read())
                 {
-                  
-                    CarTrade userDetails = new CarTrade();
-                    userDetails.UserName = reader.GetString(0).Trim();
-                    userDetails.UniqueID = reader.GetInt32(1);
-                    userDetails.Year = reader.GetString(2).Trim();
-                    userDetails.EngineCapacity = reader.GetString(3).Trim();
-                    userDetails.Gear = reader.GetString(4).Trim();
-                    userDetails.Color = reader.GetString(5).Trim();
-                    userDetails.Picture = reader.GetString(7).Trim();
-                    userDetails.Model = reader.GetString(8).Trim();
-                    AllCarsOfUser.Add(userDetails);
+                    CarTrade carTrade = new CarTrade();
+                    carTrade.UserName = reader.GetString(0).Trim();
+                    carTrade.UniqueID = reader.GetInt32(1);
+                    carTrade.Year = reader.GetString(2).Trim();
+                    carTrade.EngineCapacity = reader.GetString(3).Trim();
+                    carTrade.Gear = reader.GetString(4).Trim();
+                    carTrade.Color = reader.GetString(5).Trim();
+                    carTrade.Picture = reader.GetString(7).Trim();
+                    carTrade.Model = reader.GetString(8).Trim();
+                    AllCarsOfUser.Add(carTrade);
                 }
                 ViewBag.CarUsers = AllCarsOfUser;
                 return View();
-               
             };
-            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
+            databaseConnection.ContactToDataBaseAndExecute(query,user,MethodToBeInvoked,"@UserName");
             return View();
-
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Search(string searchString)
         {
-            CarTrade CarForSearchString = new CarTrade();
             if (Session["UserName"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-            string newString = "%" + searchString + "%";
+            CarTrade CarForSearchString = new CarTrade();
+            string newString = "%"+searchString+"%";
             CarForSearchString.UserName = newString;
-
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForInfo = new List<CarForSell>();
             List<CarTrade> carTradeInfo = new List<CarTrade>();
             string query = @"select * from CarForSell where Year LIKE @UserName or EngineCapacity LIKE @UserName or Gear LIKE @UserName
-            or Color LIKE @UserName or Price LIKE @UserName  or Model LIKE @UserName";
-        
+                             or Color LIKE @UserName or Price LIKE @UserName  or Model LIKE @UserName";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
-
                 while (reader.Read() == true)
                 {
                     CarForSell car = new CarForSell();
@@ -742,60 +707,45 @@ join carforsell as B
                     car.Model = reader.GetString(6).Trim();
                     car.Inventory = int.Parse(reader.GetString(7).Trim());
                     car.CarID = reader.GetString(8).Trim();
-                    
                     if (car.Inventory > 0)
                     {
                         carForInfo.Add(car);
                     }
                 }
                 TempData["CarsDetailes"] = carForInfo;
-            
                 return View();
             };
             databaseConnection.ContactToDataBaseAndExecute(query, CarForSearchString, MethodToBeInvoked, "@UserName");
             query = @"select * from PublishCars where Year LIKE @UserName or EngineCapacity LIKE @UserName or Gear LIKE @UserName
-            or Color LIKE @UserName or Price LIKE @UserName  or Model LIKE @UserName or UserName LIKE @UserName";
-
+                       or Color LIKE @UserName or Price LIKE @UserName  or Model LIKE @UserName or UserName LIKE @UserName";
             MethodToBeInvoked = (commad, reader) =>
-            {
-
+            { 
                 if (reader.Read() == true)
                 {
-                    CarTrade cars = new CarTrade();
-                    cars.UserName = reader.GetString(0).Trim();
-                    cars.Year = reader.GetString(1).Trim();
-                    cars.EngineCapacity = reader.GetString(3).Trim();
-                    cars.Gear = reader.GetString(4).Trim();
-                    cars.Color = reader.GetString(5).Trim();
-                    cars.Price = int.Parse(reader.GetString(6).Trim());
-                    cars.Model = reader.GetString(8).Trim();
-                    cars.PostID = reader.GetInt32(9);
-                    if(cars.UserName!=(string)Session["UserName"])
+                    CarTrade CarToUploadToScreen = new CarTrade();
+                    CarToUploadToScreen.UserName = reader.GetString(0).Trim();
+                    CarToUploadToScreen.Year = reader.GetString(1).Trim();
+                    CarToUploadToScreen.EngineCapacity = reader.GetString(3).Trim();
+                    CarToUploadToScreen.Gear = reader.GetString(4).Trim();
+                    CarToUploadToScreen.Color = reader.GetString(5).Trim();
+                    CarToUploadToScreen.Price = int.Parse(reader.GetString(6).Trim());
+                    CarToUploadToScreen.Model = reader.GetString(8).Trim();
+                    CarToUploadToScreen.PostID = reader.GetInt32(9);
+                    if(CarToUploadToScreen.UserName!=(string)Session["UserName"])
                     {
-                        carTradeInfo.Add(cars);
+                        carTradeInfo.Add(CarToUploadToScreen);
                     }
-                
-                    
                 }
                 TempData["CarsTradeDetails"] = carTradeInfo;
-                
                 return RedirectToAction("Search", "Home");
             };
-
             return databaseConnection.ContactToDataBaseAndExecute(query, CarForSearchString, MethodToBeInvoked, "@UserName");
-
-
-
-
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult PostCar(string Model,string Color,string Gear,string Year,string EngineCapacity,string Price,HttpPostedFileBase file,string UniqueId)
         {
-            //Picture is pitcure and convert base64
-            //price not minus
-            //Bdikot ota mechonit
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
@@ -828,13 +778,11 @@ join carforsell as B
             if (carToPost.UniqueID == 0)
             {
                 string PossiblePicture = ConfertToBase64IfPossible(file);
-
                 if (PossiblePicture == null)
                 {
                     return RedirectToAction("PostCar", "Home");
                 }
                 carToPost.Picture = PossiblePicture;
-
                 if (IsDigitsOnly(Year) && IsDigitsOnly(EngineCapacity))
                 {
                     if (int.Parse(Year) > 0 && int.Parse(EngineCapacity) > 0)
@@ -851,9 +799,7 @@ join carforsell as B
                 {
                     carToPost.Model = Model;
                     carToPost.Color = Color;
-                    carToPost.Gear = Gear;
-                   
-
+                    carToPost.Gear = Gear;                 
                 }
                 else
                 {
@@ -886,7 +832,7 @@ join carforsell as B
                 }
                 MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
                 {
-                    if (reader1.Read() == true)// it's mean that I found the user name in the data base
+                    if (reader1.Read() == true)
                     {
                         carToPost.Year = reader1.GetString(0);
                         carToPost.EngineCapacity = reader1.GetString(1);
@@ -913,10 +859,7 @@ join carforsell as B
         {
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            ForumMessage messageToDelete = new ForumMessage();
-            messageToDelete.UserName = (string)Session["UserName"];
-            messageToDelete.SubjectMessage = i_Subject;
-            messageToDelete.UniqueID = int.Parse(i_UniqueID);
+            ForumMessage messageToDelete = new ForumMessage() { UserName = (string)Session["UserName"], SubjectMessage = i_Subject, UniqueID = int.Parse(i_UniqueID) };
             string deleteFromDataBaseQuery = "DELETE FROM Forum WHERE UserName = @UserName and UniqueID = @UniqueID";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad, reader) =>
@@ -925,7 +868,6 @@ join carforsell as B
             };
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@UniqueID");
         }
-
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult DeleteCarTrade(int PostID)
@@ -943,20 +885,16 @@ join carforsell as B
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, CarToDelete, MethodToBeInvokedAfterTheValidation, "@PostID");
 
         }
-        
 
         public ActionResult Search()
         {
-
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
-            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-
-            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             if (Session["UserName"] == null)
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
+            Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             if(TempData["CarsTradeDetails"]==null && TempData["CarsDetailes"]==null)
             {
                 return RedirectToAction("UserHome", "Home");
@@ -966,13 +904,11 @@ join carforsell as B
             {
                 ViewBag.CarTradeDetails = TempData["CarsTradeDetails"];
             }
-      
             if (TempData["CarsDetailes"] != null)
             {
                 ViewBag.CarDetails = TempData["CarsDetailes"];
             }
-            UserAccount user = new UserAccount();
-            user.UserName = (string)Session["UserName"];
+            UserAccount user = new UserAccount() { UserName = (string)Session["UserName"] };
            string  query = "SELECT * FROM tblusers WHERE UserName = @UserName";
             MethodToBeInvoked = (commad, reader) =>
             {
@@ -984,12 +920,11 @@ join carforsell as B
                 ViewBag.Amount = user.Amount;
                 return View();
             };
-
-          databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
-
+            databaseConnection.ContactToDataBaseAndExecute(query, user, MethodToBeInvoked, "@UserName");
             return View();
         }
 
+        //Validations + Updates
         private bool UpdatePriceOfUserName(string UserName, int Price, Predicate<int> ConditionToUpdate)
         {
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
@@ -1022,7 +957,6 @@ join carforsell as B
             }
             return needToUpdate;
         }
-
         private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
             bool isValidateFileFormat = true;
@@ -1052,7 +986,6 @@ join carforsell as B
             return isValidateFileFormat;
 
         }
-
         private bool passwordCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, string passwordRegister, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
             bool isValidatePassword = true;
@@ -1076,7 +1009,6 @@ join carforsell as B
             }
             return isValidatePassword;
         }
-
         private void updateUserBasicInformatiom(string i_ProfileQuriy, DataBaseUtils i_DatabaseConnection, UserAccount i_User, params string[] i_ParametersOfTheQuery)
         {
 
@@ -1087,42 +1019,45 @@ join carforsell as B
             };
             i_DatabaseConnection.ContactToDataBaseAndExecute(i_ProfileQuriy, i_User, MethodToBeInvoked, i_ParametersOfTheQuery);
         }
-
-        private bool ValidationRegUserProperty(UserAccount i_User)
+        //Validations Strings
+        bool IsDigitsOnly(string str)
         {
-            if(i_User.FirstName==null || i_User.LastName ==null || i_User.Email == null || i_User.Password == null || i_User.PhoneNumber == null || i_User.UserName == null)
+            foreach (char c in str)
             {
-                return false;
+                if (!(c >= '0' || c <= '9'))
+                    return false;
             }
-            string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
-            var matchPassword = Regex.Match(i_User.Password, passwordRegex, RegexOptions.IgnoreCase);
-            if (!matchPassword.Success)
-            {
-                return false;
-            }
-
-            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
-            var matchEmail = Regex.Match(i_User.Email, emailRegex, RegexOptions.IgnoreCase);
-            if (!matchEmail.Success)
-            {
-                return false;
-            }
-
-            if(!IsDigitsOnly(i_User.PhoneNumber))
-            {
-                return false;
-            }
-
 
             return true;
-
         }
+        bool IsCharacterOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!((c >= 'a' && c <= 'z')|| (c >= 'A' && c <= 'Z')))
+                    return false;
+            }
 
+            return true;
+        }
+        private bool messageValidation(string i_Subject, string i_Message)
+        {
+            bool isValide = false;
+
+            if (i_Subject != "" && i_Message != "")
+            {
+                if (!(i_Message.Contains("#") || i_Subject.Contains("#")))
+                {
+                    isValide = true;
+                }
+            }
+            return isValide;
+        }
         private bool ValidationLoginUserProperty(string i_UserName, string i_Password)
         {
             if (i_Password == null || i_UserName == null)
             {
-                return false; 
+                return false;
             }
             string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
             var matchPassword = Regex.Match(i_Password, passwordRegex, RegexOptions.IgnoreCase);
@@ -1144,42 +1079,78 @@ join carforsell as B
             }
             return true;
         }
-
-        bool IsDigitsOnly(string str)
+        private bool ValidationRegUserProperty(UserAccount i_User)
         {
-            foreach (char c in str)
+            if (i_User.FirstName == null || i_User.LastName == null || i_User.Email == null || i_User.Password == null || i_User.PhoneNumber == null || i_User.UserName == null)
             {
-                if (!(c >= '0' || c <= '9'))
-                    return false;
+                return false;
+            }
+            string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
+            var matchPassword = Regex.Match(i_User.Password, passwordRegex, RegexOptions.IgnoreCase);
+            if (!matchPassword.Success)
+            {
+                return false;
             }
 
-            return true;
-        }
-
-        bool IsCharacterOnly(string str)
-        {
-            foreach (char c in str)
+            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+            var matchEmail = Regex.Match(i_User.Email, emailRegex, RegexOptions.IgnoreCase);
+            if (!matchEmail.Success)
             {
-                if (!((c >= 'a' && c <= 'z')|| (c >= 'A' && c <= 'Z')))
-                    return false;
+                return false;
             }
 
+            if (!IsDigitsOnly(i_User.PhoneNumber))
+            {
+                return false;
+            }
+
+
             return true;
+
         }
+        //Image Functions:
         private bool IsImage(HttpPostedFileBase file)
         {
-            if (file.ContentType.Contains("image"))
+            if (!ValidMinimumImageSize(file))
             {
-                return true;
+                return false;
+            }
+            if (!ValidMaximumImageSize(file))
+            {
+                return false;
+            }
+            if (!ImageFile(file))
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool ValidMinimumImageSize(HttpPostedFileBase postedFile)
+        {
+            int ImageMinimumBytes = 512;
+            return postedFile.ContentLength > ImageMinimumBytes;
+        }
+        private bool ValidMaximumImageSize(HttpPostedFileBase postedFile)
+        {
+            int ImageMaximumBytes = 10 * 1024 * 1024;
+            return postedFile.ContentLength <= ImageMaximumBytes;
+        }
+        private bool ImageFile(HttpPostedFileBase postedFile)
+        {
+            List<string> ImageMimeTypes = new List<string> { "image/jpg", "image/jpeg", "image/pjpeg", "image/gif", "image/x-png", "image/png" };
+            List<string> ImageFileExtensions = new List<string> { ".jpg", ".png", ".gif", ".jpeg" };
+            var contentType = postedFile.ContentType.ToLower();
+            if (ImageMimeTypes.All(x => x != contentType))
+            {
+                return false;
+            }
+            if (ImageFileExtensions.All(x => !postedFile.FileName.EndsWith(x)))
+            {
+                return false;
             }
 
-            string[] formats = new string[] { ".jpg", ".png", ".gif", ".jpeg" }; // add more if u like...
-
-            // linq from Henrik Stenbæk
-            return formats.Any(item => file.FileName.EndsWith(item, StringComparison.OrdinalIgnoreCase));
+            return true;
         }
-
-
         private string ConfertToBase64IfPossible (HttpPostedFileBase file)
         {
             if (file != null && IsImage(file))
@@ -1193,20 +1164,7 @@ join carforsell as B
             }
             return null;
         }
-
-        private bool messageValidation(string i_Subject, string i_Message)
-        {
-            bool isValide = false;
-
-            if (i_Subject != "" && i_Message != "")
-            {
-                if(!(i_Message.Contains("#") || i_Subject.Contains("#")))
-                {
-                    isValide = true;
-                }
-            }
-            return isValide;
-        }
+      
     }
 
 
