@@ -12,7 +12,7 @@ namespace Vladi2.Models
 {
     public class DataBaseUtils
     {
-        //public event ActionResultDelegate MethodToBeInvoked;
+    
         public string ConnectionDirectoryInMyComputer { get; private set; }
 
         private const string m_NadavServer = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\Sqlite\db.sqlite";
@@ -25,37 +25,7 @@ namespace Vladi2.Models
             m_typeConverter = new TypeMapFromTypeToDbType();
         }
 
-
-
-        //public ActionResult ContactToDataBaseAndExecute
-        //    (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
-        //{
-        //    using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
-        //    {
-        //        m_dbConnection.Open();
-        //        using (SQLiteCommand command = new SQLiteCommand(i_QueryActionOnDataBase, m_dbConnection))
-        //        {
-        //            foreach (string parameter in i_ParametersOfTheQuery)
-        //            {
-        //                command.Parameters.Add(parameter, m_typeConverter.typeMap[parameter.GetType()]);
-        //            }
-        //            foreach (string parameter in i_ParametersOfTheQuery)
-        //            {
-        //                command.Parameters[parameter].Value = matchingParams(parameter, i_objectToGetDataFromIt);
-        //            }
-
-        //            using (SQLiteDataReader reader = command.ExecuteReader())
-        //            {
-        //                return MethodToBeInvoked(command, reader);
-        //            }
-        //        }
-        //    }
-
-        //}
-
-
-        public ActionResult ContactToDataBaseAndExecute
-           (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
+        public ActionResult ContactToDataBaseAndExecute (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {
             var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer);
             ActionResult ReturnValue = new RedirectToRouteResult(new RouteValueDictionary { { "action", "error" }, { "controller", "home" } });
@@ -155,7 +125,7 @@ namespace Vladi2.Models
 
         private bool matchingParamsForCheckingInformation(string i_parameterForMatcing, string TheValue, object i_ObjectParameters)
         {
-            //string[] words = i_parameterForMatcing.Split('@');
+
             string wordAfterSplitting = i_parameterForMatcing;
             string UserData = i_ObjectParameters.ToString();
             string[] UserDataWords = i_ObjectParameters.ToString().Split(new string[] { wordAfterSplitting }, StringSplitOptions.None);
