@@ -35,8 +35,8 @@ namespace Vladi2.Models
 #EngineCapacity {4} 
 #Picture {5}
 #Model {6}
-# Inventory {7}
-# CarID {8}", this.Price, this.Year, this.Color, this.Gear, this.EngineCapacity, this.Picture, this.Model, this.Inventory, this.CarID);
+#Inventory {7}
+#CarID {8}", this.Price, this.Year, this.Color, this.Gear, this.EngineCapacity, this.Picture, this.Model, this.Inventory, this.CarID);
         }
     }
 }

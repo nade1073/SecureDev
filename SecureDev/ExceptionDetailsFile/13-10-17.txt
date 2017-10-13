@@ -1,0 +1,27 @@
+Log Date time: 13/10/2017 19:43:04nadav Logged in
+Log Date time: 13/10/2017 19:45:46nadav Logged in
+Log Date time: 13/10/2017 19:47:38nadav Logged in
+Log Date time:13/10/2017 19:53:45
+Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
+database is locked
+
+Log Date time:13/10/2017 19:54:54
+Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
+database is locked
+
+Log Date time: 13/10/2017 19:54:59nadavbought car No=12Sucseed
+Log Date time:13/10/2017 19:55:44
+Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
+database is locked
+
+Log Date time:13/10/2017 19:56:14
+Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
+database is locked
+
+Log Date time:13/10/2017 19:56:44
+Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
+database is locked
+
+Log Date time: 13/10/2017 19:56:44nadavbought car No=12Sucseed
+Log Date time: 13/10/2017 19:56:48nadavbought car No=11Sucseed
+Log Date time: 13/10/2017 19:57:04nadav Logged in
