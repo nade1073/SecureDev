@@ -38,8 +38,9 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            if(!ValidationLoginUserProperty(username, password))
+            if (!ValidationLoginUserProperty(username, password))
             {
+                ExceptionLogging.WriteToLog(username+" trying to login and the password was incorrect");
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
                 return RedirectToAction("Index", "Home");
             }
@@ -49,6 +50,7 @@ namespace Vladi2.Controllers
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
+
             Func<SQLiteCommand, SQLiteDataReader, RedirectToRouteResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
@@ -69,11 +71,13 @@ namespace Vladi2.Controllers
                         { 
                             Session["IsAdmin"] = "0";
                         }
+                        ExceptionLogging.WriteToLog(username + " Logged in");
                         return RedirectToAction("UserHome", "Home");
                     }
 
                 }
                 TempData["ErrorUserNameAndPassword"] = "The username or password are incorrect";
+                ExceptionLogging.WriteToLog("The username or password are incorrect");
                 return RedirectToAction("Index", "Home");
 
             };
@@ -86,7 +90,6 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
             return View();
         }
 
@@ -95,6 +98,7 @@ namespace Vladi2.Controllers
             user.PictureUser = ConfertToBase64IfPossible(file);
             if(user.PictureUser == null)
             {
+                ExceptionLogging.WriteToLog("Wrong picture Format-Register");
                 return RedirectToAction("Index", "Home");
             }
 
@@ -107,6 +111,7 @@ namespace Vladi2.Controllers
             }
             if (!ValidationRegUserProperty(user))
             {
+                ExceptionLogging.WriteToLog("User register property were not validate-Register");
                 return RedirectToAction("Index", "Home");
             }
 
@@ -117,6 +122,7 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
             {
+                ExceptionLogging.WriteToLog(user.UserName + "Register succeed");
                 return RedirectToAction("Index", "Home");
             };
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
@@ -124,7 +130,7 @@ namespace Vladi2.Controllers
             {
                 if (reader.Read() == true)
                 {
-
+                    ExceptionLogging.WriteToLog("Email or username is alredy been chosen-Register");
                     ViewBag.ExistUsernameoremail = "your email or username is already been chosen";
                     return RedirectToAction("Index", "Home");
                 }
@@ -173,24 +179,32 @@ namespace Vladi2.Controllers
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
-
+            bool CheckProprety = ValidationRegUserPropertyForUpdateAccountProfile(UpdateUser);
+            if(!CheckProprety)
+            {
+                ExceptionLogging.WriteToLog("User property were not pass the validation-UpdateProfile");
+                return View();
+            }
             updateUserBasicInformatiom(profileQuriy, databaseConnection, UpdateUser, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
-
             profileQuriy = "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
 
             bool isGoodPassword = passwordCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
 
             if (!isGoodPassword)
             {
+                ExceptionLogging.WriteToLog("User password was not pass the validation-UpdateProfile");
                 ViewBag.Error = "Error in password";
                 return View();
             }
             profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
             bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
+
             if (!isGoodFileFormatToUpload)
             {
+                ExceptionLogging.WriteToLog("User picture was not pass the validation-UpdateProfile");
                 return RedirectToAction("AccountProfile", "Home");
             }
+            ExceptionLogging.WriteToLog(UpdateUser.UserName+ " Succeed to update his profile-UpdateProfile ");
             return RedirectToAction("AccountProfile", "Home");
         }
 
@@ -308,23 +322,16 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult CarBuyLogic(string CarID)
         {
-            //  Take all data about the carID  V
-            //Take all data about the user V
-            //Check if the user can buy by amountofcars && amout left users
-            //down by 1 amountcars and price from user
-            // update the table
-            // update the table UsersCar with the that the users buy
+      
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM CarForSell WHERE CarID = @CarID";
-            CarForSell carToLoad = new CarForSell();
-            carToLoad.CarID = CarID;
+            CarForSell carToLoad = new CarForSell() { CarID = CarID };
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
-                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                if (reader.Read() == true)
                 {
-                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
                     carToLoad.Price = int.Parse(reader.GetString(4));
                     carToLoad.Inventory = int.Parse(reader.GetString(7));
                 }
@@ -333,24 +340,23 @@ namespace Vladi2.Controllers
             };
             databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@CarID");
             query = "SELECT * FROM tblusers WHERE UserName = @UserName";
-            UserAccount userToLoad = new UserAccount();
-            userToLoad.UserName = (string)Session["UserName"];
+            UserAccount userToLoad = new UserAccount() { UserName = (string)Session["UserName"] };
             MethodToBeInvoked = (commad, reader) =>
             {
-                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                if (reader.Read() == true)
                 {
+
                     userToLoad.Amount = int.Parse(reader.GetString(8));
                 }
                 return RedirectToAction("Index", "Home");
-
             };
             databaseConnection.ContactToDataBaseAndExecute(query, userToLoad, MethodToBeInvoked, "@UserName");
 
             if(!(userToLoad.Amount >= carToLoad.Price))
             {
+                ExceptionLogging.WriteToLog(userToLoad.UserName + "Trying to buy car and don't have enough money");
                 return RedirectToAction("CarSellCompany", "Home");
             }
-
 
             userToLoad.Amount -= carToLoad.Price;
             carToLoad.Inventory--;
@@ -363,10 +369,9 @@ namespace Vladi2.Controllers
             query = "UPDATE CarForSell SET Inventory = @Inventory WHERE CarID = @CarID";
             databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@Inventory", "@CarID");
             query = "Insert INTO UsersCars (UserName,CarID ) VALUES(@UserName,@CarID)";
-            UserNameAndCarID UserCarID = new UserNameAndCarID();
-            UserCarID.CarID = carToLoad.CarID;
-            UserCarID.UserName = userToLoad.UserName;
+            UserNameAndCarID UserCarID = new UserNameAndCarID() { CarID = carToLoad.CarID, UserName= userToLoad.UserName };
             databaseConnection.ContactToDataBaseAndExecute(query, UserCarID, MethodToBeInvoked, "@UserName", "@CarID");
+            ExceptionLogging.WriteToLog(userToLoad.UserName + "bought car No=" + carToLoad.CarID+"Sucseed");
             return RedirectToAction("CarSellCompany", "Home");
 
         }
@@ -375,28 +380,17 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult BuyCarsFromUserLogic2(int PostID)
         {
-            //upload Post Details to var  V
-            //get username from the post and take the data  V
-            //get username from the session and take the data  V
-            //Check if the user can buy by amount left from tblusers V
-            //Delete  Post Details  from dataBase V
-            //down the price from amount from the user in current session V
-            // add the price to the amount to the user that the car bought from V
-            // update the table V
-            //check  if UniqueID is null if yes add new row to table UsersCars with CarID = 0 else just update the userName of the Table usersCars
-            //
+
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM PublishCars WHERE PostID = @PostID";
-            CarTrade carToLoad = new CarTrade();
-            carToLoad.PostID = PostID;
+            CarTrade carToLoad = new CarTrade() { PostID = PostID };
+
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
-                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                if (reader.Read() == true)
                 {
-                    //if we got here - the select succeded , the user exist in db - redirect to userHome page
-                    
                     carToLoad.UserName = reader.GetString(0).Trim();
                     carToLoad.Year = reader.GetString(1).Trim();
                     carToLoad.UniqueID = int.Parse(reader.GetString(2));
@@ -412,11 +406,10 @@ namespace Vladi2.Controllers
             };
             databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@PostID");
             query = "SELECT * FROM tblusers WHERE UserName = @UserName";
-            UserAccount userToLoad = new UserAccount();
-            userToLoad.UserName = (string)Session["UserName"];
+            UserAccount userToLoad = new UserAccount() { UserName = (string)Session["UserName"] };
             MethodToBeInvoked = (commad, reader) =>
             {
-                if (reader.Read() == true)// it's mean that I found the user name in the data base
+                if (reader.Read() == true)
                 {
                     userToLoad.Amount = int.Parse(reader.GetString(8));
                 }
@@ -425,11 +418,11 @@ namespace Vladi2.Controllers
             };
             databaseConnection.ContactToDataBaseAndExecute(query, userToLoad, MethodToBeInvoked, "@UserName");
 
-            bool isUserSucCessedTobuy =  UpdatePriceOfUserName((string)Session["UserName"], -carToLoad.Price,
-                (price) => { if (!(userToLoad.Amount >= -price)) return false; return true; });
+            bool isUserSucCessedTobuy = UpdatePriceOfUserName((string)Session["UserName"], -carToLoad.Price,(price) => { if (!(userToLoad.Amount >= -price)) return false; return true; });
 
             if (isUserSucCessedTobuy == false)
             {
+                ExceptionLogging.WriteToLog(userToLoad.UserName + "Trying to buy car and don't have enough money");
                 return RedirectToAction("CarTrade", "Home");
             }
             UpdatePriceOfUserName(carToLoad.UserName, carToLoad.Price, (price) => true);
@@ -450,6 +443,7 @@ namespace Vladi2.Controllers
                 query = "UPDATE UsersCars SET UserName = @UserName WHERE UniqueID = @UniqueID";
                 databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@UserName", "@UniqueID");
             }
+            ExceptionLogging.WriteToLog(userToLoad.UserName + "bought car sucsses-CarTrade");
             return RedirectToAction("CarTrade", "Home");
 
         }
@@ -924,6 +918,10 @@ namespace Vladi2.Controllers
             return View();
         }
 
+        public ActionResult Error()
+        {
+            return View();
+        }
         //Validations + Updates
         private bool UpdatePriceOfUserName(string UserName, int Price, Predicate<int> ConditionToUpdate)
         {
@@ -1103,9 +1101,46 @@ namespace Vladi2.Controllers
             {
                 return false;
             }
+            if(!IsCharacterOnly(i_User.FirstName))
+            {
+                return false;
+            }
+            if (!IsCharacterOnly(i_User.LastName))
+            {
+                return false;
+            }
+
 
 
             return true;
+
+        }
+        private bool ValidationRegUserPropertyForUpdateAccountProfile(UserAccount i_User)
+        {
+            if (i_User.FirstName == null || i_User.LastName == null || i_User.Email == null || i_User.PhoneNumber == null )
+            {
+                return false;
+            }
+            if (!IsCharacterOnly(i_User.FirstName))
+            {
+                return false;
+            }
+            if (!IsCharacterOnly(i_User.LastName))
+            {
+                return false;
+            }
+            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+            var matchEmail = Regex.Match(i_User.Email, emailRegex, RegexOptions.IgnoreCase);
+            if (!matchEmail.Success)
+            {
+                return false;
+            }
+            if (!IsDigitsOnly(i_User.PhoneNumber))
+            {
+                return false;
+            }
+            return true;
+
 
         }
         //Image Functions:

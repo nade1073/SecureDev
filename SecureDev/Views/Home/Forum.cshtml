@@ -19,7 +19,7 @@
             var UniqueID = $(this).parent().prev().val();
      
  
-            var formData = { i_UniqueID: UniqueID, __RequestVerificationToken: gettoken() }; //Array
+            var formData = { i_UniqueID: UniqueID, __RequestVerificationToken: gettoken() };
             $.ajax({
                 url: "@Url.Action("DeleteMessage", "Home")",
                 type: "POST",

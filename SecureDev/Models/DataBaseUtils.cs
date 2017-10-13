@@ -6,6 +6,7 @@ using System.Web;
 using System.Data;
 using System.Web.Mvc;
 using System.Web.Security.AntiXss;
+using System.Web.Routing;
 
 namespace Vladi2.Models
 {
@@ -25,13 +26,45 @@ namespace Vladi2.Models
         }
 
    
+
+        //public ActionResult ContactToDataBaseAndExecute
+        //    (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
+        //{
+        //    using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
+        //    {
+        //        m_dbConnection.Open();
+        //        using (SQLiteCommand command = new SQLiteCommand(i_QueryActionOnDataBase, m_dbConnection))
+        //        {
+        //            foreach (string parameter in i_ParametersOfTheQuery)
+        //            {
+        //                command.Parameters.Add(parameter, m_typeConverter.typeMap[parameter.GetType()]);
+        //            }
+        //            foreach (string parameter in i_ParametersOfTheQuery)
+        //            {
+        //                command.Parameters[parameter].Value = matchingParams(parameter, i_objectToGetDataFromIt);
+        //            }
+
+        //            using (SQLiteDataReader reader = command.ExecuteReader())
+        //            {
+        //                   return MethodToBeInvoked(command, reader);
+        //            }
+        //        }
+        //    }
+
+        //}
+
+
         public ActionResult ContactToDataBaseAndExecute
-            (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
+           (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {
-            using (var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer))
+            var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer);
+            ActionResult ReturnValue = new RedirectToRouteResult(new RouteValueDictionary { { "action", "error" },{ "controller", "home" }});
+
+            try
             {
                 m_dbConnection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(i_QueryActionOnDataBase, m_dbConnection))
+                SQLiteCommand command = new SQLiteCommand(i_QueryActionOnDataBase, m_dbConnection);
+                try
                 {
                     foreach (string parameter in i_ParametersOfTheQuery)
                     {
@@ -42,12 +75,27 @@ namespace Vladi2.Models
                         command.Parameters[parameter].Value = matchingParams(parameter, i_objectToGetDataFromIt);
                     }
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                           return MethodToBeInvoked(command, reader);
-                    }
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    ReturnValue = MethodToBeInvoked(command, reader);
+                  
+                }
+
+                catch (Exception ex)
+                {
+                    ExceptionLogging.WriteToLog(ex);
                 }
             }
+
+            catch (Exception ex)
+            {
+                ExceptionLogging.WriteToLog(ex);
+            }
+
+            finally
+            {
+                m_dbConnection.Dispose();
+            }
+            return ReturnValue;
 
         }
 

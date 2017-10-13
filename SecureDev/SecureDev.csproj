@@ -150,6 +150,7 @@
     <Compile Include="Models\CarTrade.cs" />
     <Compile Include="Models\DataBaseUtils.cs" />
     <Compile Include="Models\EncryptionManager.cs" />
+    <Compile Include="Models\ExceptionLogging.cs" />
     <Compile Include="Models\ForumMessage.cs" />
     <Compile Include="Models\homeVM.cs" />
     <Compile Include="Models\ResultViewDelegate.cs" />
@@ -207,7 +208,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\UserHome.cshtml" />
@@ -224,6 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ExceptionDetailsFile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
