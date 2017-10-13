@@ -1,27 +1,26 @@
-Log Date time: 13/10/2017 19:43:04nadav Logged in
-Log Date time: 13/10/2017 19:45:46nadav Logged in
-Log Date time: 13/10/2017 19:47:38nadav Logged in
-Log Date time:13/10/2017 19:53:45
-Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
-database is locked
-
-Log Date time:13/10/2017 19:54:54
-Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
-database is locked
-
-Log Date time: 13/10/2017 19:54:59nadavbought car No=12Sucseed
-Log Date time:13/10/2017 19:55:44
-Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
-database is locked
-
-Log Date time:13/10/2017 19:56:14
-Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
-database is locked
-
-Log Date time:13/10/2017 19:56:44
-Error Message: SQLiteException,  Exception Type: System.Data.SQLite.SQLiteException,  Error Location : database is locked
-database is locked
-
-Log Date time: 13/10/2017 19:56:44nadavbought car No=12Sucseed
-Log Date time: 13/10/2017 19:56:48nadavbought car No=11Sucseed
-Log Date time: 13/10/2017 19:57:04nadav Logged in
+Log Date time: 13/10/2017 20:10:35nadav Logged in
+Log Date time: 13/10/2017 20:10:59amit Logged in
+Log Date time: 13/10/2017 20:37:38nadav Logged in
+Log Date time: 13/10/2017 20:59:36nadav Logged in
+Log Date time: 13/10/2017 21:07:15nadav Logged in
+Log Date time: 13/10/2017 21:08:05nadav Logged in
+Log Date time: 13/10/2017 21:09:33nadav Logged in
+Log Date time: 13/10/2017 21:09:46User picture was not pass the validation-UpdateProfile
+Log Date time: 13/10/2017 21:11:15nadav Succeed to update his profile-UpdateProfile 
+Log Date time: 13/10/2017 21:12:56User password was not passwod the validation-UpdateProfile
+Log Date time: 13/10/2017 21:13:46nadav Logged in
+Log Date time: 13/10/2017 21:16:28nadav Logged in
+Log Date time: 13/10/2017 21:18:20nadav Logged in
+Log Date time: 13/10/2017 21:21:27nadav Logged in
+Log Date time: 13/10/2017 21:22:22nadav Logged in
+Log Date time: 13/10/2017 21:26:21nadav Logged in
+Log Date time: 13/10/2017 21:32:13nadav Logged in
+Log Date time: 13/10/2017 21:33:00nadav Logged in
+Log Date time: 13/10/2017 21:33:47nadav Succeed to update his profile-UpdateProfile 
+Log Date time: 13/10/2017 21:34:07nadav Succeed to update his profile-UpdateProfile 
+Log Date time: 13/10/2017 21:34:33nadav Succeed to update his profile-UpdateProfile 
+Log Date time: 13/10/2017 21:37:06amit Logged in
+Log Date time: 13/10/2017 21:37:15amit Deleted his own pots car
+Log Date time: 13/10/2017 21:37:15amitbought car  fromnadavsucsses-CarTrade
+Log Date time: 13/10/2017 21:37:24amit posted new car for selling
+Log Date time: 13/10/2017 21:37:38amit Uploaded message to :Sport

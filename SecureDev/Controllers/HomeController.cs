@@ -178,32 +178,48 @@ namespace Vladi2.Controllers
             UserAccount UpdateUser = new UserAccount() { Email = Email, FirstName = FirstName, LastName= LastName, PhoneNumber= PhoneNumber, UserName= (string)Session["UserName"] };
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string profileQuriy = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
+       
+        
             bool CheckProprety = ValidationRegUserPropertyForUpdateAccountProfile(UpdateUser);
             if(!CheckProprety)
             {
                 ExceptionLogging.WriteToLog("User property were not pass the validation-UpdateProfile");
                 return View();
             }
-            updateUserBasicInformatiom(profileQuriy, databaseConnection, UpdateUser, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
-            profileQuriy = "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
-
-            bool isGoodPassword = passwordCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
-
-            if (!isGoodPassword)
+            if (passwordRegister != "*****")
             {
-                ExceptionLogging.WriteToLog("User password was not pass the validation-UpdateProfile");
-                ViewBag.Error = "Error in password";
-                return View();
+                if (!ValidatePassword(passwordRegister))
+                {
+                    ExceptionLogging.WriteToLog("User password was not passwod the validation-UpdateProfile");
+                    ViewBag.Error = "Error in password";
+                    return View();
+                }
             }
-            profileQuriy = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
-            bool isGoodFileFormatToUpload = fileCheckingAndUpdatingifNeeded(profileQuriy, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
-
-            if (!isGoodFileFormatToUpload)
+            if(file!=null)
             {
-                ExceptionLogging.WriteToLog("User picture was not pass the validation-UpdateProfile");
-                return RedirectToAction("AccountProfile", "Home");
+                if (!IsImage(file))
+                {
+                    ViewBag.Error = "Error in password";
+                    ExceptionLogging.WriteToLog("User picture was not pass the validation-UpdateProfile");
+                    return RedirectToAction("AccountProfile", "Home");
+
+                }
+               
             }
+
+            string profileQuery1 = "UPDATE tblusers SET FirstName = @FirstName, LastName = @LastName,PhoneNumber=@PhoneNumber,Email=@Email WHERE UserName = @UserName";
+            updateUserBasicInformatiom(profileQuery1, databaseConnection, UpdateUser, "@FirstName", "@LastName", "@PhoneNumber", "@Email", "@UserName");
+            if (passwordRegister != "*****")
+            {
+                string profileQuery2 = "UPDATE tblusers SET Password = @Password WHERE UserName = @UserName";
+                passwordUpdate(profileQuery2, databaseConnection, passwordRegister, UpdateUser, "@Password", "@UserName");
+            }
+            if (file != null)
+            {
+                string profileQuery3 = "UPDATE tblusers SET PictureUser = @PictureUser WHERE UserName = @UserName";
+                fileUpdating(profileQuery3, databaseConnection, file, UpdateUser, "@PictureUser", "@UserName");
+            }
+         
             ExceptionLogging.WriteToLog(UpdateUser.UserName+ " Succeed to update his profile-UpdateProfile ");
             return RedirectToAction("AccountProfile", "Home");
         }
@@ -385,7 +401,7 @@ namespace Vladi2.Controllers
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM PublishCars WHERE PostID = @PostID";
             CarTrade carToLoad = new CarTrade() { PostID = PostID };
-
+    
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
@@ -404,7 +420,9 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
 
             };
+
             databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@PostID");
+            string NameOfTheSeller = carToLoad.UserName;
             query = "SELECT * FROM tblusers WHERE UserName = @UserName";
             UserAccount userToLoad = new UserAccount() { UserName = (string)Session["UserName"] };
             MethodToBeInvoked = (commad, reader) =>
@@ -443,7 +461,7 @@ namespace Vladi2.Controllers
                 query = "UPDATE UsersCars SET UserName = @UserName WHERE UniqueID = @UniqueID";
                 databaseConnection.ContactToDataBaseAndExecute(query, carToLoad, MethodToBeInvoked, "@UserName", "@UniqueID");
             }
-            ExceptionLogging.WriteToLog(userToLoad.UserName + "bought car sucsses-CarTrade");
+            ExceptionLogging.WriteToLog(userToLoad.UserName + "bought car  from"+ NameOfTheSeller + "sucsses-CarTrade");
             return RedirectToAction("CarTrade", "Home");
 
         }
@@ -487,8 +505,7 @@ namespace Vladi2.Controllers
             };
             databaseConnection.ContactToDataBaseAndExecute(query, null, MethodToBeInvoked);
 
-            UserAccount user = new UserAccount();
-            user.UserName = (string)Session["UserName"];
+            UserAccount user = new UserAccount() { UserName = (string)Session["UserName"] };
             query = "SELECT * FROM tblusers WHERE UserName = @UserName";
             MethodToBeInvoked = (commad, reader) =>
             {
@@ -548,19 +565,18 @@ namespace Vladi2.Controllers
             {
                 string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-                ForumMessage messageToLoad = new ForumMessage();
-                messageToLoad.SubjectMessage = Subject;
-                messageToLoad.Message = Message;
-                messageToLoad.TopicMessage = Topic;
-                messageToLoad.UserName = (string)Session["UserName"];
+                ForumMessage messageToLoad = new ForumMessage() { SubjectMessage = Subject, Message = Message, TopicMessage = Topic, UserName = (string)Session["UserName"]};
+
                 string insetrToDataBaseQuery = "Insert INTO Forum (UserName, Topic, Subject, Message) VALUES(@UserName,@Topic,@Subject,@Message)";
                 Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
                 MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
                 {
+                    ExceptionLogging.WriteToLog((string)Session["UserName"] + " Uploaded message to :"+messageToLoad.TopicMessage);
                     return RedirectToAction("Forum", "Home", new { topic = Topic });
                 };
                 return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, messageToLoad, MethodToBeInvokedAfterTheValidation, "@UserName", "@Topic", "@Subject", "@Message");
             }
+            ExceptionLogging.WriteToLog((string)Session["UserName"] + "Trying to upload Messsage and not pass the validation");
             return RedirectToAction("Forum", "Home", new { topic = Topic });
         }
 
@@ -614,15 +630,14 @@ namespace Vladi2.Controllers
         {
             string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            UserAccount UserDetails = new UserAccount();
-            UserDetails.UserName = username;
-            UserAccountImproved User = new UserAccountImproved();
-            User.UserDetails = UserDetails;
+            UserAccount UserDetails = new UserAccount() {UserName = username};
+            UserAccountImproved User = new UserAccountImproved() { UserDetails = UserDetails };
             User.AdminDetails = (checkbox == true) ? 1 : 0;
             string profileQuriy = "UPDATE tblusers SET isAdmin = @Admin WHERE UserName = @UserName";
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad1, reader1) =>
             {
+                ExceptionLogging.WriteToLog((string)Session["UserName"] + " Change Admin porpety to "+username);
                 return RedirectToAction("ControlPanel", "Home");
             };
             return databaseConnection.ContactToDataBaseAndExecute(profileQuriy, User, MethodToBeInvoked, "@UserName", "@Admin");
@@ -747,9 +762,7 @@ namespace Vladi2.Controllers
             int CurrentCarId = -1;
             bool isExistMoreThanOnes = false;
             string QueryForTakingData;
-            CarTrade carToPost = new CarTrade();
-            carToPost.UniqueID = int.Parse(UniqueId);
-            carToPost.UserName = (string)Session["UserName"];
+            CarTrade carToPost = new CarTrade() { UniqueID = int.Parse(UniqueId),UserName = (string)Session["UserName"] };
             string QueryForcheckingUniqueID = "select * from PublishCars where UniqueId=@UniqueId and uniqueId!=0";
             MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
             {
@@ -842,6 +855,7 @@ namespace Vladi2.Controllers
             string insetrToDataBaseQuery = "Insert INTO PublishCars (UserName, Year, UniqueID, EngineCapacity,Gear,Color,Price,Picture,Model) VALUES(@UserName,@Year,@UniqueID,@EngineCapacity,@Gear,@Color,@Price,@Picture,@Model)";
             MethodToBeInvokedAfterTheValidation = (commad1, reader1) =>
             {
+                ExceptionLogging.WriteToLog((string)Session["UserName"] + " posted new car for selling");
                 return RedirectToAction("CarTrade", "Home");
             };
             return databaseConnection.ContactToDataBaseAndExecute(insetrToDataBaseQuery, carToPost, MethodToBeInvokedAfterTheValidation, "@UserName", "@Year", "@UniqueID", "@EngineCapacity", "@Gear", "@Color", "@Price", "@Picture","@Model");
@@ -858,10 +872,12 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad, reader) =>
             {
+                ExceptionLogging.WriteToLog((string)Session["UserName"] + " Deleted his own pots message");
                 return RedirectToAction("CarTrade", "Home");
             };
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, messageToDelete, MethodToBeInvokedAfterTheValidation, "@UserName", "@UniqueID");
         }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult DeleteCarTrade(int PostID)
@@ -874,6 +890,7 @@ namespace Vladi2.Controllers
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             MethodToBeInvokedAfterTheValidation = (commad, reader) =>
             {
+                ExceptionLogging.WriteToLog((string)Session["UserName"] + " Deleted his own pots car");
                 return RedirectToAction("CarTrade", "Home");
             };
             return databaseConnection.ContactToDataBaseAndExecute(deleteFromDataBaseQuery, CarToDelete, MethodToBeInvokedAfterTheValidation, "@PostID");
@@ -955,57 +972,42 @@ namespace Vladi2.Controllers
             }
             return needToUpdate;
         }
-        private bool fileCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
+
+        private void fileUpdating(string profileQuriy, DataBaseUtils databaseConnection, HttpPostedFileBase file, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
-            bool isValidateFileFormat = true;
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
                 return View();
             };
-            if (file != null)
-            {
-                if (IsImage(file))
-                {
                     byte[] fileInBytes = new byte[file.ContentLength];
                     using (BinaryReader theReader = new BinaryReader(file.InputStream))
                     {
                         fileInBytes = theReader.ReadBytes(file.ContentLength);
                     }
-                    string fileAsString = Convert.ToBase64String(fileInBytes); // Last String base64 for image!
-                    updateUser.PictureUser = fileAsString;
-                    databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, "@PictureUser", "@UserName");
-                }
-                else
-                {
-                    isValidateFileFormat = false;
-                }
-            }
-            return isValidateFileFormat;
+            string fileAsString = Convert.ToBase64String(fileInBytes);
+           updateUser.PictureUser = fileAsString;
+         databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, "@PictureUser", "@UserName");
+                
+           
+         
 
         }
-        private bool passwordCheckingAndUpdatingifNeeded(string profileQuriy, DataBaseUtils databaseConnection, string passwordRegister, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
+        private void passwordUpdate(string profileQuriy, DataBaseUtils databaseConnection, string passwordRegister, UserAccount updateUser, params string[] i_ParametersOfTheQuery)
         {
-            bool isValidatePassword = true;
+         
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             MethodToBeInvoked = (commad, reader) =>
             {
                 return View();
             };
-            if (passwordRegister != "*****")
-            {
-                if (ValidatePassword(passwordRegister))
-                {
-                    string encriptedPassword = EncryptionManager.Encrypt(passwordRegister, c_passwordKey);
-                    updateUser.Password = encriptedPassword;
-                    databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, i_ParametersOfTheQuery);
-                }
-                else
-                {
-                    isValidatePassword = false;
-                }
-            }
-            return isValidatePassword;
+             string encriptedPassword = EncryptionManager.Encrypt(passwordRegister, c_passwordKey);
+            updateUser.Password = encriptedPassword;
+           databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, i_ParametersOfTheQuery);
+                
+     
+            
+         
         }
         private void updateUserBasicInformatiom(string i_ProfileQuriy, DataBaseUtils i_DatabaseConnection, UserAccount i_User, params string[] i_ParametersOfTheQuery)
         {
@@ -1146,6 +1148,11 @@ namespace Vladi2.Controllers
         //Image Functions:
         private bool IsImage(HttpPostedFileBase file)
         {
+            if(file==null)
+            {
+                return false;
+            }
+
             if (!ValidMinimumImageSize(file))
             {
                 return false;
@@ -1173,17 +1180,12 @@ namespace Vladi2.Controllers
         private bool ImageFile(HttpPostedFileBase postedFile)
         {
             List<string> ImageMimeTypes = new List<string> { "image/jpg", "image/jpeg", "image/pjpeg", "image/gif", "image/x-png", "image/png" };
-            List<string> ImageFileExtensions = new List<string> { ".jpg", ".png", ".gif", ".jpeg" };
+            bool flag1=postedFile.FileName.EndsWith(".jpg");
             var contentType = postedFile.ContentType.ToLower();
             if (ImageMimeTypes.All(x => x != contentType))
             {
                 return false;
             }
-            if (ImageFileExtensions.All(x => !postedFile.FileName.EndsWith(x)))
-            {
-                return false;
-            }
-
             return true;
         }
         private string ConfertToBase64IfPossible (HttpPostedFileBase file)

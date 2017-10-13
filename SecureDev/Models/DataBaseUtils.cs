@@ -25,7 +25,7 @@ namespace Vladi2.Models
             m_typeConverter = new TypeMapFromTypeToDbType();
         }
 
-   
+
 
         //public ActionResult ContactToDataBaseAndExecute
         //    (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
@@ -46,7 +46,7 @@ namespace Vladi2.Models
 
         //            using (SQLiteDataReader reader = command.ExecuteReader())
         //            {
-        //                   return MethodToBeInvoked(command, reader);
+        //                return MethodToBeInvoked(command, reader);
         //            }
         //        }
         //    }
@@ -58,7 +58,7 @@ namespace Vladi2.Models
            (string i_QueryActionOnDataBase, object i_objectToGetDataFromIt, Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked, params string[] i_ParametersOfTheQuery)
         {
             var m_dbConnection = new SQLiteConnection(ConnectionDirectoryInMyComputer);
-            ActionResult ReturnValue = new RedirectToRouteResult(new RouteValueDictionary { { "action", "error" },{ "controller", "home" }});
+            ActionResult ReturnValue = new RedirectToRouteResult(new RouteValueDictionary { { "action", "error" }, { "controller", "home" } });
 
             try
             {
@@ -74,20 +74,24 @@ namespace Vladi2.Models
                     {
                         command.Parameters[parameter].Value = matchingParams(parameter, i_objectToGetDataFromIt);
                     }
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+              
+                        ReturnValue = MethodToBeInvoked(command, reader);
+                    }
 
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    ReturnValue = MethodToBeInvoked(command, reader);
-                  
                 }
 
                 catch (Exception ex)
                 {
+        
                     ExceptionLogging.WriteToLog(ex);
                 }
             }
 
             catch (Exception ex)
             {
+  
                 ExceptionLogging.WriteToLog(ex);
             }
 
