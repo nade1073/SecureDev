@@ -62,3 +62,6 @@ Log Date time: 14/10/2017 15:07:20nadavshaleRegister succeed
 Log Date time: 14/10/2017 15:08:30nadav Logged in
 Log Date time: 14/10/2017 15:08:55nade$$$ trying to login and the password was incorrect
 Log Date time: 14/10/2017 15:09:08ma trying to login and the password was incorrect
+Log Date time: 14/10/2017 15:42:05nadavRegister succeed
+Log Date time: 14/10/2017 15:42:21The username or password are incorrect
+Log Date time: 14/10/2017 15:42:29nadav Logged in
