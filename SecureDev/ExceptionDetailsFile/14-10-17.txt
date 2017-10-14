@@ -65,3 +65,20 @@ Log Date time: 14/10/2017 15:09:08ma trying to login and the password was incorr
 Log Date time: 14/10/2017 15:42:05nadavRegister succeed
 Log Date time: 14/10/2017 15:42:21The username or password are incorrect
 Log Date time: 14/10/2017 15:42:29nadav Logged in
+Log Date time:14/10/2017 18:20:07
+Error Message: NotSupportedException,  Exception Type: System.NotSupportedException,  Error Location : The given path's format is not supported.
+
+Log Date time:14/10/2017 18:21:27
+Error Message: NotSupportedException,  Exception Type: System.NotSupportedException,  Error Location : The given path's format is not supported.
+
+Log Date time: 14/10/2017 18:23:58nadav Logged in
+Log Date time: 14/10/2017 18:27:36nadav Logged in
+Log Date time: 14/10/2017 18:28:18nade67Register succeed
+Log Date time: 14/10/2017 18:28:30The username or password are incorrect
+Log Date time: 14/10/2017 18:29:16nade67 Logged in
+Log Date time: 14/10/2017 18:29:22nade67bought car No=13Sucseed
+Log Date time: 14/10/2017 18:29:24nade67bought car No=12Sucseed
+Log Date time: 14/10/2017 18:29:25nade67bought car No=14Sucseed
+Log Date time: 14/10/2017 18:29:58nade67 Deleted his own pots car
+Log Date time: 14/10/2017 18:29:58nade67bought car  fromnadavsucsses-CarTrade
+Log Date time: 14/10/2017 18:30:20nade67 Succeed to update his profile-UpdateProfile 

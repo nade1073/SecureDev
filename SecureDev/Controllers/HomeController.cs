@@ -15,12 +15,7 @@ namespace Vladi2.Controllers
 {
     public class HomeController : BaseController
     {
-
-        const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionReznik = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
-        const string m_ConnectionBen = @"C:\Users\benma\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
-        
+        private readonly string connectionString = string.Format("DataSource={0}", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Sqlite\db.sqlite"));
         public ActionResult Index()
         {
             if (Session["UserName"] != null)
@@ -46,9 +41,7 @@ namespace Vladi2.Controllers
             }
 
             UserAccount userDetailes = new UserAccount() { UserName = username, Password = password };
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-       
             string encriptedPassword = EncryptionManager.getSHA256Password(password);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
 
@@ -103,7 +96,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+           
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             if (user.Password != ConfirmPassword)
             {
@@ -148,7 +141,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+          
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string userNameFromSession = (string)Session["UserName"];
             string accountProfileQuery = "SELECT * FROM tblusers Where Username = @UserName";
@@ -177,7 +170,7 @@ namespace Vladi2.Controllers
         public ActionResult AccountProfile(string PhoneNumber, string LastName, string FirstName, string passwordRegister, string Email, HttpPostedFileBase file)
         {
             UserAccount UpdateUser = new UserAccount() { Email = Email, FirstName = FirstName, LastName= LastName, PhoneNumber= PhoneNumber, UserName= (string)Session["UserName"] };
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+           
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
        
         
@@ -240,7 +233,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+     
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarTrade> CarForumObjects = new List<CarTrade>();
             var query = "SELECT * FROM PublishCars";
@@ -291,7 +284,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
             UserAccount user = new UserAccount() { UserName = (string)Session["UserName"] };
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+       
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForInfo = new List<CarForSell>();
             string query = @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
@@ -340,7 +333,7 @@ namespace Vladi2.Controllers
         public ActionResult CarBuyLogic(string CarID)
         {
       
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+       
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM CarForSell WHERE CarID = @CarID";
             CarForSell carToLoad = new CarForSell() { CarID = CarID };
@@ -398,7 +391,7 @@ namespace Vladi2.Controllers
         public ActionResult BuyCarsFromUserLogic2(int PostID)
         {
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+       
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             var query = "SELECT * FROM PublishCars WHERE PostID = @PostID";
             CarTrade carToLoad = new CarTrade() { PostID = PostID };
@@ -474,7 +467,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+            
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForSell = new List<CarForSell>();
 
@@ -532,7 +525,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("HomePageForum", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+           
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<ForumMessage> messagesOFTheForum = new List<ForumMessage>();
             ForumMessage MessageofTheDataBase = new ForumMessage() { TopicMessage = topic };
@@ -564,7 +557,7 @@ namespace Vladi2.Controllers
         {
             if (messageValidation(Subject, Message) )
             {
-                string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+         
                 DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
                 ForumMessage messageToLoad = new ForumMessage() { SubjectMessage = Subject, Message = Message, TopicMessage = Topic, UserName = (string)Session["UserName"]};
 
@@ -594,7 +587,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+     
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<UserAccount> users = new List<UserAccount>();
             List<string> usersIsAdmin = new List<string>();
@@ -629,7 +622,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult ControlPanelUpdate(string username,bool checkbox)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+           
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             UserAccount UserDetails = new UserAccount() {UserName = username};
             UserAccountImproved User = new UserAccountImproved() { UserDetails = UserDetails };
@@ -651,7 +644,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+           
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string query = @"select A.UserName,A.UniqueID,B.Year,B.EngineCapacity,B.Gear,B.Color,B.Price,B.Picture,B.Model 
                              from userscars as A
@@ -697,7 +690,7 @@ namespace Vladi2.Controllers
             CarTrade CarForSearchString = new CarTrade();
             string newString = "%"+searchString+"%";
             CarForSearchString.UserName = newString;
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+     
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             List<CarForSell> carForInfo = new List<CarForSell>();
             List<CarTrade> carTradeInfo = new List<CarTrade>();
@@ -756,7 +749,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult PostCar(string Model,string Color,string Gear,string Year,string EngineCapacity,string Price,HttpPostedFileBase file,string UniqueId)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+           
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvokedAfterTheValidation;
             int price = int.Parse(Price);
@@ -866,7 +859,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult DeleteMessage(string i_Subject, string i_UniqueID)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+          
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             ForumMessage messageToDelete = new ForumMessage() { UserName = (string)Session["UserName"], SubjectMessage = i_Subject, UniqueID = int.Parse(i_UniqueID) };
             string deleteFromDataBaseQuery = "DELETE FROM Forum WHERE UserName = @UserName and UniqueID = @UniqueID";
@@ -883,7 +876,7 @@ namespace Vladi2.Controllers
         [HttpPost]
         public ActionResult DeleteCarTrade(int PostID)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+        
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             CarTrade CarToDelete = new CarTrade();
             CarToDelete.PostID = PostID;
@@ -904,7 +897,7 @@ namespace Vladi2.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+          
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             Func<SQLiteCommand, SQLiteDataReader, ActionResult> MethodToBeInvoked;
             if(TempData["CarsTradeDetails"]==null && TempData["CarsDetailes"]==null)
@@ -943,7 +936,7 @@ namespace Vladi2.Controllers
         //Validations + Updates
         private bool UpdatePriceOfUserName(string UserName, int Price, Predicate<int> ConditionToUpdate)
         {
-            string connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
+         
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
             string query = "SELECT * FROM tblusers WHERE UserName = @UserName";
             UserAccount user = new UserAccount();
