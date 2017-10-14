@@ -15,7 +15,7 @@ namespace Vladi2.Controllers
 {
     public class HomeController : BaseController
     {
-        const string c_passwordKey = "Nadav&Netanel";
+
         const string m_ConnectionNadav = @"C:\Users\Nadav\Desktop\SecureDev\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionItzik = @"C:\Users\shalev itzhak\Source\Repos\SecureDev\SecureDev\Sqlite\db.sqlite";
         const string m_ConnectionReznik = @"C:\לימודים HIT\שנה ג סמסטר קיץ\פרוייקט ולדי\SecureDev\Sqlite\db.sqlite";
@@ -48,7 +48,7 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount() { UserName = username, Password = password };
             var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            //string encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
+       
             string encriptedPassword = EncryptionManager.getSHA256Password(password);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
 
@@ -59,7 +59,7 @@ namespace Vladi2.Controllers
                 {
                     var encryptionPassword = reader.GetString(2).Trim();
                     var isAdmin = reader.GetString(7);
-                    //var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
+                  
                     var userName = reader.GetString(1).Trim();
                     if (encryptionPassword == encriptedPassword)
                     {
