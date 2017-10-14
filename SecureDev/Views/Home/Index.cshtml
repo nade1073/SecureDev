@@ -23,6 +23,11 @@
             alert("Please check the Errors");
             return false;
         }
+        var regexUserName = /^[a-z0-9_-]{3,10}$/;
+        if (!regexUserName.test(userName)) {
+            alert("Please check the Errors");
+            return false;
+        }
         var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
         if (!regexPass.test(password))
         {
@@ -100,10 +105,15 @@
         });
         $('#usernameRegister').on('input', function (e)
         {
+            var regexUserName = /^[a-z0-9_-]{3,10}$/;
             var value = $(this).val();
             if (value.length === 0) {
 
                 $('#userNameerror').replaceWith("<p id=userNameerror class=msgError>Error:Field is required. </p>");
+            }
+            else if (!regexUserName.test(value)) {
+
+                $('#userNameerror').replaceWith("<p id=userNameerror class=msgError>Error: 3 to 10 characters with any lower case character, digit or special symbol “_-” only.</p>");
             }
             else {
                 $('#userNameerror').replaceWith("<p id=userNameerror ></p>");

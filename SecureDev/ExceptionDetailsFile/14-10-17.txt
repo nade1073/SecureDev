@@ -1,0 +1,64 @@
+Log Date time: 14/10/2017 14:01:40Email or username is alredy been chosen-Register
+Log Date time: 14/10/2017 14:04:05nadeshalevRegister succeed
+Log Date time: 14/10/2017 14:10:09nadavRegister succeed
+Log Date time: 14/10/2017 14:10:19nadav Logged in
+Log Date time: 14/10/2017 14:12:25nadavRegister succeed
+Log Date time: 14/10/2017 14:12:34nadav Logged in
+Log Date time: 14/10/2017 14:12:38nadavbought car No=11Sucseed
+Log Date time: 14/10/2017 14:12:43nadavbought car No=16Sucseed
+Log Date time: 14/10/2017 14:13:53nadav Logged in
+Log Date time: 14/10/2017 14:14:16nadav Succeed to update his profile-UpdateProfile 
+Log Date time: 14/10/2017 14:14:22nadav Logged in
+Log Date time: 14/10/2017 14:14:27nadavbought car No=12Sucseed
+Log Date time: 14/10/2017 14:14:27nadavbought car No=11Sucseed
+Log Date time: 14/10/2017 14:14:30nadavbought car No=17Sucseed
+Log Date time: 14/10/2017 14:14:30nadavbought car No=18Sucseed
+Log Date time: 14/10/2017 14:14:47nadav posted new car for selling
+Log Date time: 14/10/2017 14:15:09nadav posted new car for selling
+Log Date time: 14/10/2017 14:15:47reznikRegister succeed
+Log Date time: 14/10/2017 14:16:06The username or password are incorrect
+Log Date time: 14/10/2017 14:16:11reznik Logged in
+Log Date time: 14/10/2017 14:16:16reznikbought car No=12Sucseed
+Log Date time: 14/10/2017 14:16:17reznikbought car No=13Sucseed
+Log Date time: 14/10/2017 14:16:31reznik Deleted his own pots car
+Log Date time: 14/10/2017 14:16:32reznikbought car  fromnadavsucsses-CarTrade
+Log Date time: 14/10/2017 14:16:33reznik Deleted his own pots car
+Log Date time: 14/10/2017 14:16:33reznikbought car  fromnadavsucsses-CarTrade
+Log Date time: 14/10/2017 14:21:36reznik Logged in
+Log Date time: 14/10/2017 14:25:01nadav Logged in
+Log Date time: 14/10/2017 14:25:14nadavbought car No=16Sucseed
+Log Date time: 14/10/2017 14:25:37nadav posted new car for selling
+Log Date time: 14/10/2017 14:25:45reznik Logged in
+Log Date time: 14/10/2017 14:33:09nadav Logged in
+Log Date time: 14/10/2017 14:33:58The username or password are incorrect
+Log Date time: 14/10/2017 14:34:02reznik Logged in
+Log Date time: 14/10/2017 14:34:47The username or password are incorrect
+Log Date time: 14/10/2017 14:34:52The username or password are incorrect
+Log Date time: 14/10/2017 14:34:55nadav Logged in
+Log Date time: 14/10/2017 14:36:46nadav Logged in
+Log Date time: 14/10/2017 14:38:20The username or password are incorrect
+Log Date time: 14/10/2017 14:38:26The username or password are incorrect
+Log Date time: 14/10/2017 14:38:29nadav Logged in
+Log Date time: 14/10/2017 14:38:49reznik Logged in
+Log Date time: 14/10/2017 14:42:02reznik posted new car for selling
+Log Date time: 14/10/2017 14:42:13The username or password are incorrect
+Log Date time: 14/10/2017 14:42:16nadav Logged in
+Log Date time: 14/10/2017 14:43:04nadav Deleted his own pots car
+Log Date time: 14/10/2017 14:43:05nadavbought car  fromrezniksucsses-CarTrade
+Log Date time: 14/10/2017 14:43:57nadav Succeed to update his profile-UpdateProfile 
+Log Date time: 14/10/2017 14:44:11nadav Change Admin porpety to reznik
+Log Date time: 14/10/2017 14:44:23nadav Uploaded message to :Luxury
+Log Date time: 14/10/2017 14:44:27nadav Uploaded message to :Luxury
+Log Date time: 14/10/2017 14:44:33nadav Uploaded message to :Sport
+Log Date time: 14/10/2017 14:44:41The username or password are incorrect
+Log Date time: 14/10/2017 14:44:47reznik trying to login and the password was incorrect
+Log Date time: 14/10/2017 14:44:53The username or password are incorrect
+Log Date time: 14/10/2017 14:45:43nadav Logged in
+Log Date time: 14/10/2017 14:45:48reznik Logged in
+Log Date time: 14/10/2017 14:46:28reznik Uploaded message to :Luxury
+Log Date time: 14/10/2017 15:04:27Email or username is alredy been chosen-Register
+Log Date time: 14/10/2017 15:05:49Email or username is alredy been chosen-Register
+Log Date time: 14/10/2017 15:07:20nadavshaleRegister succeed
+Log Date time: 14/10/2017 15:08:30nadav Logged in
+Log Date time: 14/10/2017 15:08:55nade$$$ trying to login and the password was incorrect
+Log Date time: 14/10/2017 15:09:08ma trying to login and the password was incorrect

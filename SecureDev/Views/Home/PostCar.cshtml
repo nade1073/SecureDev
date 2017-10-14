@@ -5,7 +5,12 @@
 
 
 <script>
-        var carsArray = @Html.Raw(Json.Encode(ViewBag.CarUsers));
+    @{
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        serializer.MaxJsonLength = Int32.MaxValue;
+        var jsonModel = serializer.Serialize(ViewBag.CarUsers);
+    }
+        var carsArray = @Html.Raw(jsonModel);
         function FillFieldsAuto(car)
         {
             document.getElementById("Model").value = car.Model;

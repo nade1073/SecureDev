@@ -48,7 +48,8 @@ namespace Vladi2.Controllers
             UserAccount userDetailes = new UserAccount() { UserName = username, Password = password };
             var connectionString = string.Format("DataSource={0}", m_ConnectionNadav);
             DataBaseUtils databaseConnection = new DataBaseUtils(connectionString);
-            string encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
+            //string encriptedPassword = EncryptionManager.Encrypt(password, c_passwordKey);
+            string encriptedPassword = EncryptionManager.getSHA256Password(password);
             string loginQuery = "SELECT * FROM tblusers Where Username = @UserName";
 
             Func<SQLiteCommand, SQLiteDataReader, RedirectToRouteResult> MethodToBeInvoked;
@@ -56,11 +57,11 @@ namespace Vladi2.Controllers
             {
                 while (reader.Read())
                 {
-                    var encriptionPassword = reader.GetString(2).Trim();
+                    var encryptionPassword = reader.GetString(2).Trim();
                     var isAdmin = reader.GetString(7);
-                    var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
+                    //var decriptionis = EncryptionManager.Decrypt(encriptionPassword, c_passwordKey);
                     var userName = reader.GetString(1).Trim();
-                    if (decriptionis == password)
+                    if (encryptionPassword == encriptedPassword)
                     {
                         Session["UserName"] = username;
                         if(isAdmin == "1")
@@ -115,7 +116,7 @@ namespace Vladi2.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            string encriptedPassword = EncryptionManager.Encrypt(user.Password, c_passwordKey);
+            string encriptedPassword = EncryptionManager.getSHA256Password(user.Password);
             user.Password = encriptedPassword;
 
             var query = "SELECT * FROM tblusers Where Username = @UserName or Email = @Email";
@@ -1001,7 +1002,7 @@ namespace Vladi2.Controllers
             {
                 return View();
             };
-             string encriptedPassword = EncryptionManager.Encrypt(passwordRegister, c_passwordKey);
+           string encriptedPassword = EncryptionManager.getSHA256Password(passwordRegister);
             updateUser.Password = encriptedPassword;
            databaseConnection.ContactToDataBaseAndExecute(profileQuriy, updateUser, MethodToBeInvoked, i_ParametersOfTheQuery);
                 
@@ -1059,6 +1060,12 @@ namespace Vladi2.Controllers
             {
                 return false;
             }
+            string usernameRegex = @"^[a-z0-9_-]{3,10}$";
+            var matchUsername = Regex.Match(i_UserName, usernameRegex, RegexOptions.IgnoreCase);
+            if (!matchUsername.Success)
+            {
+                return false;
+            }
             string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
             var matchPassword = Regex.Match(i_Password, passwordRegex, RegexOptions.IgnoreCase);
             if (!matchPassword.Success)
@@ -1085,6 +1092,13 @@ namespace Vladi2.Controllers
             {
                 return false;
             }
+            string usernameRegex = @"^[a-z0-9_-]{3,10}$";
+            var matchUsername = Regex.Match(i_User.UserName, usernameRegex, RegexOptions.IgnoreCase);
+            if (!matchUsername.Success)
+            {
+                return false;
+            }
+
             string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
             var matchPassword = Regex.Match(i_User.Password, passwordRegex, RegexOptions.IgnoreCase);
             if (!matchPassword.Success)
